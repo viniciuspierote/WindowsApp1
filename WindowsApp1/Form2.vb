@@ -1,733 +1,426 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Collections.Generic
+Imports System.Data
+Imports System.Globalization
+Imports System.Text
+Imports System.Windows.Forms
+
 Public Class frm_emitircertificado
-    Private conexaoo As MySqlConnection
-    Private comando As MySqlCommand
-    Private da As MySqlDataAdapter
-    Private dr As MySqlDataReader
-    Private strSQL As String
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
 
-    End Sub
-
-    Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-
-    End Sub
-
-    Private Sub Label2_Click(sender As Object, e As EventArgs) Handles Label2.Click
-
-    End Sub
-
-    Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-
-    End Sub
-
-    Private Sub Label18_Click(sender As Object, e As EventArgs) Handles Label18.Click
-
-    End Sub
+    Private _campos As Dictionary(Of String, Control)
+    Private _registroCarregado As DataRow
+    Private _idAtual As Integer = 0
+    Private _emEdicao As Boolean = False
+    Private _dataChegada As Object = DBNull.Value
 
     Private Sub frm_emitircertificado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        _campos = New Dictionary(Of String, Control) From {
+            {"WORK_ORDER", txtwo}, {"HEAT_NUMBER", txtcorrida},
+            {"QTDE", txtquantidade}, {"ESPECIFICACAO", txtespecificacao},
+            {"SIZE_A", txtdimensao}, {"TOLERANCIA", txttolerancia},
+            {"OBS", txtobservacao}, {"AGN_IN_CODIGO", txtcodfornecedor},
+            {"WORK_ORDER_1", txtlote}, {"COD_CLI", txtcodigocliente},
+            {"PED_CLI", txtnumerodopedido}, {"NF", txtnotafiscal},
+            {"LIGA_MATERIAL", txtliga}, {"TRAT_TERMICO", txttratamentotermico},
+            {"ACABAMENTO", txtacabamento}, {"COMPRIMENTO", txtcomprimento},
+            {"PESO", txtpeso}, {"ALONG", txtalongamento},
+            {"ESCOAMENTO", txtescoamento}, {"RES_ATRACAO", txtracao},
+            {"MICROESTRUTURA", txtmicroestrutura}, {"PRODUTO", txttipo},
+            {"ESP_GRAO", txtnormagrao}, {"OBT_GRAO", txtgrao},
+            {"DUREZA", txtdureza}, {"A_FINA", txtafina},
+            {"B_FINA", txtbfina}, {"C_FINA", txtcfina},
+            {"D_FINA", txtdfina}, {"A_GROSSA", txtagrossa},
+            {"B_GROSSA", txtbgrossa}, {"C_GROSSA", txtcgrossa},
+            {"D_GROSSA", txtdgrossa}, {"NOME_ABRV", txtfornecedor},
+            {"ANO_CERT", txtano}, {"TIPO_PESO", txtunidadedepeso},
+            {"REDUCAODEAREA", txtreducaoarea}
+        }
+        txtnumerocertificado.ReadOnly = True
+        txtwo.ReadOnly = True
+        txtnomecliente.ReadOnly = True
+        LimparCampos()
+        DefinirEdicao(False)
     End Sub
 
-    Private Sub Label29_Click(sender As Object, e As EventArgs) Handles Label29.Click
-
+    Private Sub DefinirEdicao(editar As Boolean)
+        _emEdicao = editar
+        For Each campo As Control In _campos.Values
+            campo.Enabled = editar
+        Next
+        txtwo.Enabled = False
+        txtnumerocertificado.Enabled = True
+        txtnomecliente.Enabled = True
+        btnincluir.Text = "Incluir"
+        btneditar.Text = "Editar"
+        btnincluir.Enabled = Not editar
+        btnbuscar.Enabled = Not editar
+        txtprocurar.Enabled = Not editar
+        btneditar.Enabled = Not editar AndAlso _idAtual > 0
+        btnsalvar.Enabled = editar AndAlso _idAtual = 0
+        btnatualizar.Enabled = editar AndAlso _idAtual > 0
+        btncancelar.Enabled = editar
+        btnprocurar.Enabled = editar
+        btnprocurarcliente.Enabled = editar
+        btnprocurarofornecedor.Enabled = editar
+        ' Estes dois botoes nao tinham uma operacao implementada no codigo original.
+        btnexcluir.Enabled = False
+        btnincluirlote.Enabled = False
     End Sub
 
-    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles btnbuscar.Click
+    Private Sub ColocarTexto(controle As Control, texto As String)
+        Dim lista As ComboBox = TryCast(controle, ComboBox)
+        If lista IsNot Nothing Then
+            lista.SelectedIndex = -1
+            If texto <> "" AndAlso lista.DropDownStyle = ComboBoxStyle.DropDownList AndAlso
+                Not lista.Items.Contains(texto) Then
+                lista.Items.Add(texto)
+            End If
+        End If
+        controle.Text = texto
+    End Sub
+
+    Private Sub LimparCampos()
+        _dataChegada = DBNull.Value
+        For Each campo As Control In _campos.Values
+            ColocarTexto(campo, String.Empty)
+        Next
+        txtnumerocertificado.Clear()
+        txtnomecliente.Clear()
+    End Sub
+
+    Private Function TextoRegistro(registro As DataRow, coluna As String) As String
+        If registro.IsNull(coluna) Then Return String.Empty
+        Return Convert.ToString(registro(coluna), CultureInfo.CurrentCulture)
+    End Function
+
+    Private Sub MostrarRegistro(registro As DataRow)
+        _dataChegada = registro("SHIPMENT_DATE")
+        For Each campo As KeyValuePair(Of String, Control) In _campos
+            ColocarTexto(campo.Value, TextoRegistro(registro, campo.Key))
+        Next
+        _idAtual = Convert.ToInt32(registro("ID"))
+        txtnumerocertificado.Text = _idAtual.ToString()
+        txtprocurar.Text = _idAtual.ToString()
+        txtnomecliente.Clear()
+    End Sub
+
+    Private Function Consultar(sql As String, parametro As String, valor As Object) As DataTable
+        Dim tabela As New DataTable()
+        Using cn As MySqlConnection = conexao.NovaConexao()
+            Using cmd As New MySqlCommand(sql, cn)
+                cmd.Parameters.AddWithValue(parametro, valor)
+                cn.Open()
+                Using leitor As MySqlDataReader = cmd.ExecuteReader()
+                    tabela.Load(leitor)
+                End Using
+            End Using
+        End Using
+        Return tabela
+    End Function
+
+    Private Sub BuscarCertificado_Click(sender As Object, e As EventArgs) Handles btnbuscar.Click
+        If _emEdicao Then Return
+        Dim numero As Integer
+        If Not Integer.TryParse(txtprocurar.Text.Trim(), numero) OrElse numero <= 0 Then
+            MessageBox.Show("Informe um numero de certificado valido.", "Consulta")
+            Return
+        End If
         Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "SELECT * from emissaodecertificado WHERE ID = @ID"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@ID", txtprocurar.Text)
-
-            conexaoo.Open()
-            dr = comando.ExecuteReader()
-            Do While dr.Read
-                txtquantidade.Text = dr("QTDE")
-                txtlote.Text = dr("work_order_1")
-                txtobservacao.Text = dr("OBS")
-                txtnotafiscal.Text = dr("NF")
-                txtliga.Text = dr("liga_material")
-                txttratamentotermico.Text = dr("trat_termico")
-                txtacabamento.Text = dr("acabamento")
-                txtcomprimento.Text = dr("comprimento")
-                txtalongamento.Text = dr("along")
-                txtescoamento.Text = dr("escoamento")
-                txtracao.Text = dr("res_atracao")
-                txtnormagrao.Text = dr("esp_grao")
-                txtgrao.Text = dr("obt_grao")
-                txtunidadedepeso.Text = dr("tipo_peso")
-                txttipo.Text = dr("produto")
-                txtdimensao.Text = dr("size_a")
-                txttolerancia.Text = dr("tolerancia")
-                txtcodigocliente.Text = dr("cod_cli")
-                txtnumerodopedido.Text = dr("ped_cli")
-                txtano.Text = dr("ano_cert")
-                txtpeso.Text = dr("peso")
-                txtdureza.Text = dr("dureza")
-                txtnumerocertificado.Text = dr("id")
-                txtcodfornecedor.Text = dr("agn_in_codigo")
-                txtano.Text = dr("ano_cert")
-                txtcorrida.Text = dr("heat_number")
-                txtwo.Text = dr("work_order")
-                txtespecificacao.Text = dr("especificacao")
-            Loop
+            Dim tabela As DataTable = Consultar(
+                "SELECT * FROM emissaodecertificado WHERE ID = @id", "@id", numero)
+            If tabela.Rows.Count = 0 Then
+                MessageBox.Show("Certificado nao encontrado. Os dados exibidos foram mantidos.", "Consulta")
+                Return
+            End If
+            _registroCarregado = tabela.Rows(0)
+            MostrarRegistro(_registroCarregado)
+            DefinirEdicao(False)
+            CarregarCliente(False)
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
+            MessageBox.Show("Nao foi possivel consultar o certificado." & vbCrLf & ex.Message, "Consulta")
         End Try
+    End Sub
+
+    Private Sub IncluirCertificado_Click(sender As Object, e As EventArgs) Handles btnincluir.Click
+        If _emEdicao Then Return
+        _idAtual = 0
+        _registroCarregado = Nothing
+        LimparCampos()
+        txtprocurar.Clear()
+        txtano.Text = Date.Today.Year.ToString()
+        ColocarTexto(txttipo, "Barra Redonda")
+        ColocarTexto(txtacabamento, "Retificado")
+        DefinirEdicao(True)
+        txtlote.Focus()
+    End Sub
+
+    Private Sub EditarCertificado_Click(sender As Object, e As EventArgs) Handles btneditar.Click
+        If _emEdicao OrElse _idAtual <= 0 Then Return
+        DefinirEdicao(True)
+        txtobservacao.Focus()
+    End Sub
+
+    Private Sub CancelarCertificado_Click(sender As Object, e As EventArgs) Handles btncancelar.Click
+        If Not _emEdicao Then Return
+        If MessageBox.Show("Descartar as alteracoes que ainda nao foram salvas?", "Cancelar",
+                           MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then Return
+        If _registroCarregado IsNot Nothing Then
+            MostrarRegistro(_registroCarregado)
+            CarregarCliente(False)
+        Else
+            _idAtual = 0
+            LimparCampos()
+        End If
+        DefinirEdicao(False)
+    End Sub
+
+    Private Function ValorParaBanco(coluna As String, controle As Control) As Object
+        Dim texto As String = controle.Text.Trim()
+        If texto = "" Then Return DBNull.Value
+        Select Case coluna
+            Case "WORK_ORDER", "AGN_IN_CODIGO", "COD_CLI", "NF",
+                 "ESCOAMENTO", "RES_ATRACAO", "REDUCAODEAREA"
+                Dim inteiro As Integer
+                If Not Integer.TryParse(texto, NumberStyles.Integer, CultureInfo.CurrentCulture, inteiro) Then
+                    controle.Focus()
+                    Throw New ArgumentException("O campo " & coluna & " aceita somente um numero inteiro. Valor informado: " & texto)
+                End If
+                Return inteiro
+            Case "ALONG"
+                Dim alongamento As Decimal
+                If Not Decimal.TryParse(texto.Replace(",", "."),
+                                        NumberStyles.AllowLeadingSign Or NumberStyles.AllowDecimalPoint,
+                                        CultureInfo.InvariantCulture, alongamento) Then
+                    controle.Focus()
+                    Throw New ArgumentException("O alongamento deve ser um numero, como 15,7 ou 15.7, sem separador de milhar.")
+                End If
+                If Decimal.Round(alongamento, 4) <> alongamento Then
+                    controle.Focus()
+                    Throw New ArgumentException("O alongamento pode ter no maximo quatro casas decimais.")
+                End If
+                Return alongamento
+            Case "A_FINA", "B_FINA", "C_FINA", "D_FINA",
+                 "A_GROSSA", "B_GROSSA", "C_GROSSA", "D_GROSSA"
+                Dim numero As Double
+                If Not Double.TryParse(texto.Replace(",", "."), NumberStyles.AllowLeadingSign Or NumberStyles.AllowDecimalPoint,
+                                       CultureInfo.InvariantCulture, numero) OrElse
+                    Double.IsNaN(numero) OrElse Double.IsInfinity(numero) Then
+                    controle.Focus()
+                    Throw New ArgumentException("O campo " & coluna & " aceita um numero com virgula ou ponto, sem separador de milhar.")
+                End If
+                Return numero
+        End Select
+        If coluna = "WORK_ORDER_1" Then Return texto
+        Return controle.Text
+    End Function
+
+    Private Sub SalvarCertificado_Click(sender As Object, e As EventArgs) Handles btnsalvar.Click
+        If Not _emEdicao OrElse _idAtual <> 0 Then Return
+        GravarCertificado(False)
+    End Sub
+
+    Private Sub AtualizarCertificado_Click(sender As Object, e As EventArgs) Handles btnatualizar.Click
+        If Not _emEdicao OrElse _idAtual <= 0 Then Return
+        GravarCertificado(True)
+    End Sub
+
+    Private Sub GravarCertificado(atualizar As Boolean)
         Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "SELECT * from emissaodecertificado WHERE work_order_1 = @work_order_1"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@work_order_1", txtlote.Text)
-            conexaoo.Open()
-            dr = comando.ExecuteReader()
-            Do While dr.Read
-                txtespecificacao.Text = dr("especificacao")
-            Loop
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
-        End Try
-        If txtnumerocertificado.Text <> "" Then
-            btnincluir.Text = "Editar"
-        End If
-    End Sub
-
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles btnincluir.Click
-        If btnincluir.Text = "Incluir" Then
-            Dim numero
-            Try
-                conexaoo = conexao.NovaConexao()
-                strSQL = ("SELECT ID FROM emissaodecertificado ORDER BY id DESC LIMIT 1")
-                comando = New MySqlCommand(strSQL, conexaoo)
-
-                conexaoo.Open()
-                dr = comando.ExecuteReader()
-                Do While dr.Read
-                    numero = dr("ID")
-                Loop
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-            Finally
-                conexaoo.Close()
-                conexaoo = Nothing
-                comando = Nothing
-            End Try
-            txtnumerocertificado.Text = numero + 1
-            txtquantidade.Enabled = True
-            txtlote.Enabled = True
-            txtobservacao.Enabled = True
-            txtnotafiscal.Enabled = True
-            txtliga.Enabled = True
-            txttratamentotermico.Enabled = True
-            txtacabamento.Enabled = True
-            txtcomprimento.Enabled = True
-            txtalongamento.Enabled = True
-            txtescoamento.Enabled = True
-            txtracao.Enabled = True
-            txtnormagrao.Enabled = True
-            txtgrao.Enabled = True
-            txtunidadedepeso.Enabled = True
-            txttipo.Enabled = True
-            txtdimensao.Enabled = True
-            txttolerancia.Enabled = True
-            txtcodigocliente.Enabled = True
-            txtnumerodopedido.Enabled = True
-            txtano.Enabled = True
-            txtpeso.Enabled = True
-            txtdureza.Enabled = True
-            txtnumerocertificado.Enabled = True
-            txtcodfornecedor.Enabled = True
-            txtano.Enabled = True
-            txtreducaoarea.Enabled = True
-            txtcorrida.Enabled = True
-            btnincluirlote.Enabled = True
-            btnprocurar.Enabled = True
-            btncancelar.Enabled = True
-            btnsalvar.Enabled = True
-            btnprocurarcliente.Enabled = True
-            btneditar.Enabled = False
-            btnincluir.Enabled = False
-            btnbuscar.Enabled = False
-            txtquantidade.Text = " metros"
-        End If
-        If btnincluir.Text = "Editar" Then
-            txtquantidade.Enabled = True
-            txtlote.Enabled = True
-            txtobservacao.Enabled = True
-            txtnotafiscal.Enabled = True
-            txtliga.Enabled = True
-            txttratamentotermico.Enabled = True
-            txtacabamento.Enabled = True
-            txtcomprimento.Enabled = True
-            txtalongamento.Enabled = True
-            txtescoamento.Enabled = True
-            txtracao.Enabled = True
-            txtnormagrao.Enabled = True
-            txtgrao.Enabled = True
-            txtunidadedepeso.Enabled = True
-            txttipo.Enabled = True
-            txtdimensao.Enabled = True
-            txttolerancia.Enabled = True
-            txtcodigocliente.Enabled = True
-            txtnumerodopedido.Enabled = True
-            txtano.Enabled = True
-            txtpeso.Enabled = True
-            txtdureza.Enabled = True
-            txtnumerocertificado.Enabled = True
-            txtcodfornecedor.Enabled = True
-            txtano.Enabled = True
-            txtreducaoarea.Enabled = True
-            txtcorrida.Enabled = True
-            btnsalvar.Enabled = True
-            btnprocurar.Enabled = True
-            btnprocurarcliente.Enabled = True
-            btncancelar.Enabled = True
-            txtespecificacao.Enabled = True
-        End If
-        txtano.Text = "2023"
-        txttipo.Text = "Barra Redonda"
-        txtacabamento.Text = "Retificado"
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles btneditar.Click
-        If btneditar.Enabled Then
-            btneditar.Text = "Cancelar"
-            txtquantidade.Enabled = True
-            txtlote.Enabled = True
-            txtobservacao.Enabled = True
-            txtnotafiscal.Enabled = True
-            txtliga.Enabled = True
-            txttratamentotermico.Enabled = True
-            txtacabamento.Enabled = True
-            txtcomprimento.Enabled = True
-            txtalongamento.Enabled = True
-            txtescoamento.Enabled = True
-            txtracao.Enabled = True
-            txtnormagrao.Enabled = True
-            txtgrao.Enabled = True
-            txtunidadedepeso.Enabled = True
-            txttipo.Enabled = True
-            txtdimensao.Enabled = True
-            txttolerancia.Enabled = True
-            txtcodigocliente.Enabled = True
-            txtnumerodopedido.Enabled = True
-            txtano.Enabled = True
-            txtpeso.Enabled = True
-            txtdureza.Enabled = True
-            txtnumerocertificado.Enabled = True
-            txtcodfornecedor.Enabled = True
-            txtano.Enabled = True
-            txtreducaoarea.Enabled = True
-            txtcorrida.Enabled = True
-            btnsalvar.Enabled = True
-        End If
-        If btneditar.Text = "Cancelar" Then
-            txtquantidade.Text = ""
-            txtlote.Text = ""
-            txtobservacao.Text = ""
-            txtnotafiscal.Text = ""
-            txtliga.Text = ""
-            txttratamentotermico.Text = ""
-            txtacabamento.Text = ""
-            txtcomprimento.Text = ""
-            txtalongamento.Text = ""
-            txtescoamento.Text = ""
-            txtracao.Text = ""
-            txtnormagrao.Text = ""
-            txtgrao.Text = ""
-            txtunidadedepeso.Text = ""
-            txttipo.Text = ""
-            txtdimensao.Text = ""
-            txttolerancia.Text = ""
-            txtcodigocliente.Text = ""
-            txtnumerodopedido.Text = ""
-            txtano.Text = ""
-            txtpeso.Text = ""
-            txtdureza.Text = ""
-            txtnumerocertificado.Text = ""
-            txtcodfornecedor.Text = ""
-            txtano.Text = ""
-            txtreducaoarea.Text = ""
-            txtcorrida.Text = ""
-            txtespecificacao.Text = ""
-            txtobservacao.Text = ""
-            txtmicroestrutura.Text = ""
-            txtafina.Text = ""
-            txtbfina.Text = ""
-            txtcfina.Text = ""
-            txtdfina.Text = ""
-            txtagrossa.Text = ""
-            txtbgrossa.Text = ""
-            txtcgrossa.Text = ""
-            txtdgrossa.Text = ""
-        End If
-
-
-    End Sub
-
-    Private Sub PrintPreviewDialog1_Load(sender As Object, e As EventArgs)
-
-    End Sub
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnsalvar.Click
-
-        Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "INSERT INTO emissaodecertificado (WORK_ORDER, HEAT_NUMBER, QTDE, ESPECIFICACAO, SIZE_A, TOLERANCIA, OBS, AGN_IN_CODIGO, WORK_ORDER_1, ID, COD_CLI, PED_CLI, NF, LIGA_MATERIAL, TRAT_TERMICO, ACABAMENTO, COMPRIMENTO, PESO, ALONG, ESCOAMENTO, RES_ATRACAO, MICROESTRUTURA, PRODUTO, ESP_GRAO, OBT_GRAO, DUREZA, A_FINA, B_FINA, C_FINA, D_FINA, A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, NOME_ABRV, ANO_CERT, TIPO_PESO, REDUCAODEAREA) VALUES (@workorder, @corrida, @quantidade, @especificacao, @dimensao, @tolerancia, @observacao, @codigofornecedor, @lote, @certificado, @codigocliente, @numerodopedido, @notafiscal, @liga, @tratamentotermico, @acabamento, @comprimento, @peso, @alongamento, @escoamento, @tracao, @microestrutura, @tipo, @normagrao, @grao, @dureza, @afina, @bfina, @cfina, @dfina, @agrossa, @bgrossa, @cgrossa, @dgrossa, @fornecedor, @certificadoano, @unidadepeso, @REDUCAODEAREA)"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@certificado", txtnumerocertificado.Text)
-            comando.Parameters.AddWithValue("@especificacao", txtespecificacao.Text)
-            comando.Parameters.AddWithValue("@certificadoano", txtano.Text)
-            comando.Parameters.AddWithValue("@lote", txtlote.Text)
-            comando.Parameters.AddWithValue("@codigofornecedor", txtcodfornecedor.Text)
-            comando.Parameters.AddWithValue("@codigocliente", txtcodigocliente.Text)
-            comando.Parameters.AddWithValue("@fornecedor", txtfornecedor.Text)
-            comando.Parameters.AddWithValue("@notafiscal", txtnotafiscal.Text)
-            comando.Parameters.AddWithValue("@numerodopedido", txtnumerodopedido.Text)
-            comando.Parameters.AddWithValue("@peso", txtpeso.Text)
-            comando.Parameters.AddWithValue("@unidadepeso", txtunidadedepeso.Text)
-            comando.Parameters.AddWithValue("@quantidade", txtquantidade.Text)
-            comando.Parameters.AddWithValue("@corrida", txtcorrida.Text)
-            comando.Parameters.AddWithValue("@liga", txtliga.Text)
-            comando.Parameters.AddWithValue("@tipo", txttipo.Text)
-            comando.Parameters.AddWithValue("@dimensao", txtdimensao.Text)
-            comando.Parameters.AddWithValue("@tolerancia", txttolerancia.Text)
-            comando.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
-            comando.Parameters.AddWithValue("@tratamentotermico", txttratamentotermico.Text)
-            comando.Parameters.AddWithValue("@acabamento", txtacabamento.Text)
-            comando.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
-            comando.Parameters.AddWithValue("@reducaodearea", txtreducaoarea.Text)
-            comando.Parameters.AddWithValue("@escoamento", txtescoamento.Text)
-            comando.Parameters.AddWithValue("@tracao", txtracao.Text)
-            comando.Parameters.AddWithValue("@dureza", txtdureza.Text)
-            comando.Parameters.AddWithValue("@grao", txtgrao.Text)
-            comando.Parameters.AddWithValue("@normagrao", txtnormagrao.Text)
-            comando.Parameters.AddWithValue("@observacao", txtobservacao.Text)
-            comando.Parameters.AddWithValue("@microestrutura", txtmicroestrutura.Text)
-            comando.Parameters.AddWithValue("@afina", txtafina.Text)
-            comando.Parameters.AddWithValue("@bfina", txtbfina.Text)
-            comando.Parameters.AddWithValue("@cfina", txtcfina.Text)
-            comando.Parameters.AddWithValue("@dfina", txtdfina.Text)
-            comando.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
-            comando.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
-            comando.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
-            comando.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
-            comando.Parameters.AddWithValue("@workorder", txtwo.Text)
-            conexaoo.Open()
-            comando.ExecuteNonQuery()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
-        End Try
-
-        txtquantidade.Enabled = False
-        txtlote.Enabled = False
-        txtobservacao.Enabled = False
-        txtnotafiscal.Enabled = False
-        txtliga.Enabled = False
-        txttratamentotermico.Enabled = False
-        txtacabamento.Enabled = False
-        txtcomprimento.Enabled = False
-        txtalongamento.Enabled = False
-        txtescoamento.Enabled = False
-        txtracao.Enabled = False
-        txtnormagrao.Enabled = False
-        txtgrao.Enabled = False
-        txtunidadedepeso.Enabled = False
-        txttipo.Enabled = False
-        txtdimensao.Enabled = False
-        txttolerancia.Enabled = False
-        txtcodigocliente.Enabled = False
-        txtnumerodopedido.Enabled = False
-        txtano.Enabled = False
-        txtpeso.Enabled = False
-        txtdureza.Enabled = False
-        txtnumerocertificado.Enabled = False
-        txtcodfornecedor.Enabled = False
-        txtano.Enabled = False
-        txtreducaoarea.Enabled = False
-        txtcorrida.Enabled = False
-        txtespecificacao.Enabled = False
-        btnincluir.Enabled = True
-
-        txtquantidade.Text = ""
-        txtlote.Text = ""
-        txtobservacao.Text = ""
-        txtnotafiscal.Text = ""
-        txtliga.Text = ""
-        txttratamentotermico.Text = ""
-        txtacabamento.Text = ""
-        txtcomprimento.Text = ""
-        txtalongamento.Text = ""
-        txtescoamento.Text = ""
-        txtracao.Text = ""
-        txtnormagrao.Text = ""
-        txtgrao.Text = ""
-        txtunidadedepeso.Text = ""
-        txttipo.Text = ""
-        txtdimensao.Text = ""
-        txttolerancia.Text = ""
-        txtcodigocliente.Text = ""
-        txtnumerodopedido.Text = ""
-        txtano.Text = ""
-        txtpeso.Text = ""
-        txtdureza.Text = ""
-        txtnumerocertificado.Text = ""
-        txtcodfornecedor.Text = ""
-        txtano.Text = ""
-        txtreducaoarea.Text = ""
-        txtcorrida.Text = ""
-        txtespecificacao.Text = ""
-        txtobservacao.Text = ""
-        txtmicroestrutura.Text = ""
-        txtafina.Text = ""
-        txtbfina.Text = ""
-        txtcfina.Text = ""
-        txtdfina.Text = ""
-        txtagrossa.Text = ""
-        txtbgrossa.Text = ""
-        txtcgrossa.Text = ""
-        txtdgrossa.Text = ""
-
-    End Sub
-
-    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles btnprocurar.Click
-        Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "SELECT * from cadastrocertificados WHERE work_order_1 = @work_order_1"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@work_order_1", txtlote.Text)
-
-            conexaoo.Open()
-            dr = comando.ExecuteReader()
-            If dr.Read() Then ' Verificar se há registros antes de ler os campos
-                txtcorrida.Text = If(Not IsDBNull(dr("Heat_Number")), dr("Heat_Number").ToString(), String.Empty)
-                txtcodfornecedor.Text = If(Not IsDBNull(dr("AGN_IN_CODIGO")), dr("AGN_IN_CODIGO").ToString(), String.Empty)
-                txtespecificacao.Text = If(Not IsDBNull(dr("especificacao")), dr("especificacao").ToString(), String.Empty)
-                txtdimensao.Text = If(Not IsDBNull(dr("size_a")), dr("size_a").ToString(), String.Empty)
-                txttolerancia.Text = If(Not IsDBNull(dr("tolerancia")), dr("tolerancia").ToString(), String.Empty)
-                txtobservacao.Text = If(Not IsDBNull(dr("obs")), dr("obs").ToString(), String.Empty)
-                txtafina.Text = If(Not IsDBNull(dr("a_fina")), dr("a_fina").ToString(), String.Empty)
-                txtbfina.Text = If(Not IsDBNull(dr("b_fina")), dr("b_fina").ToString(), String.Empty)
-                txtcfina.Text = If(Not IsDBNull(dr("c_fina")), dr("c_fina").ToString(), String.Empty)
-                txtdfina.Text = If(Not IsDBNull(dr("d_fina")), dr("d_fina").ToString(), String.Empty)
-                txtagrossa.Text = If(Not IsDBNull(dr("a_grossa")), dr("a_grossa").ToString(), String.Empty)
-                txtbgrossa.Text = If(Not IsDBNull(dr("b_grossa")), dr("b_grossa").ToString(), String.Empty)
-                txtcgrossa.Text = If(Not IsDBNull(dr("c_grossa")), dr("c_grossa").ToString(), String.Empty)
-                txtdgrossa.Text = If(Not IsDBNull(dr("d_grossa")), dr("d_grossa").ToString(), String.Empty)
-                txtmicroestrutura.Text = If(Not IsDBNull(dr("microestrutura")), dr("microestrutura").ToString(), String.Empty)
-                txtcomprimento.Text = If(Not IsDBNull(dr("comprimento")), dr("comprimento").ToString(), String.Empty)
-                txtalongamento.Text = If(Not IsDBNull(dr("along")), dr("along").ToString(), String.Empty)
-                txtreducaoarea.Text = If(Not IsDBNull(dr("reducaoarea")), dr("reducaoarea").ToString(), String.Empty)
-                txtescoamento.Text = If(Not IsDBNull(dr("escoamento")), dr("escoamento").ToString(), String.Empty)
-                txtracao.Text = If(Not IsDBNull(dr("res_atracao")), dr("res_atracao").ToString(), String.Empty)
-                txtdureza.Text = If(Not IsDBNull(dr("dureza")), dr("dureza").ToString(), String.Empty)
-                txtwo.Text = If(Not IsDBNull(dr("work_order")), dr("work_order").ToString(), String.Empty)
-            Else
-                ' Caso não haja registros, você pode limpar os campos de texto
-                txtcorrida.Text = String.Empty
-                txtcodfornecedor.Text = String.Empty
-                txtquantidade.Text = String.Empty
-                txtespecificacao.Text = String.Empty
-                txtdimensao.Text = String.Empty
-                txttolerancia.Text = String.Empty
-                txtobservacao.Text = String.Empty
-                txtafina.Text = String.Empty
-                txtbfina.Text = String.Empty
-                txtcfina.Text = String.Empty
-                txtdfina.Text = String.Empty
-                txtagrossa.Text = String.Empty
-                txtbgrossa.Text = String.Empty
-                txtcgrossa.Text = String.Empty
-                txtdgrossa.Text = String.Empty
-                txtmicroestrutura.Text = String.Empty
-                txtcomprimento.Text = String.Empty
-
-
-
-                txtescoamento.Text = String.Empty
-
-
-                txtalongamento.Text = String.Empty
+            If String.IsNullOrWhiteSpace(txtlote.Text) Then
+                txtlote.Focus()
+                Throw New ArgumentException("Informe o lote do certificado.")
+            End If
+            If txtlote.Text.Trim().Length > 255 Then
+                Throw New ArgumentException("O lote pode ter no maximo 255 caracteres.")
+            End If
+            If String.IsNullOrWhiteSpace(txtano.Text) Then
+                txtano.Focus()
+                Throw New ArgumentException("Informe o ano do certificado.")
             End If
 
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
-        End Try
+            Dim colunas As New List(Of String)()
+            Dim parametros As New List(Of String)()
+            Dim atribuicoes As New List(Of String)()
+            Dim valores As New Dictionary(Of String, Object)()
+            For Each campo As KeyValuePair(Of String, Control) In _campos
+                colunas.Add("`" & campo.Key & "`")
+                parametros.Add("@" & campo.Key)
+                atribuicoes.Add("`" & campo.Key & "` = @" & campo.Key)
+                valores.Add(campo.Key, ValorParaBanco(campo.Key, campo.Value))
+            Next
 
-        If txtespecificacao.Text = ("ASTM F1537 / NBR ISO 5832-12") Then
-            txtliga.Text = ("Cobalto - Cromo")
-        ElseIf txtespecificacao.Text = ("ASTM F899 303") Then
-            txtliga.Text = ("Aço Inoxidável")
-            txttratamentotermico.Text = ("Recozido")
-        ElseIf txtespecificacao.Text = ("ASTM F67-Gr1 e ISO 5832-2") Then
-            txtliga.Text = ("Titânio Puro")
-            txttratamentotermico.Text = ("Recozido")
-        ElseIf txtespecificacao.Text = ("ASTM F67-Gr2 e ISO 5832-2") Then
-            txtliga.Text = ("Titânio Puro")
-            txttratamentotermico.Text = ("Recozido")
-        ElseIf txtespecificacao.Text = ("ASTM F67-Gr4 e ISO 5832-2") Then
-            txttratamentotermico.Text = ("Recozido")
-            txtliga.Text = ("Titânio Puro")
-            txttratamentotermico.Text = ("Recozido")
-        ElseIf txtespecificacao.Text = ("ASTM F899 S42010") Then
-            txttratamentotermico.Text = ("Recozido")
-            txtliga.Text = ("Aço Inoxidável")
-        ElseIf txtespecificacao.Text = ("ASTM F899 440C") Then
-            txttratamentotermico.Text = ("Recozido")
-            txtliga.Text = ("Aço Inoxidável")
-        ElseIf txtespecificacao.Text = ("ASTM F136 e ISO 5832-3") Then
-            txttratamentotermico.Text = ("Recozido")
-            txtliga.Text = ("Titânio 6Al 4V ELI")
-        ElseIf txtespecificacao.Text = ("ASTM F899 455 XM-16") Then
-            txttratamentotermico.Text = ("Recozido")
-            txtliga.Text = ("Aço Inoxidável")
-        ElseIf txtespecificacao.Text = ("ASTM F2063") Then
-            txtliga.Text = ("Níquel - Titânio")
-            txttratamentotermico.Text = ("Recozido")
+            ' A data de chegada acompanha a emissao mesmo sem um controle visual.
+            valores.Add("SHIPMENT_DATE", _dataChegada)
+            valores.Add("USUARIO_ATUALIZACAO", Environment.UserName)
+            valores.Add("DATA_ATUALIZACAO", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
+            For Each coluna As String In New String() {"SHIPMENT_DATE", "USUARIO_ATUALIZACAO", "DATA_ATUALIZACAO"}
+                colunas.Add("`" & coluna & "`")
+                parametros.Add("@" & coluna)
+                atribuicoes.Add("`" & coluna & "` = @" & coluna)
+            Next
+
+            Dim sql As String
+            If atualizar Then
+                sql = "UPDATE emissaodecertificado SET " & String.Join(", ", atribuicoes.ToArray()) & " WHERE ID = @id"
+            Else
+                sql = "INSERT INTO emissaodecertificado (" & String.Join(", ", colunas.ToArray()) &
+                      ") VALUES (" & String.Join(", ", parametros.ToArray()) & ")"
+            End If
+
+            Dim idSalvo As Integer = _idAtual
+            Using cn As MySqlConnection = conexao.NovaConexao()
+                cn.Open()
+                Using transacao As MySqlTransaction = cn.BeginTransaction()
+                    If atualizar Then
+                        Using verificar As New MySqlCommand("SELECT ID FROM emissaodecertificado WHERE ID = @id FOR UPDATE", cn, transacao)
+                            verificar.Parameters.AddWithValue("@id", _idAtual)
+                            If verificar.ExecuteScalar() Is Nothing Then
+                                Throw New InvalidOperationException("Este certificado nao existe mais no banco. Consulte novamente.")
+                            End If
+                        End Using
+                    End If
+                    Using cmd As New MySqlCommand(sql, cn, transacao)
+                        For Each valor As KeyValuePair(Of String, Object) In valores
+                            cmd.Parameters.AddWithValue("@" & valor.Key, valor.Value)
+                        Next
+                        If atualizar Then cmd.Parameters.AddWithValue("@id", _idAtual)
+                        cmd.ExecuteNonQuery()
+                        If Not atualizar Then idSalvo = Convert.ToInt32(cmd.LastInsertedId)
+                    End Using
+                    transacao.Commit()
+                End Using
+            End Using
+
+            _idAtual = idSalvo
+            txtnumerocertificado.Text = idSalvo.ToString()
+            txtprocurar.Text = idSalvo.ToString()
+            ' Guarda uma copia dos dados salvos para o botao Cancelar.
+            Dim copia As New DataTable()
+            copia.Columns.Add("ID", GetType(Integer))
+            For Each coluna As String In valores.Keys
+                copia.Columns.Add(coluna, GetType(Object))
+            Next
+            Dim registro As DataRow = copia.NewRow()
+            registro("ID") = idSalvo
+            For Each valor As KeyValuePair(Of String, Object) In valores
+                registro(valor.Key) = valor.Value
+            Next
+            copia.Rows.Add(registro)
+            _registroCarregado = registro
+            DefinirEdicao(False)
+            Dim mensagem As String = If(atualizar, "Certificado atualizado com sucesso!", "Certificado salvo com sucesso!")
+            MessageBox.Show(mensagem & vbCrLf & "Numero: " & idSalvo.ToString(), "Emissao de certificado",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            MessageBox.Show("Nao foi possivel concluir a gravacao." & vbCrLf & ex.Message & vbCrLf &
+                            "Os campos foram mantidos para correcao.", "Emissao de certificado",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ProcurarLote_Click(sender As Object, e As EventArgs) Handles btnprocurar.Click
+        If Not _emEdicao Then Return
+        Dim lote As String = txtlote.Text.Trim()
+        If lote = "" Then
+            MessageBox.Show("Informe o lote para procurar.", "Lote")
+            Return
         End If
-    End Sub
-
-    Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles txtdgrossa.TextChanged
-
-    End Sub
-
-    Private Sub Label36_Click(sender As Object, e As EventArgs) Handles Label36.Click
-
-    End Sub
-
-    Private Sub TextBox6_TextChanged(sender As Object, e As EventArgs) Handles txtcgrossa.TextChanged
-
-    End Sub
-
-    Private Sub Label37_Click(sender As Object, e As EventArgs) Handles Label37.Click
-
-    End Sub
-
-    Private Sub TextBox7_TextChanged(sender As Object, e As EventArgs) Handles txtbgrossa.TextChanged
-
-    End Sub
-
-    Private Sub Label38_Click(sender As Object, e As EventArgs) Handles Label38.Click
-
-    End Sub
-
-    Private Sub TextBox8_TextChanged(sender As Object, e As EventArgs) Handles txtagrossa.TextChanged
-
-    End Sub
-
-    Private Sub Label39_Click(sender As Object, e As EventArgs) Handles Label39.Click
-
-    End Sub
-
-    Private Sub btnteste_Click(sender As Object, e As EventArgs)
-        MsgBox("(WORK_ORDER, HEAT_NUMBER, QTDE, ESPECIFICACAO, SIZE_A, TOLERANCIA, OBS, AGN_IN_CODIGO, WORK_ORDER_1, ID, COD_CLI, PED_CLI, NF, LIGA_MATERIAL, TRAT_TERMICO, ACABAMENTO, COMPRIMENTO, PESO, ALONG, ESCOAMENTO, RES_ATRACAO, MICROESTRUTURA, PRODUTO, ESP_GRAO, OBT_GRAO, DUREZA, A_FINA, B_FINA, C_FINA, C_FINA, A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, NOME_ABRV, ANO_CERT, TIPO_PESO) VALUES (@work_order, @corrida, @quantidade, @dimensao, @tolerancia, @observacao, @codigofornecedor, @lote, @certificado, @codigocliente, @numerodopedido, @notafiscal, @liga, @tratamentotermico, @acabamento, @comprimento, @peso, @alongamento,@escoamento, @tracao @microestrutura, @tipo, @normagrao, @grao, @dureza, @afina, @bfina, @cfina, @dfina, @agrossa, @bgrossa, @cgrossa, @dgrossa, @fornecedor, @certificadoano, @unidadepeso)")
-
-    End Sub
-
-    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles btnprocurarcliente.Click
         Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "SELECT * from clientes WHERE codigo = @codigo"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@codigo", txtcodigocliente.Text)
+            Dim tabela As DataTable = Consultar(
+                "SELECT * FROM cadastrocertificados WHERE TRIM(WORK_ORDER_1) = @lote ORDER BY WORK_ORDER", "@lote", lote)
+            If tabela.Rows.Count = 0 Then
+                MessageBox.Show("Lote nao encontrado. Os demais campos foram mantidos.", "Lote")
+                Return
+            End If
+            Dim escolhido As DataRow = tabela.Rows(0)
+            If tabela.Rows.Count > 1 Then
+                Dim aviso As New StringBuilder("Este lote possui mais de um cadastro antigo. Informe o ID desejado:" & vbCrLf)
+                For Each registro As DataRow In tabela.Rows
+                    aviso.AppendLine("ID " & TextoRegistro(registro, "WORK_ORDER") & " | Ano " &
+                                     TextoRegistro(registro, "ANO_CERT") & " | Corrida " &
+                                     TextoRegistro(registro, "HEAT_NUMBER") & " | Dimensao " & TextoRegistro(registro, "SIZE_A"))
+                Next
+                Dim resposta As String = Microsoft.VisualBasic.Interaction.InputBox(aviso.ToString(), "Selecionar cadastro do lote")
+                If resposta.Trim() = "" Then Return
+                Dim idEscolhido As Integer
+                If Not Integer.TryParse(resposta.Trim(), idEscolhido) Then
+                    MessageBox.Show("Informe um dos IDs apresentados.", "Lote")
+                    Return
+                End If
+                escolhido = Nothing
+                For Each registro As DataRow In tabela.Rows
+                    If Convert.ToInt32(registro("WORK_ORDER")) = idEscolhido Then
+                        escolhido = registro
+                        Exit For
+                    End If
+                Next
+                If escolhido Is Nothing Then
+                    MessageBox.Show("O ID informado nao pertence a este lote.", "Lote")
+                    Return
+                End If
+            End If
 
-            conexaoo.Open()
-            dr = comando.ExecuteReader()
-            Do While dr.Read
-                txtnomecliente.Text = dr("nome")
-
-            Loop
+            Dim camposOrigem As String() = {"WORK_ORDER", "HEAT_NUMBER", "AGN_IN_CODIGO", "WORK_ORDER_1",
+                "ESPECIFICACAO", "SIZE_A", "TOLERANCIA", "OBS", "TRAT_TERMICO", "ACABAMENTO", "PRODUTO",
+                "ESP_GRAO", "OBT_GRAO", "COMPRIMENTO", "ALONG", "ESCOAMENTO", "RES_ATRACAO",
+                "DUREZA", "MICROESTRUTURA", "A_FINA", "B_FINA", "C_FINA", "D_FINA",
+                "A_GROSSA", "B_GROSSA", "C_GROSSA", "D_GROSSA"}
+            For Each coluna As String In camposOrigem
+                ColocarTexto(_campos(coluna), TextoRegistro(escolhido, coluna))
+            Next
+            _dataChegada = escolhido("SHIPMENT_DATE")
+            txtreducaoarea.Text = TextoRegistro(escolhido, "REDUCAOAREA")
+            txtfornecedor.Clear()
+            ColocarTexto(txtliga, String.Empty)
+            Select Case txtespecificacao.Text.Trim()
+                Case "ASTM F1537 / NBR ISO 5832-12"
+                    ColocarTexto(txtliga, "Cobalto - Cromo")
+                Case "ASTM F899 303", "ASTM F899 S42010", "ASTM F899 440C", "ASTM F899 455 XM-16"
+                    ColocarTexto(txtliga, "Aço Inoxidável")
+                Case "ASTM F67-Gr1 e ISO 5832-2", "ASTM F67-Gr2 e ISO 5832-2", "ASTM F67-Gr4 e ISO 5832-2"
+                    ColocarTexto(txtliga, "Titânio Puro")
+                Case "ASTM F136 e ISO 5832-3"
+                    ColocarTexto(txtliga, "Titânio 6Al 4V ELI")
+                Case "ASTM F2063"
+                    ColocarTexto(txtliga, "Níquel - Titânio")
+            End Select
+            ' Ano, cliente, NF, pedido, quantidade e peso da emissao sao preservados.
+            ' O tratamento termico vem do cadastro; nao se presume "Recozido".
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
+            MessageBox.Show("Nao foi possivel consultar o lote." & vbCrLf & ex.Message, "Lote")
         End Try
     End Sub
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles btncancelar.Click
-        txtquantidade.Enabled = False
-        txtlote.Enabled = False
-        txtobservacao.Enabled = False
-        txtnotafiscal.Enabled = False
-        txtliga.Enabled = False
-        txttratamentotermico.Enabled = False
-        txtacabamento.Enabled = False
-        txtcomprimento.Enabled = False
-        txtalongamento.Enabled = False
-        txtescoamento.Enabled = False
-        txtracao.Enabled = False
-        txtnormagrao.Enabled = False
-        txtgrao.Enabled = False
-        txtunidadedepeso.Enabled = False
-        txttipo.Enabled = False
-        txtdimensao.Enabled = False
-        txttolerancia.Enabled = False
-        txtcodigocliente.Enabled = False
-        txtnumerodopedido.Enabled = False
-        txtano.Enabled = False
-        txtpeso.Enabled = False
-        txtdureza.Enabled = False
-        txtnumerocertificado.Enabled = False
-        txtcodfornecedor.Enabled = False
-        txtano.Enabled = False
-        txtreducaoarea.Enabled = False
-        txtcorrida.Enabled = False
-        txtespecificacao.Enabled = False
-
-        txtquantidade.Text = ""
-        txtlote.Text = ""
-        txtobservacao.Text = ""
-        txtnotafiscal.Text = ""
-        txtliga.Text = ""
-        txttratamentotermico.Text = ""
-        txtacabamento.Text = ""
-        txtcomprimento.Text = ""
-        txtalongamento.Text = ""
-        txtescoamento.Text = ""
-        txtracao.Text = ""
-        txtnormagrao.Text = ""
-        txtgrao.Text = ""
-        txtunidadedepeso.Text = ""
-        txttipo.Text = ""
-        txtdimensao.Text = ""
-        txttolerancia.Text = ""
-        txtcodigocliente.Text = ""
-        txtnumerodopedido.Text = ""
-        txtano.Text = ""
-        txtpeso.Text = ""
-        txtdureza.Text = ""
-        txtnumerocertificado.Text = ""
-        txtcodfornecedor.Text = ""
-        txtano.Text = ""
-        txtreducaoarea.Text = ""
-        txtcorrida.Text = ""
-        txtespecificacao.Text = ""
-        btnincluir.Enabled = True
-        btnbuscar.Enabled = True
-
-
+    Private Sub ProcurarCliente_Click(sender As Object, e As EventArgs) Handles btnprocurarcliente.Click
+        If Not _emEdicao Then Return
+        CarregarCliente(True)
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles btnexcluir.Click
-        btnexcluir.Enabled = False
-    End Sub
-
-    Private Sub btnprocurarofornecedor_Click(sender As Object, e As EventArgs) Handles btnprocurarofornecedor.Click
-        frmprocurarlote.Show()
-    End Sub
-
-    Private Sub txtliga_SelectedIndexChanged(sender As Object, e As EventArgs) Handles txtliga.SelectedIndexChanged
-
-    End Sub
-
-    Private Sub txtlote_TextChanged(sender As Object, e As EventArgs) Handles txtlote.TextChanged
-
-    End Sub
-
-    Private Sub btnatualizar_Click(sender As Object, e As EventArgs) Handles btnatualizar.Click
+    Private Sub CarregarCliente(avisar As Boolean)
+        txtnomecliente.Clear()
+        Dim codigo As Integer
+        If Not Integer.TryParse(txtcodigocliente.Text.Trim(), codigo) OrElse codigo <= 0 Then
+            If avisar Then MessageBox.Show("Informe um codigo de cliente valido.", "Cliente")
+            Return
+        End If
         Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "UPDATE emissaodecertificado Set WORK_ORDER = @workorder, HEAT_NUMBER = @corrida, WORK_ORDER_1 = @lote, QTDE = @quantidade, ESPECIFICACAO = @especificacao, SIZE_A = @dimensao, TOLERANCIA = @tolerancia, OBS = @observacao, AGN_IN_CODIGO = @codigofornecedor, COD_CLI = @codigocliente, PED_CLI = @numerodopedido, NF = @notafiscal, LIGA_MATERIAL = @liga , TRAT_TERMICO = @tratamentotermico, ACABAMENTO = @acabamento, COMPRIMENTO = @comprimento, PESO = @peso, ALONG = @alongamento, ESCOAMENTO = @escoamento, RES_ATRACAO = @tracao, MICROESTRUTURA = @microestrutura, PRODUTO = @tipo, ESP_GRAO = @normagrao, OBT_GRAO = @grao, DUREZA = @dureza, ANO_CERT = @certificadoano, REDUCAODEAREA = @reducaodearea, TIPO_PESO = @unidadepeso WHERE ID = @certificado"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@certificado", txtnumerocertificado.Text)
-            comando.Parameters.AddWithValue("@especificacao", txtespecificacao.Text)
-            comando.Parameters.AddWithValue("@certificadoano", txtano.Text)
-            comando.Parameters.AddWithValue("@lote", txtlote.Text)
-            comando.Parameters.AddWithValue("@codigofornecedor", txtcodfornecedor.Text)
-            comando.Parameters.AddWithValue("@codigocliente", txtcodigocliente.Text)
-            comando.Parameters.AddWithValue("@fornecedor", txtfornecedor.Text)
-            comando.Parameters.AddWithValue("@notafiscal", txtnotafiscal.Text)
-            comando.Parameters.AddWithValue("@numerodopedido", txtnumerodopedido.Text)
-            comando.Parameters.AddWithValue("@peso", txtpeso.Text)
-            comando.Parameters.AddWithValue("@unidadepeso", txtunidadedepeso.Text)
-            comando.Parameters.AddWithValue("@quantidade", txtquantidade.Text)
-            comando.Parameters.AddWithValue("@corrida", txtcorrida.Text)
-            comando.Parameters.AddWithValue("@liga", txtliga.Text)
-            comando.Parameters.AddWithValue("@tipo", txttipo.Text)
-            comando.Parameters.AddWithValue("@dimensao", txtdimensao.Text)
-            comando.Parameters.AddWithValue("@tolerancia", txttolerancia.Text)
-            comando.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
-            comando.Parameters.AddWithValue("@tratamentotermico", txttratamentotermico.Text)
-            comando.Parameters.AddWithValue("@acabamento", txtacabamento.Text)
-            comando.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
-            comando.Parameters.AddWithValue("@reducaodearea", txtreducaoarea.Text)
-            comando.Parameters.AddWithValue("@escoamento", txtescoamento.Text)
-            comando.Parameters.AddWithValue("@tracao", txtracao.Text)
-            comando.Parameters.AddWithValue("@dureza", txtdureza.Text)
-            comando.Parameters.AddWithValue("@grao", txtgrao.Text)
-            comando.Parameters.AddWithValue("@normagrao", txtnormagrao.Text)
-            comando.Parameters.AddWithValue("@observacao", txtobservacao.Text)
-            comando.Parameters.AddWithValue("@microestrutura", txtmicroestrutura.Text)
-            comando.Parameters.AddWithValue("@afina", txtafina.Text)
-            comando.Parameters.AddWithValue("@bfina", txtbfina.Text)
-            comando.Parameters.AddWithValue("@cfina", txtcfina.Text)
-            comando.Parameters.AddWithValue("@dfina", txtdfina.Text)
-            comando.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
-            comando.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
-            comando.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
-            comando.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
-            comando.Parameters.AddWithValue("@workorder", txtwo.Text)
-            conexaoo.Open()
-            comando.ExecuteNonQuery()
-
+            Dim tabela As DataTable = Consultar("SELECT nome FROM clientes WHERE codigo = @codigo", "@codigo", codigo)
+            If tabela.Rows.Count > 0 Then
+                txtnomecliente.Text = TextoRegistro(tabela.Rows(0), "nome")
+            ElseIf avisar Then
+                MessageBox.Show("Cliente nao encontrado.", "Cliente")
+            End If
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
+            If avisar Then MessageBox.Show("Nao foi possivel consultar o cliente." & vbCrLf & ex.Message, "Cliente")
         End Try
-        MsgBox("Certificado Atualizado")
     End Sub
 
-    Private Sub BindingSource1_CurrentChanged(sender As Object, e As EventArgs) Handles BindingSource1.CurrentChanged
-
+    Private Sub CodigoClienteAlterado(sender As Object, e As EventArgs) Handles txtcodigocliente.TextChanged
+        txtnomecliente.Clear()
     End Sub
 
-    Private Sub txtnumerocertificado_TextChanged(sender As Object, e As EventArgs) Handles txtnumerocertificado.TextChanged
-
+    Private Sub ProcurarFornecedor_Click(sender As Object, e As EventArgs) Handles btnprocurarofornecedor.Click
+        If _emEdicao Then frmprocurarlote.Show()
     End Sub
 
-    Private Sub txtespecificacao_TextChanged(sender As Object, e As EventArgs) Handles txtespecificacao.TextChanged
-
-    End Sub
-
-    Private Sub txtano_TextChanged(sender As Object, e As EventArgs) Handles txtano.TextChanged
-
-    End Sub
-
-    Private Sub txtalongamento_TextChanged(sender As Object, e As EventArgs) Handles txtalongamento.TextChanged
-
-    End Sub
-
-    Private Sub btnincluirlote_Click(sender As Object, e As EventArgs) Handles btnincluirlote.Click
-
-    End Sub
-
-    Private Sub GroupBox3_Enter(sender As Object, e As EventArgs) Handles GroupBox3.Enter
-
-    End Sub
-
-    Private Sub txttipo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles txttipo.SelectedIndexChanged
-
-    End Sub
 End Class

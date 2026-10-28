@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Globalization
 
 Public Class frmcadastro
     Private conexaoo As MySqlConnection
@@ -7,6 +8,7 @@ Public Class frmcadastro
     Private dr As MySqlDataReader
     Private strSQL As String
     Public loteglobal As String
+    Private _dataChegadaLegada As Object = DBNull.Value
     Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles txtcorrida.TextChanged, txtsalesorder.TextChanged
 
     End Sub
@@ -31,6 +33,7 @@ Public Class frmcadastro
                 encontrou = True
                 txtcorrida.Text = If(Not IsDBNull(dr("Heat_Number")), dr("Heat_Number").ToString(), String.Empty)
                 txtid.Text = If(Not IsDBNull(dr("work_order")), dr("work_order").ToString(), String.Empty)
+                txtworkorder1.Text = Convert.ToString(dr("WORK_ORDER_1"))
                 txtsalesorder.Text = If(Not IsDBNull(dr("Sales_Order")), dr("Sales_Order").ToString(), String.Empty)
                 txtcodfornecedor.Text = If(Not IsDBNull(dr("AGN_IN_CODIGO")), dr("AGN_IN_CODIGO").ToString(), String.Empty)
                 txtquantidade.Text = If(Not IsDBNull(dr("qtde")), dr("qtde").ToString(), String.Empty)
@@ -58,6 +61,15 @@ Public Class frmcadastro
                 txtalongamento.Text = If(Not IsDBNull(dr("along")), dr("along").ToString(), String.Empty)
                 txtdureza.Text = If(Not IsDBNull(dr("dureza")), dr("dureza").ToString(), String.Empty)
                 txtreducaoarea.Text = If(Not IsDBNull(dr("reducaoarea")), dr("reducaoarea").ToString(), String.Empty)
+                txttratamentotermico.Text = Convert.ToString(dr("TRAT_TERMICO"))
+                txtacabamento.Text = Convert.ToString(dr("ACABAMENTO"))
+                ComboBox1.Text = Convert.ToString(dr("PRODUTO"))
+                TextBox24.Text = Convert.ToString(dr("USUARIO_ATUALIZACAO"))
+                _dataChegadaLegada = DBNull.Value
+                If Not PreencherDataCadastro(DateTimePicker1, dr("SHIPMENT_DATE")) Then
+                    _dataChegadaLegada = dr("SHIPMENT_DATE")
+                End If
+                PreencherDataCadastro(dttime, dr("DATA_ATUALIZACAO"))
             Else
                 ' Caso não haja registros, você pode limpar os campos de texto
                 txtcorrida.Text = String.Empty
@@ -88,6 +100,13 @@ Public Class frmcadastro
                 txtalongamento.Text = String.Empty
                 txtdureza.Text = String.Empty
                 txtreducaoarea.Text = String.Empty
+                txttratamentotermico.Text = String.Empty
+                txtacabamento.Text = String.Empty
+                ComboBox1.Text = String.Empty
+                TextBox24.Clear()
+                DateTimePicker1.Checked = False
+                dttime.Checked = False
+                _dataChegadaLegada = DBNull.Value
             End If
 
 
@@ -144,6 +163,13 @@ Public Class frmcadastro
 
     Private Sub frmcadastro_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        DateTimePicker1.ShowCheckBox = True
+        dttime.ShowCheckBox = True
+        dttime.Format = DateTimePickerFormat.Custom
+        dttime.CustomFormat = "dd/MM/yyyy HH:mm"
+        dttime.Enabled = False
+        TextBox24.ReadOnly = True
+        Label24.Text = "Atualizado em:"
         PrepararNovoCadastro()
 
     End Sub
@@ -212,7 +238,9 @@ Public Class frmcadastro
                 "DUREZA, ALONG, ESCOAMENTO, RES_ATRACAO, " &
                 "A_FINA, B_FINA, C_FINA, D_FINA, " &
                 "A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, " &
-                "MICROESTRUTURA, COMPRIMENTO, ANO_CERT, REDUCAOAREA" &
+                "MICROESTRUTURA, COMPRIMENTO, ANO_CERT, REDUCAOAREA, " &
+                "SHIPMENT_DATE, TRAT_TERMICO, ACABAMENTO, PRODUTO, " &
+                "USUARIO_ATUALIZACAO, DATA_ATUALIZACAO" &
                 ") VALUES (" &
                 "@corrida, @salesorder, @customer, @quantidade, " &
                 "@especificacao, @dimensao, @tolerancia, @observacao, " &
@@ -220,7 +248,9 @@ Public Class frmcadastro
                 "@dureza, @alongamento, @escoamento, @tracao, " &
                 "@afina, @bfina, @cfina, @dfina, " &
                 "@agrossa, @bgrossa, @cgrossa, @dgrossa, " &
-                "@microestrutura, @comprimento, @ano, @reducaoarea)"
+                "@microestrutura, @comprimento, @ano, @reducaoarea, " &
+                "@dataChegada, @tratamento, @acabamento, @produto, " &
+                "@usuarioAtualizacao, @dataAtualizacao)"
 
                 Using cmd As New MySqlCommand(sql, cn)
 
@@ -258,12 +288,21 @@ Public Class frmcadastro
                     cmd.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
                     cmd.Parameters.AddWithValue("@ano", txtanocertificado.Text)
                     cmd.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
+                    Dim instanteGravacao As DateTime = DateTime.Now
+                    cmd.Parameters.AddWithValue("@dataChegada", ObterDataChegadaCadastro())
+                    cmd.Parameters.AddWithValue("@tratamento", txttratamentotermico.Text)
+                    cmd.Parameters.AddWithValue("@acabamento", txtacabamento.Text)
+                    cmd.Parameters.AddWithValue("@produto", ComboBox1.Text)
+                    cmd.Parameters.AddWithValue("@usuarioAtualizacao", Environment.UserName)
+                    cmd.Parameters.AddWithValue("@dataAtualizacao",
+                        instanteGravacao.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
 
                     cn.Open()
                     GravarSemRepetirLote(cmd, txtworkorder1.Text)
 
                     ' Número gerado pelo AUTO_INCREMENT do MySQL.
                     txtid.Text = cmd.LastInsertedId.ToString()
+                    MostrarAuditoriaCadastro(instanteGravacao)
 
                     btnsalvar.Enabled = False
                     btnatualizar.Enabled = True
@@ -336,7 +375,11 @@ Public Class frmcadastro
                 "A_GROSSA = @agrossa, B_GROSSA = @bgrossa, " &
                 "C_GROSSA = @cgrossa, D_GROSSA = @dgrossa, " &
                 "MICROESTRUTURA = @microestrutura, COMPRIMENTO = @comprimento, " &
-                "ANO_CERT = @ano, REDUCAOAREA = @reducaoarea " &
+                "ANO_CERT = @ano, REDUCAOAREA = @reducaoarea, " &
+                "SHIPMENT_DATE = @dataChegada, TRAT_TERMICO = @tratamento, " &
+                "ACABAMENTO = @acabamento, PRODUTO = @produto, " &
+                "USUARIO_ATUALIZACAO = @usuarioAtualizacao, " &
+                "DATA_ATUALIZACAO = @dataAtualizacao " &
                 "WHERE WORK_ORDER = @id"
 
                 Using cmd As New MySqlCommand(sql, cn)
@@ -376,6 +419,14 @@ Public Class frmcadastro
                     cmd.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
                     cmd.Parameters.AddWithValue("@ano", txtanocertificado.Text)
                     cmd.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
+                    Dim instanteGravacao As DateTime = DateTime.Now
+                    cmd.Parameters.AddWithValue("@dataChegada", ObterDataChegadaCadastro())
+                    cmd.Parameters.AddWithValue("@tratamento", txttratamentotermico.Text)
+                    cmd.Parameters.AddWithValue("@acabamento", txtacabamento.Text)
+                    cmd.Parameters.AddWithValue("@produto", ComboBox1.Text)
+                    cmd.Parameters.AddWithValue("@usuarioAtualizacao", Environment.UserName)
+                    cmd.Parameters.AddWithValue("@dataAtualizacao",
+                        instanteGravacao.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
 
                     cn.Open()
 
@@ -383,6 +434,7 @@ Public Class frmcadastro
                         GravarSemRepetirLote(cmd, txtworkorder1.Text, idCadastro)
 
                     If quantidade = 1 Then
+                        MostrarAuditoriaCadastro(instanteGravacao)
                         MessageBox.Show(
                         "Cadastro atualizado com sucesso!",
                         "Cadastro",
@@ -628,7 +680,10 @@ Public Class frmcadastro
         Next
 
         txtanocertificado.Text = Date.Today.Year.ToString()
+        _dataChegadaLegada = DBNull.Value
         DateTimePicker1.Value = Date.Today
+        DateTimePicker1.Checked = True
+        MostrarAuditoriaCadastro(DateTime.Now)
 
         loteglobal = String.Empty
         dgvdados.DataSource = Nothing
@@ -646,6 +701,41 @@ Public Class frmcadastro
         txtworkorder1.Focus()
 
     End Sub
+
+    Private Function PreencherDataCadastro(controle As DateTimePicker, valor As Object) As Boolean
+        controle.Checked = False
+        If valor Is Nothing OrElse Convert.IsDBNull(valor) OrElse
+            String.IsNullOrWhiteSpace(Convert.ToString(valor)) Then Return True
+
+        Dim data As DateTime
+        Dim texto As String = Convert.ToString(valor)
+        Dim formatos As String() = {"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-ddTHH:mm:ss"}
+        Dim conseguiu As Boolean = DateTime.TryParseExact(texto, formatos,
+            CultureInfo.InvariantCulture, DateTimeStyles.None, data)
+        If Not conseguiu Then
+            conseguiu = DateTime.TryParse(texto, CultureInfo.GetCultureInfo("pt-BR"),
+                                          DateTimeStyles.AllowWhiteSpaces, data)
+        End If
+        If Not conseguiu OrElse data < controle.MinDate OrElse data > controle.MaxDate Then Return False
+        controle.Value = data
+        controle.Checked = True
+        Return True
+    End Function
+
+    Private Function ObterDataChegadaCadastro() As Object
+        If DateTimePicker1.Checked Then
+            Return DateTimePicker1.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+        End If
+        ' Conserva textos de datas antigas que nao puderam ser interpretados.
+        Return _dataChegadaLegada
+    End Function
+
+    Private Sub MostrarAuditoriaCadastro(instante As DateTime)
+        TextBox24.Text = Environment.UserName
+        dttime.Value = instante
+        dttime.Checked = True
+    End Sub
+
     Private Function GravarSemRepetirLote(
     comandoGravacao As MySqlCommand,
     loteInformado As String,
@@ -730,4 +820,5 @@ Public Class frmcadastro
 
     End Function
 End Class
+
 
