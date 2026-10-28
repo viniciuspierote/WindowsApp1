@@ -53,6 +53,66 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("localhost")>  _
+        Public Property MysqlServidor() As String
+            Get
+                Return CType(Me("MysqlServidor"),String)
+            End Get
+            Set
+                Me("MysqlServidor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("3306")>  _
+        Public Property MysqlPorta() As Integer
+            Get
+                Return CType(Me("MysqlPorta"),Integer)
+            End Get
+            Set
+                Me("MysqlPorta") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("novo_bd")>  _
+        Public Property MysqlBanco() As String
+            Get
+                Return CType(Me("MysqlBanco"),String)
+            End Get
+            Set
+                Me("MysqlBanco") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("root")>  _
+        Public Property MysqlUsuario() As String
+            Get
+                Return CType(Me("MysqlUsuario"),String)
+            End Get
+            Set
+                Me("MysqlUsuario") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property MysqlSenhaProtegida() As String
+            Get
+                Return CType(Me("MysqlSenhaProtegida"),String)
+            End Get
+            Set
+                Me("MysqlSenhaProtegida") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

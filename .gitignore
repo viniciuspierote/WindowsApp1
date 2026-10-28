@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Pacotes ZIP e configurações locais do sistema
+*.zip
+user.config
+mysql.config.xml

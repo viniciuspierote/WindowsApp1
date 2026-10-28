@@ -15,7 +15,7 @@ Public Class frm_principal
     End Sub
 
     Private Sub frm_principal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        abrir()
+
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -52,5 +52,11 @@ Public Class frm_principal
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         frmcadastrarcliente.Show()
+    End Sub
+
+    Private Sub btnConfiguracoes_Click(sender As Object, e As EventArgs) Handles btnConfiguracoes.Click
+        Using tela As New frmConfiguracoes()
+            tela.ShowDialog(Me)
+        End Using
     End Sub
 End Class

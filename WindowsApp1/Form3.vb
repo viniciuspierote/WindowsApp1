@@ -17,9 +17,10 @@ Public Class frmcadastro
 
     Private Sub btnprocurar_Click(sender As Object, e As EventArgs) Handles btnprocurar.Click
         Dim cq = txtworkorder1.Text
+        Dim encontrou As Boolean = False
 
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "SELECT * from cadastrocertificados WHERE Work_Order_1 = @Work_Order_1"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@Work_Order_1", txtworkorder1.Text)
@@ -27,6 +28,7 @@ Public Class frmcadastro
             dr = comando.ExecuteReader()
 
             If dr.Read() Then ' Verificar se há registros antes de ler os campos
+                encontrou = True
                 txtcorrida.Text = If(Not IsDBNull(dr("Heat_Number")), dr("Heat_Number").ToString(), String.Empty)
                 txtid.Text = If(Not IsDBNull(dr("work_order")), dr("work_order").ToString(), String.Empty)
                 txtsalesorder.Text = If(Not IsDBNull(dr("Sales_Order")), dr("Sales_Order").ToString(), String.Empty)
@@ -54,6 +56,8 @@ Public Class frmcadastro
                 txttracao.Text = If(Not IsDBNull(dr("res_atracao")), dr("res_atracao").ToString(), String.Empty)
                 txtcustomer.Text = If(Not IsDBNull(dr("customer_po")), dr("customer_po").ToString(), String.Empty)
                 txtalongamento.Text = If(Not IsDBNull(dr("along")), dr("along").ToString(), String.Empty)
+                txtdureza.Text = If(Not IsDBNull(dr("dureza")), dr("dureza").ToString(), String.Empty)
+                txtreducaoarea.Text = If(Not IsDBNull(dr("reducaoarea")), dr("reducaoarea").ToString(), String.Empty)
             Else
                 ' Caso não haja registros, você pode limpar os campos de texto
                 txtcorrida.Text = String.Empty
@@ -82,6 +86,8 @@ Public Class frmcadastro
                 txttracao.Text = String.Empty
                 txtcustomer.Text = String.Empty
                 txtalongamento.Text = String.Empty
+                txtdureza.Text = String.Empty
+                txtreducaoarea.Text = String.Empty
             End If
 
 
@@ -92,6 +98,11 @@ Public Class frmcadastro
             conexaoo = Nothing
             comando = Nothing
         End Try
+        If encontrou Then
+            CarregarComposicaoQuimica()
+        Else
+            dgvdados.DataSource = Nothing
+        End If
     End Sub
 
 
@@ -120,7 +131,7 @@ Public Class frmcadastro
         txtworkorder.Text = txtid.Text
         Dim numero
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = ("SELECT WORK_ORDER FROM cadastrocertificados ORDER BY WORK_ORDER DESC LIMIT 1")
             comando = New MySqlCommand(strSQL, conexaoo)
 
@@ -158,7 +169,7 @@ Public Class frmcadastro
 
     Private Sub btnsalvar_Click(sender As Object, e As EventArgs) Handles btnsalvar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "INSERT INTO cadastrocertificados (WORK_ORDER, HEAT_NUMBER, SALES_ORDER, CUSTOMER_PO, QTDE, ESPECIFICACAO, SIZE_A, TOLERANCIA, OBS, AGN_IN_CODIGO, WORK_ORDER_1, ESP_GRAO, OBT_GRAO, DUREZA, ALONG, ESCOAMENTO, RES_ATRACAO, A_FINA, B_FINA, C_FINA, D_FINA, A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, MICROESTRUTURA, COMPRIMENTO, ANO_CERT, REDUCAOAREA) Values (@work_order, @corrida, @salesorder, @customer, @quantidade, @especificacao, @dimensao, @tolerancia, @observacao, @codfornecedor, @work_order_1, @espeficacaograo, @tamanhograo, @dureza, @alongamento, @escoamento, @tracao, @afina, @bfina, @cfina, @dfina, @agrossa, @bgrossa, @cgrossa, @dgrossa, @microestrutura, @comprimento, @anocertificado, @reducaodearea)"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtid.Text)
@@ -204,8 +215,8 @@ Public Class frmcadastro
 
     Private Sub btnatualizar_Click_1(sender As Object, e As EventArgs) Handles btnatualizar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
-            strSQL = "UPDATE cadastrocertificados set HEAT_NUMBER = @corrida, SALES_ORDER = @salesorder, CUSTOMER_PO = @customer, QTDE = @quantidade, ESPECIFICACAO = @especificacao, SIZE_A = @dimensao, TOLERANCIA = @tolerancia, OBS = @observacao, AGN_IN_CODIGO = @codfornecedor, WORK_ORDER_1 = @work_order_1, ESP_GRAO = @espeficacaograo, OBT_GRAO = @tamanhograo, DUREZA = @dureza, ALONG = @alongamento, ESCOAMENTO = @escoamento, RES_ATRACAO = @tracao, A_FINA = @afina, B_FINA = @bfina, C_FINA = @cfina, D_FINA = @dfina, A_GROSSA = @agrossa, B_GROSSA = @bgrossa, C_GROSSA = @cgrossa, D_GROSSA = @dgrossa, MICROESTRUTURA = @microestrutura, COMPRIMENTO = @comprimento, , ANO_CERT = @anocertificado WHERE work_order = @work_order"
+            conexaoo = conexao.NovaConexao()
+            strSQL = "UPDATE cadastrocertificados set HEAT_NUMBER = @corrida, SALES_ORDER = @salesorder, CUSTOMER_PO = @customer, QTDE = @quantidade, ESPECIFICACAO = @especificacao, SIZE_A = @dimensao, TOLERANCIA = @tolerancia, OBS = @observacao, AGN_IN_CODIGO = @codfornecedor, WORK_ORDER_1 = @work_order_1, ESP_GRAO = @espeficacaograo, OBT_GRAO = @tamanhograo, DUREZA = @dureza, ALONG = @alongamento, ESCOAMENTO = @escoamento, RES_ATRACAO = @tracao, A_FINA = @afina, B_FINA = @bfina, C_FINA = @cfina, D_FINA = @dfina, A_GROSSA = @agrossa, B_GROSSA = @bgrossa, C_GROSSA = @cgrossa, D_GROSSA = @dgrossa, MICROESTRUTURA = @microestrutura, COMPRIMENTO = @comprimento, ANO_CERT = @anocertificado, REDUCAOAREA = @reducaoarea WHERE work_order = @work_order"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtid.Text)
             comando.Parameters.AddWithValue("@corrida", txtcorrida.Text)
@@ -227,7 +238,7 @@ Public Class frmcadastro
             comando.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
             comando.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
             comando.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
-            comando.Parameters.AddWithValue("@dgrossa", txtcorrida.Text)
+            comando.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
             comando.Parameters.AddWithValue("@tamanhograo", txttamanhograo.Text)
             comando.Parameters.AddWithValue("@espeficacaograo", txtespecificacaograo.Text)
             comando.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
@@ -249,7 +260,7 @@ Public Class frmcadastro
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnincluir.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "INSERT INTO cadastrocompquimica (WORK_ORDER, SEQUENCIA, TIPO, VALOR) VALUES (@work_order, @sequencia, @tipo, @valor)"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtworkorder.Text)
@@ -283,13 +294,14 @@ Public Class frmcadastro
     End Sub
 
     Private Sub txtid_TextChanged(sender As Object, e As EventArgs) Handles txtid.TextChanged
+        txtworkorder.Text = txtid.Text
 
     End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
 
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "Delete from cadastrocompquimica where WORK_ORDER = @work_order and SEQUENCIA = @sequencia and TIPO = @tipo"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtworkorder.Text)
@@ -328,8 +340,8 @@ Public Class frmcadastro
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles btneditarcompquimica.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
-            strSQL = "update cadastrocompquimica set VALOR = @valor Where Work_order = work_order and TIPO = @tipo"
+            conexaoo = conexao.NovaConexao()
+            strSQL = "UPDATE cadastrocompquimica SET VALOR = @valor WHERE WORK_ORDER = @work_order AND SEQUENCIA = @sequencia AND TIPO = @tipo"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtworkorder.Text)
             comando.Parameters.AddWithValue("@sequencia", txtsequencia.Text)
@@ -349,6 +361,94 @@ Public Class frmcadastro
 
     Private Sub txtworkorder_Click(sender As Object, e As EventArgs) Handles txtworkorder.Click
         txtworkorder.Text = txtid.Text
+    End Sub
+
+    Private Sub txtworkorder1_Leave(sender As Object, e As EventArgs) Handles txtworkorder1.Leave
+        If String.IsNullOrWhiteSpace(txtworkorder1.Text) Then Return
+
+        Try
+            Using cn As MySqlConnection = conexao.NovaConexao()
+
+                Dim sql As String =
+                "SELECT COUNT(*) FROM cadastrocertificados " &
+                "WHERE WORK_ORDER_1 = @lote"
+
+                If Not String.IsNullOrWhiteSpace(txtid.Text) Then
+                    sql &= " AND WORK_ORDER <> @id"
+                End If
+
+                Using cmd As New MySqlCommand(sql, cn)
+                    cmd.Parameters.AddWithValue("@lote", txtworkorder1.Text.Trim())
+
+                    If Not String.IsNullOrWhiteSpace(txtid.Text) Then
+                        cmd.Parameters.AddWithValue("@id", txtid.Text.Trim())
+                    End If
+
+                    cn.Open()
+
+                    Dim quantidade As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+
+                    If quantidade > 0 Then
+                        MessageBox.Show(
+                            "O lote " & txtworkorder1.Text.Trim() &
+                            " já está cadastrado no sistema.",
+                            "Lote já cadastrado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                                        )
+                    End If
+                End Using
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show("Erro ao verificar o lote:" & vbCrLf & ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub txtworkorder1_TextChanged(sender As Object, e As EventArgs) Handles txtworkorder1.TextChanged
+
+    End Sub
+    Private Sub CarregarComposicaoQuimica()
+
+        If String.IsNullOrWhiteSpace(txtid.Text) Then
+            dgvdados.DataSource = Nothing
+            Exit Sub
+        End If
+
+        Try
+
+            Using conexaoComp As MySqlConnection = conexao.NovaConexao()
+
+                Dim sql As String =
+                    "SELECT * FROM cadastrocompquimica " &
+                    "WHERE WORK_ORDER = @work_order " &
+                    "ORDER BY SEQUENCIA"
+
+                Using cmd As New MySqlCommand(sql, conexaoComp)
+
+                    cmd.Parameters.AddWithValue("@work_order", txtid.Text)
+
+                    Dim dt As New DataTable
+                    Dim adapter As New MySqlDataAdapter(cmd)
+
+                    adapter.Fill(dt)
+
+                    dgvdados.DataSource = dt
+
+                End Using
+
+            End Using
+
+        Catch ex As Exception
+
+            MessageBox.Show(
+                "Erro ao carregar composição química:" &
+                vbCrLf & ex.Message
+            )
+
+        End Try
+
     End Sub
 End Class
 

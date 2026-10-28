@@ -29,14 +29,15 @@ Partial Class frm_principal
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.btnespeci = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.btnConfiguracoes = New System.Windows.Forms.Button()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(283, 81)
+        Me.Button1.Location = New System.Drawing.Point(265, 12)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(194, 139)
+        Me.Button1.Size = New System.Drawing.Size(231, 54)
         Me.Button1.TabIndex = 1
         Me.Button1.Text = "Emitir Certificado"
         Me.Button1.UseVisualStyleBackColor = True
@@ -44,18 +45,18 @@ Partial Class frm_principal
         'Button2
         '
         Me.Button2.AutoSize = True
-        Me.Button2.Location = New System.Drawing.Point(83, 81)
+        Me.Button2.Location = New System.Drawing.Point(12, 12)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(194, 139)
+        Me.Button2.Size = New System.Drawing.Size(247, 54)
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Cadastrar Lote"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(283, 226)
+        Me.Button3.Location = New System.Drawing.Point(265, 72)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(194, 117)
+        Me.Button3.Size = New System.Drawing.Size(231, 52)
         Me.Button3.TabIndex = 4
         Me.Button3.Text = "Certificados Emitidos"
         Me.Button3.UseVisualStyleBackColor = True
@@ -77,27 +78,37 @@ Partial Class frm_principal
         '
         'btnespeci
         '
-        Me.btnespeci.Location = New System.Drawing.Point(83, 226)
+        Me.btnespeci.Location = New System.Drawing.Point(12, 72)
         Me.btnespeci.Name = "btnespeci"
-        Me.btnespeci.Size = New System.Drawing.Size(194, 117)
+        Me.btnespeci.Size = New System.Drawing.Size(247, 52)
         Me.btnespeci.TabIndex = 10
         Me.btnespeci.Text = "Cadastrar Especificação do cliente"
         Me.btnespeci.UseVisualStyleBackColor = True
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(483, 81)
+        Me.Button4.Location = New System.Drawing.Point(377, 207)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 139)
         Me.Button4.TabIndex = 12
         Me.Button4.Text = "Cadastrar Cliente"
         Me.Button4.UseVisualStyleBackColor = True
         '
+        'btnConfiguracoes
+        '
+        Me.btnConfiguracoes.Location = New System.Drawing.Point(12, 130)
+        Me.btnConfiguracoes.Name = "btnConfiguracoes"
+        Me.btnConfiguracoes.Size = New System.Drawing.Size(247, 47)
+        Me.btnConfiguracoes.TabIndex = 14
+        Me.btnConfiguracoes.Text = "Configurações"
+        Me.btnConfiguracoes.UseVisualStyleBackColor = True
+        '
         'frm_principal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(644, 466)
+        Me.Controls.Add(Me.btnConfiguracoes)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.btnespeci)
         Me.Controls.Add(Me.StatusStrip1)
@@ -123,4 +134,5 @@ Partial Class frm_principal
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents btnespeci As Button
     Friend WithEvents Button4 As Button
+    Friend WithEvents btnConfiguracoes As Button
 End Class
