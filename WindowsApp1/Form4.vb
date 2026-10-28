@@ -20,7 +20,7 @@ Public Class Form4
         Dim work As String
         work = txtworkorder.Text
         Try
-            conexaoo = New MySqlConnection("server=localhost;database=novo_bd;uid=root;pwd=")
+            conexaoo = conexao.NovaConexao()
             strSQL = "Select * FROM itu_cad_certif_prod_f where work_order = " + work
             Dim dt As New DataTable
             da = New MySqlDataAdapter(strSQL, conexaoo)
@@ -37,7 +37,7 @@ Public Class Form4
 
     Private Sub btneditar_Click(sender As Object, e As EventArgs) Handles btnatualizar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "update itu_cad_certif_prod_f set VALOR = @valor Where Work_order = work_order and TIPO = @tipo"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtworkorder.Text)
@@ -60,7 +60,7 @@ Public Class Form4
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "INSERT INTO itu_cad_certif_prod_f (WORK_ORDER, SEQUENCIA, TIPO, VALOR) VALUES (@work_order, @sequencia, @tipo, @valor)"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtworkorder.Text)
@@ -83,7 +83,7 @@ Public Class Form4
     Private Sub btnexcluir_Click(sender As Object, e As EventArgs) Handles btnexcluir.Click
 
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "Delete from itu_cad_certif_prod_f where WORK_ORDER = @work_order and SEQUENCIA = @sequencia and TIPO = @tipo"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order", txtworkorder.Text)

@@ -7,7 +7,7 @@ Public Class frmcadastrarcliente
     Private strSQL As String
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btncadastrar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "INSERT INTO clientes (codigo, nome) VALUES (@codigo, @nome)"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@codigo", txtcodigo.Text)
