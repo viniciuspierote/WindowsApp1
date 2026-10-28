@@ -99,9 +99,24 @@ Public Class frmcadastro
             comando = Nothing
         End Try
         If encontrou Then
+            btnsalvar.Enabled = False
+            btnatualizar.Enabled = True
+
+            TabPage3.Enabled = True
+            btncadastrarcomposicao.Enabled = True
+
             CarregarComposicaoQuimica()
         Else
+            btnsalvar.Enabled = False
+            btnatualizar.Enabled = False
+
+            TabPage3.Enabled = False
+            btncadastrarcomposicao.Enabled = False
+
             dgvdados.DataSource = Nothing
+
+            MessageBox.Show(
+                "Lote não encontrado. Para cadastrar um novo, clique em Inserir.")
         End If
     End Sub
 
@@ -128,26 +143,9 @@ Public Class frmcadastro
     End Sub
 
     Private Sub frmcadastro_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        txtworkorder.Text = txtid.Text
-        Dim numero
-        Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = ("SELECT WORK_ORDER FROM cadastrocertificados ORDER BY WORK_ORDER DESC LIMIT 1")
-            comando = New MySqlCommand(strSQL, conexaoo)
 
-            conexaoo.Open()
-            dr = comando.ExecuteReader()
-            Do While dr.Read
-                numero = dr("work_order")
-            Loop
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
-        End Try
-        txtid.Text = numero + 1
+        PrepararNovoCadastro()
+
     End Sub
 
     Private Sub btnatualizar_Click(sender As Object, e As EventArgs)
@@ -165,97 +163,251 @@ Public Class frmcadastro
 
     Private Sub btninserir_Click(sender As Object, e As EventArgs) Handles btninserir.Click
 
+        Dim resposta = MessageBox.Show(
+        "Iniciar um novo cadastro? " &
+        "Os dados ainda não salvos na tela serão descartados.",
+        "Novo cadastro",
+        MessageBoxButtons.YesNo,
+        MessageBoxIcon.Question)
+
+        If resposta = DialogResult.Yes Then
+            PrepararNovoCadastro()
+        End If
+
     End Sub
 
-    Private Sub btnsalvar_Click(sender As Object, e As EventArgs) Handles btnsalvar.Click
+    Private Sub btnsalvar_Click(
+    sender As Object,
+    e As EventArgs) Handles btnsalvar.Click
+
+        If Not String.IsNullOrWhiteSpace(txtid.Text) Then
+            MessageBox.Show(
+            "Este cadastro já possui um ID. Use Atualizar ou clique em Inserir.")
+            Return
+        End If
+
+        If String.IsNullOrWhiteSpace(txtworkorder1.Text) Then
+            MessageBox.Show("Informe o lote / Work Order.")
+            txtworkorder1.Focus()
+            Return
+        End If
+
+        Dim codigoFornecedor As Integer
+
+        If Not String.IsNullOrWhiteSpace(txtcodfornecedor.Text) AndAlso
+        Not Integer.TryParse(txtcodfornecedor.Text.Trim(), codigoFornecedor) Then
+
+            MessageBox.Show("O código do fornecedor deve ser um número inteiro.")
+            Return
+        End If
+
         Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "INSERT INTO cadastrocertificados (WORK_ORDER, HEAT_NUMBER, SALES_ORDER, CUSTOMER_PO, QTDE, ESPECIFICACAO, SIZE_A, TOLERANCIA, OBS, AGN_IN_CODIGO, WORK_ORDER_1, ESP_GRAO, OBT_GRAO, DUREZA, ALONG, ESCOAMENTO, RES_ATRACAO, A_FINA, B_FINA, C_FINA, D_FINA, A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, MICROESTRUTURA, COMPRIMENTO, ANO_CERT, REDUCAOAREA) Values (@work_order, @corrida, @salesorder, @customer, @quantidade, @especificacao, @dimensao, @tolerancia, @observacao, @codfornecedor, @work_order_1, @espeficacaograo, @tamanhograo, @dureza, @alongamento, @escoamento, @tracao, @afina, @bfina, @cfina, @dfina, @agrossa, @bgrossa, @cgrossa, @dgrossa, @microestrutura, @comprimento, @anocertificado, @reducaodearea)"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@work_order", txtid.Text)
-            comando.Parameters.AddWithValue("@corrida", txtcorrida.Text)
-            comando.Parameters.AddWithValue("@work_order_1", txtworkorder1.Text)
-            comando.Parameters.AddWithValue("@salesorder", txtsalesorder.Text)
-            comando.Parameters.AddWithValue("@codfornecedor", txtcodfornecedor.Text)
-            comando.Parameters.AddWithValue("@customer", txtcustomer.Text)
-            comando.Parameters.AddWithValue("@quantidade", txtquantidade.Text)
-            comando.Parameters.AddWithValue("@especificacao", txtespecificacao.Text)
-            comando.Parameters.AddWithValue("@dimensao", txtdimensao.Text)
-            comando.Parameters.AddWithValue("@tolerancia", txttolerancia.Text)
-            comando.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
-            comando.Parameters.AddWithValue("@microestrutura", txtmicroestrutura.Text)
-            comando.Parameters.AddWithValue("@observacao", txtobservacao.Text)
-            comando.Parameters.AddWithValue("@afina", txtafina.Text)
-            comando.Parameters.AddWithValue("@bfina", txtbfina.Text)
-            comando.Parameters.AddWithValue("@cfina", txtcfina.Text)
-            comando.Parameters.AddWithValue("@dfina", txtdfina.Text)
-            comando.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
-            comando.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
-            comando.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
-            comando.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
-            comando.Parameters.AddWithValue("@tamanhograo", txttamanhograo.Text)
-            comando.Parameters.AddWithValue("@espeficacaograo", txtespecificacaograo.Text)
-            comando.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
-            comando.Parameters.AddWithValue("@escoamento", txtescoamento.Text)
-            comando.Parameters.AddWithValue("@tracao", txttracao.Text)
-            comando.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
-            comando.Parameters.AddWithValue("@dureza", txtdureza.Text)
-            comando.Parameters.AddWithValue("@anocertificado", txtanocertificado.Text)
-            comando.Parameters.AddWithValue("@reducaodearea", txtreducaoarea.Text)
-            conexaoo.Open()
-            comando.ExecuteNonQuery()
+            Using cn As MySqlConnection = conexao.NovaConexao()
+
+                Dim sql As String =
+                "INSERT INTO cadastrocertificados (" &
+                "HEAT_NUMBER, SALES_ORDER, CUSTOMER_PO, QTDE, " &
+                "ESPECIFICACAO, SIZE_A, TOLERANCIA, OBS, " &
+                "AGN_IN_CODIGO, WORK_ORDER_1, ESP_GRAO, OBT_GRAO, " &
+                "DUREZA, ALONG, ESCOAMENTO, RES_ATRACAO, " &
+                "A_FINA, B_FINA, C_FINA, D_FINA, " &
+                "A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, " &
+                "MICROESTRUTURA, COMPRIMENTO, ANO_CERT, REDUCAOAREA" &
+                ") VALUES (" &
+                "@corrida, @salesorder, @customer, @quantidade, " &
+                "@especificacao, @dimensao, @tolerancia, @observacao, " &
+                "@codfornecedor, @lote, @especificacaograo, @tamanhograo, " &
+                "@dureza, @alongamento, @escoamento, @tracao, " &
+                "@afina, @bfina, @cfina, @dfina, " &
+                "@agrossa, @bgrossa, @cgrossa, @dgrossa, " &
+                "@microestrutura, @comprimento, @ano, @reducaoarea)"
+
+                Using cmd As New MySqlCommand(sql, cn)
+
+                    cmd.Parameters.AddWithValue("@corrida", txtcorrida.Text)
+                    cmd.Parameters.AddWithValue("@salesorder", txtsalesorder.Text)
+                    cmd.Parameters.AddWithValue("@customer", txtcustomer.Text)
+                    cmd.Parameters.AddWithValue("@quantidade", txtquantidade.Text)
+                    cmd.Parameters.AddWithValue("@especificacao", txtespecificacao.Text)
+                    cmd.Parameters.AddWithValue("@dimensao", txtdimensao.Text)
+                    cmd.Parameters.AddWithValue("@tolerancia", txttolerancia.Text)
+                    cmd.Parameters.AddWithValue("@observacao", txtobservacao.Text)
+
+                    cmd.Parameters.AddWithValue(
+                    "@codfornecedor",
+                    If(String.IsNullOrWhiteSpace(txtcodfornecedor.Text),
+                       CType(DBNull.Value, Object),
+                       CType(codigoFornecedor, Object)))
+
+                    cmd.Parameters.AddWithValue("@lote", txtworkorder1.Text.Trim())
+                    cmd.Parameters.AddWithValue("@especificacaograo", txtespecificacaograo.Text)
+                    cmd.Parameters.AddWithValue("@tamanhograo", txttamanhograo.Text)
+                    cmd.Parameters.AddWithValue("@dureza", txtdureza.Text)
+                    cmd.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
+                    cmd.Parameters.AddWithValue("@escoamento", txtescoamento.Text)
+                    cmd.Parameters.AddWithValue("@tracao", txttracao.Text)
+                    cmd.Parameters.AddWithValue("@afina", txtafina.Text)
+                    cmd.Parameters.AddWithValue("@bfina", txtbfina.Text)
+                    cmd.Parameters.AddWithValue("@cfina", txtcfina.Text)
+                    cmd.Parameters.AddWithValue("@dfina", txtdfina.Text)
+                    cmd.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
+                    cmd.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
+                    cmd.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
+                    cmd.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
+                    cmd.Parameters.AddWithValue("@microestrutura", txtmicroestrutura.Text)
+                    cmd.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
+                    cmd.Parameters.AddWithValue("@ano", txtanocertificado.Text)
+                    cmd.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
+
+                    cn.Open()
+                    cmd.ExecuteNonQuery()
+
+                    ' Número gerado pelo AUTO_INCREMENT do MySQL.
+                    txtid.Text = cmd.LastInsertedId.ToString()
+
+                    btnsalvar.Enabled = False
+                    btnatualizar.Enabled = True
+
+                    TabPage3.Enabled = True
+                    btncadastrarcomposicao.Enabled = True
+
+                End Using
+            End Using
+
+            MessageBox.Show(
+            "Cadastro salvo com sucesso! ID: " & txtid.Text,
+            "Cadastro",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information)
+
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
+            MessageBox.Show(
+            "Não foi possível salvar o cadastro." &
+            vbCrLf & ex.Message,
+            "Cadastro",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error)
         End Try
+
     End Sub
 
-    Private Sub btnatualizar_Click_1(sender As Object, e As EventArgs) Handles btnatualizar.Click
+    Private Sub btnatualizar_Click_1(
+    sender As Object,
+    e As EventArgs) Handles btnatualizar.Click
+
+        Dim idCadastro As Integer
+
+        If Not Integer.TryParse(txtid.Text, idCadastro) OrElse idCadastro <= 0 Then
+            MessageBox.Show(
+            "Consulte um cadastro existente ou salve o novo cadastro primeiro.")
+            Return
+        End If
+
+        If String.IsNullOrWhiteSpace(txtworkorder1.Text) Then
+            MessageBox.Show("Informe o lote / Work Order.")
+            txtworkorder1.Focus()
+            Return
+        End If
+
+        Dim codigoFornecedor As Integer
+
+        If Not String.IsNullOrWhiteSpace(txtcodfornecedor.Text) AndAlso
+        Not Integer.TryParse(txtcodfornecedor.Text.Trim(), codigoFornecedor) Then
+
+            MessageBox.Show("O código do fornecedor deve ser um número inteiro.")
+            Return
+        End If
+
         Try
-            conexaoo = conexao.NovaConexao()
-            strSQL = "UPDATE cadastrocertificados set HEAT_NUMBER = @corrida, SALES_ORDER = @salesorder, CUSTOMER_PO = @customer, QTDE = @quantidade, ESPECIFICACAO = @especificacao, SIZE_A = @dimensao, TOLERANCIA = @tolerancia, OBS = @observacao, AGN_IN_CODIGO = @codfornecedor, WORK_ORDER_1 = @work_order_1, ESP_GRAO = @espeficacaograo, OBT_GRAO = @tamanhograo, DUREZA = @dureza, ALONG = @alongamento, ESCOAMENTO = @escoamento, RES_ATRACAO = @tracao, A_FINA = @afina, B_FINA = @bfina, C_FINA = @cfina, D_FINA = @dfina, A_GROSSA = @agrossa, B_GROSSA = @bgrossa, C_GROSSA = @cgrossa, D_GROSSA = @dgrossa, MICROESTRUTURA = @microestrutura, COMPRIMENTO = @comprimento, ANO_CERT = @anocertificado, REDUCAOAREA = @reducaoarea WHERE work_order = @work_order"
-            comando = New MySqlCommand(strSQL, conexaoo)
-            comando.Parameters.AddWithValue("@work_order", txtid.Text)
-            comando.Parameters.AddWithValue("@corrida", txtcorrida.Text)
-            comando.Parameters.AddWithValue("@work_order_1", txtworkorder1.Text)
-            comando.Parameters.AddWithValue("@salesorder", txtsalesorder.Text)
-            comando.Parameters.AddWithValue("@codfornecedor", txtcodfornecedor.Text)
-            comando.Parameters.AddWithValue("@customer", txtcustomer.Text)
-            comando.Parameters.AddWithValue("@quantidade", txtquantidade.Text)
-            comando.Parameters.AddWithValue("@especificacao", txtespecificacao.Text)
-            comando.Parameters.AddWithValue("@dimensao", txtdimensao.Text)
-            comando.Parameters.AddWithValue("@tolerancia", txttolerancia.Text)
-            comando.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
-            comando.Parameters.AddWithValue("@microestrutura", txtmicroestrutura.Text)
-            comando.Parameters.AddWithValue("@observacao", txtobservacao.Text)
-            comando.Parameters.AddWithValue("@afina", txtafina.Text)
-            comando.Parameters.AddWithValue("@bfina", txtbfina.Text)
-            comando.Parameters.AddWithValue("@cfina", txtcfina.Text)
-            comando.Parameters.AddWithValue("@dfina", txtdfina.Text)
-            comando.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
-            comando.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
-            comando.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
-            comando.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
-            comando.Parameters.AddWithValue("@tamanhograo", txttamanhograo.Text)
-            comando.Parameters.AddWithValue("@espeficacaograo", txtespecificacaograo.Text)
-            comando.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
-            comando.Parameters.AddWithValue("@escoamento", txtescoamento.Text)
-            comando.Parameters.AddWithValue("@tracao", txttracao.Text)
-            comando.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
-            comando.Parameters.AddWithValue("@dureza", txtdureza.Text)
-            comando.Parameters.AddWithValue("@anocertificado", txtanocertificado.Text)
-            conexaoo.Open()
-            comando.ExecuteNonQuery()
+            Using cn As MySqlConnection = conexao.NovaConexao()
+
+                Dim sql As String =
+                "UPDATE cadastrocertificados SET " &
+                "HEAT_NUMBER = @corrida, SALES_ORDER = @salesorder, " &
+                "CUSTOMER_PO = @customer, QTDE = @quantidade, " &
+                "ESPECIFICACAO = @especificacao, SIZE_A = @dimensao, " &
+                "TOLERANCIA = @tolerancia, OBS = @observacao, " &
+                "AGN_IN_CODIGO = @codfornecedor, WORK_ORDER_1 = @lote, " &
+                "ESP_GRAO = @especificacaograo, OBT_GRAO = @tamanhograo, " &
+                "DUREZA = @dureza, ALONG = @alongamento, " &
+                "ESCOAMENTO = @escoamento, RES_ATRACAO = @tracao, " &
+                "A_FINA = @afina, B_FINA = @bfina, " &
+                "C_FINA = @cfina, D_FINA = @dfina, " &
+                "A_GROSSA = @agrossa, B_GROSSA = @bgrossa, " &
+                "C_GROSSA = @cgrossa, D_GROSSA = @dgrossa, " &
+                "MICROESTRUTURA = @microestrutura, COMPRIMENTO = @comprimento, " &
+                "ANO_CERT = @ano, REDUCAOAREA = @reducaoarea " &
+                "WHERE WORK_ORDER = @id"
+
+                Using cmd As New MySqlCommand(sql, cn)
+
+                    cmd.Parameters.AddWithValue("@id", idCadastro)
+                    cmd.Parameters.AddWithValue("@corrida", txtcorrida.Text)
+                    cmd.Parameters.AddWithValue("@salesorder", txtsalesorder.Text)
+                    cmd.Parameters.AddWithValue("@customer", txtcustomer.Text)
+                    cmd.Parameters.AddWithValue("@quantidade", txtquantidade.Text)
+                    cmd.Parameters.AddWithValue("@especificacao", txtespecificacao.Text)
+                    cmd.Parameters.AddWithValue("@dimensao", txtdimensao.Text)
+                    cmd.Parameters.AddWithValue("@tolerancia", txttolerancia.Text)
+                    cmd.Parameters.AddWithValue("@observacao", txtobservacao.Text)
+
+                    cmd.Parameters.AddWithValue(
+                    "@codfornecedor",
+                    If(String.IsNullOrWhiteSpace(txtcodfornecedor.Text),
+                       CType(DBNull.Value, Object),
+                       CType(codigoFornecedor, Object)))
+
+                    cmd.Parameters.AddWithValue("@lote", txtworkorder1.Text.Trim())
+                    cmd.Parameters.AddWithValue("@especificacaograo", txtespecificacaograo.Text)
+                    cmd.Parameters.AddWithValue("@tamanhograo", txttamanhograo.Text)
+                    cmd.Parameters.AddWithValue("@dureza", txtdureza.Text)
+                    cmd.Parameters.AddWithValue("@alongamento", txtalongamento.Text)
+                    cmd.Parameters.AddWithValue("@escoamento", txtescoamento.Text)
+                    cmd.Parameters.AddWithValue("@tracao", txttracao.Text)
+                    cmd.Parameters.AddWithValue("@afina", txtafina.Text)
+                    cmd.Parameters.AddWithValue("@bfina", txtbfina.Text)
+                    cmd.Parameters.AddWithValue("@cfina", txtcfina.Text)
+                    cmd.Parameters.AddWithValue("@dfina", txtdfina.Text)
+                    cmd.Parameters.AddWithValue("@agrossa", txtagrossa.Text)
+                    cmd.Parameters.AddWithValue("@bgrossa", txtbgrossa.Text)
+                    cmd.Parameters.AddWithValue("@cgrossa", txtcgrossa.Text)
+                    cmd.Parameters.AddWithValue("@dgrossa", txtdgrossa.Text)
+                    cmd.Parameters.AddWithValue("@microestrutura", txtmicroestrutura.Text)
+                    cmd.Parameters.AddWithValue("@comprimento", txtcomprimento.Text)
+                    cmd.Parameters.AddWithValue("@ano", txtanocertificado.Text)
+                    cmd.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
+
+                    cn.Open()
+
+                    Dim quantidade As Integer = cmd.ExecuteNonQuery()
+
+                    If quantidade = 1 Then
+                        MessageBox.Show(
+                        "Cadastro atualizado com sucesso!",
+                        "Cadastro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information)
+                    Else
+                        MessageBox.Show(
+                        "O banco não informou uma alteração. " &
+                        "Consulte o cadastro novamente para conferir os dados.",
+                        "Cadastro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information)
+                    End If
+
+                End Using
+            End Using
+
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        Finally
-            conexaoo.Close()
-            conexaoo = Nothing
-            comando = Nothing
+            MessageBox.Show(
+            "Não foi possível atualizar o cadastro." &
+            vbCrLf & ex.Message,
+            "Cadastro",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error)
         End Try
+
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnincluir.Click
@@ -448,6 +600,49 @@ Public Class frmcadastro
             )
 
         End Try
+
+    End Sub
+
+    Private Sub PrepararNovoCadastro()
+
+        Dim campos As Control() = {
+            txtid, txtworkorder, txtworkorder1,
+            txtcorrida, txtsalesorder, txtcustomer,
+            txtcodfornecedor, txtnomefornecedor,
+            txtquantidade, txtespecificacao,
+            txtdimensao, txttolerancia,
+            txtobservacao, txtmicroestrutura,
+            txtcomprimento, txtanocertificado,
+            txttamanhograo, txtespecificacaograo,
+            txtalongamento, txtescoamento,
+            txttracao, txtdureza, txtreducaoarea,
+            txtafina, txtbfina, txtcfina, txtdfina,
+            txtagrossa, txtbgrossa, txtcgrossa, txtdgrossa,
+            txttratamentotermico, txtacabamento, ComboBox1,
+            txtsequencia, txttipo, txtvalor
+        }
+
+        For Each campo As Control In campos
+            campo.Text = String.Empty
+        Next
+
+        txtanocertificado.Text = Date.Today.Year.ToString()
+        DateTimePicker1.Value = Date.Today
+
+        loteglobal = String.Empty
+        dgvdados.DataSource = Nothing
+
+        txtworkorder.ReadOnly = True
+
+        btnsalvar.Enabled = True
+        btnatualizar.Enabled = False
+
+        ' A composição só poderá ser cadastrada após salvar o registro.
+        TabPage3.Enabled = False
+        btncadastrarcomposicao.Enabled = False
+
+        TabControl1.SelectedTab = TabPage1
+        txtworkorder1.Focus()
 
     End Sub
 End Class
