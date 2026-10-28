@@ -35,7 +35,7 @@ Public Class frm_emitircertificado
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles btnbuscar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "SELECT * from emissaodecertificado WHERE ID = @ID"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@ID", txtprocurar.Text)
@@ -80,7 +80,7 @@ Public Class frm_emitircertificado
             comando = Nothing
         End Try
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "SELECT * from emissaodecertificado WHERE work_order_1 = @work_order_1"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order_1", txtlote.Text)
@@ -105,7 +105,7 @@ Public Class frm_emitircertificado
         If btnincluir.Text = "Incluir" Then
             Dim numero
             Try
-                conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+                conexaoo = conexao.NovaConexao()
                 strSQL = ("SELECT ID FROM emissaodecertificado ORDER BY id DESC LIMIT 1")
                 comando = New MySqlCommand(strSQL, conexaoo)
 
@@ -281,7 +281,7 @@ Public Class frm_emitircertificado
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnsalvar.Click
 
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "INSERT INTO emissaodecertificado (WORK_ORDER, HEAT_NUMBER, QTDE, ESPECIFICACAO, SIZE_A, TOLERANCIA, OBS, AGN_IN_CODIGO, WORK_ORDER_1, ID, COD_CLI, PED_CLI, NF, LIGA_MATERIAL, TRAT_TERMICO, ACABAMENTO, COMPRIMENTO, PESO, ALONG, ESCOAMENTO, RES_ATRACAO, MICROESTRUTURA, PRODUTO, ESP_GRAO, OBT_GRAO, DUREZA, A_FINA, B_FINA, C_FINA, D_FINA, A_GROSSA, B_GROSSA, C_GROSSA, D_GROSSA, NOME_ABRV, ANO_CERT, TIPO_PESO, REDUCAODEAREA) VALUES (@workorder, @corrida, @quantidade, @especificacao, @dimensao, @tolerancia, @observacao, @codigofornecedor, @lote, @certificado, @codigocliente, @numerodopedido, @notafiscal, @liga, @tratamentotermico, @acabamento, @comprimento, @peso, @alongamento, @escoamento, @tracao, @microestrutura, @tipo, @normagrao, @grao, @dureza, @afina, @bfina, @cfina, @dfina, @agrossa, @bgrossa, @cgrossa, @dgrossa, @fornecedor, @certificadoano, @unidadepeso, @REDUCAODEAREA)"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@certificado", txtnumerocertificado.Text)
@@ -405,7 +405,7 @@ Public Class frm_emitircertificado
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles btnprocurar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "SELECT * from cadastrocertificados WHERE work_order_1 = @work_order_1"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@work_order_1", txtlote.Text)
@@ -543,7 +543,7 @@ Public Class frm_emitircertificado
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles btnprocurarcliente.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "SELECT * from clientes WHERE codigo = @codigo"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@codigo", txtcodigocliente.Text)
@@ -645,7 +645,7 @@ Public Class frm_emitircertificado
 
     Private Sub btnatualizar_Click(sender As Object, e As EventArgs) Handles btnatualizar.Click
         Try
-            conexaoo = New MySqlConnection("Server=localhost;Database=novo_bd;Uid=root;Pwd=;")
+            conexaoo = conexao.NovaConexao()
             strSQL = "UPDATE emissaodecertificado Set WORK_ORDER = @workorder, HEAT_NUMBER = @corrida, WORK_ORDER_1 = @lote, QTDE = @quantidade, ESPECIFICACAO = @especificacao, SIZE_A = @dimensao, TOLERANCIA = @tolerancia, OBS = @observacao, AGN_IN_CODIGO = @codigofornecedor, COD_CLI = @codigocliente, PED_CLI = @numerodopedido, NF = @notafiscal, LIGA_MATERIAL = @liga , TRAT_TERMICO = @tratamentotermico, ACABAMENTO = @acabamento, COMPRIMENTO = @comprimento, PESO = @peso, ALONG = @alongamento, ESCOAMENTO = @escoamento, RES_ATRACAO = @tracao, MICROESTRUTURA = @microestrutura, PRODUTO = @tipo, ESP_GRAO = @normagrao, OBT_GRAO = @grao, DUREZA = @dureza, ANO_CERT = @certificadoano, REDUCAODEAREA = @reducaodearea, TIPO_PESO = @unidadepeso WHERE ID = @certificado"
             comando = New MySqlCommand(strSQL, conexaoo)
             comando.Parameters.AddWithValue("@certificado", txtnumerocertificado.Text)

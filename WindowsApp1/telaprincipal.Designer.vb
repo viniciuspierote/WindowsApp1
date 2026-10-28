@@ -64,9 +64,9 @@ Partial Class frm_principal
         'StatusStrip1
         '
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 444)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 272)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(644, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(533, 22)
         Me.StatusStrip1.TabIndex = 8
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -87,9 +87,9 @@ Partial Class frm_principal
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(377, 207)
+        Me.Button4.Location = New System.Drawing.Point(265, 130)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(75, 139)
+        Me.Button4.Size = New System.Drawing.Size(231, 47)
         Me.Button4.TabIndex = 12
         Me.Button4.Text = "Cadastrar Cliente"
         Me.Button4.UseVisualStyleBackColor = True
@@ -107,7 +107,7 @@ Partial Class frm_principal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(644, 466)
+        Me.ClientSize = New System.Drawing.Size(533, 294)
         Me.Controls.Add(Me.btnConfiguracoes)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.btnespeci)

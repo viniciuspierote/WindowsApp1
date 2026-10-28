@@ -40,55 +40,55 @@ Partial Class frmConfiguracoes
         '
         'txtServidor
         '
-        Me.txtServidor.Location = New System.Drawing.Point(172, 72)
+        Me.txtServidor.Location = New System.Drawing.Point(98, 12)
         Me.txtServidor.Name = "txtServidor"
-        Me.txtServidor.Size = New System.Drawing.Size(100, 20)
+        Me.txtServidor.Size = New System.Drawing.Size(160, 20)
         Me.txtServidor.TabIndex = 0
         '
         'txtSenha
         '
-        Me.txtSenha.Location = New System.Drawing.Point(172, 150)
+        Me.txtSenha.Location = New System.Drawing.Point(98, 116)
         Me.txtSenha.Name = "txtSenha"
-        Me.txtSenha.Size = New System.Drawing.Size(100, 20)
+        Me.txtSenha.Size = New System.Drawing.Size(160, 20)
         Me.txtSenha.TabIndex = 1
         Me.txtSenha.UseSystemPasswordChar = True
         '
         'txtUsuario
         '
-        Me.txtUsuario.Location = New System.Drawing.Point(172, 124)
+        Me.txtUsuario.Location = New System.Drawing.Point(98, 90)
         Me.txtUsuario.Name = "txtUsuario"
-        Me.txtUsuario.Size = New System.Drawing.Size(100, 20)
+        Me.txtUsuario.Size = New System.Drawing.Size(160, 20)
         Me.txtUsuario.TabIndex = 2
         '
         'txtBanco
         '
-        Me.txtBanco.Location = New System.Drawing.Point(172, 98)
+        Me.txtBanco.Location = New System.Drawing.Point(98, 64)
         Me.txtBanco.Name = "txtBanco"
-        Me.txtBanco.Size = New System.Drawing.Size(100, 20)
+        Me.txtBanco.Size = New System.Drawing.Size(160, 20)
         Me.txtBanco.TabIndex = 3
         '
         'nudPorta
         '
-        Me.nudPorta.Location = New System.Drawing.Point(415, 77)
+        Me.nudPorta.Location = New System.Drawing.Point(98, 38)
         Me.nudPorta.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
         Me.nudPorta.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudPorta.Name = "nudPorta"
-        Me.nudPorta.Size = New System.Drawing.Size(120, 20)
+        Me.nudPorta.Size = New System.Drawing.Size(160, 20)
         Me.nudPorta.TabIndex = 4
         Me.nudPorta.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'btnTestar
         '
-        Me.btnTestar.Location = New System.Drawing.Point(415, 103)
+        Me.btnTestar.Location = New System.Drawing.Point(98, 142)
         Me.btnTestar.Name = "btnTestar"
-        Me.btnTestar.Size = New System.Drawing.Size(120, 23)
+        Me.btnTestar.Size = New System.Drawing.Size(160, 23)
         Me.btnTestar.TabIndex = 5
         Me.btnTestar.Text = "Testar conexão"
         Me.btnTestar.UseVisualStyleBackColor = True
         '
         'btnSalvar
         '
-        Me.btnSalvar.Location = New System.Drawing.Point(415, 132)
+        Me.btnSalvar.Location = New System.Drawing.Point(12, 171)
         Me.btnSalvar.Name = "btnSalvar"
         Me.btnSalvar.Size = New System.Drawing.Size(120, 23)
         Me.btnSalvar.TabIndex = 6
@@ -97,7 +97,7 @@ Partial Class frmConfiguracoes
         '
         'btnCancelar
         '
-        Me.btnCancelar.Location = New System.Drawing.Point(415, 161)
+        Me.btnCancelar.Location = New System.Drawing.Point(138, 171)
         Me.btnCancelar.Name = "btnCancelar"
         Me.btnCancelar.Size = New System.Drawing.Size(120, 23)
         Me.btnCancelar.TabIndex = 7
@@ -107,7 +107,7 @@ Partial Class frmConfiguracoes
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(117, 75)
+        Me.Label1.Location = New System.Drawing.Point(43, 15)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(49, 13)
         Me.Label1.TabIndex = 8
@@ -116,7 +116,7 @@ Partial Class frmConfiguracoes
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(377, 79)
+        Me.Label2.Location = New System.Drawing.Point(57, 40)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(35, 13)
         Me.Label2.TabIndex = 9
@@ -125,7 +125,7 @@ Partial Class frmConfiguracoes
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(81, 103)
+        Me.Label3.Location = New System.Drawing.Point(7, 69)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(88, 13)
         Me.Label3.TabIndex = 10
@@ -134,7 +134,7 @@ Partial Class frmConfiguracoes
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(120, 127)
+        Me.Label4.Location = New System.Drawing.Point(46, 93)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(46, 13)
         Me.Label4.TabIndex = 11
@@ -143,7 +143,7 @@ Partial Class frmConfiguracoes
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(128, 153)
+        Me.Label5.Location = New System.Drawing.Point(54, 119)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(41, 13)
         Me.Label5.TabIndex = 12
@@ -153,7 +153,7 @@ Partial Class frmConfiguracoes
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1178, 450)
+        Me.ClientSize = New System.Drawing.Size(279, 234)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)

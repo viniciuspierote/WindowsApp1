@@ -323,7 +323,7 @@ Public Class frmcadastro
         Dim work As String
         work = txtworkorder.Text
         Try
-            conexaoo = New MySqlConnection("server=localhost;database=novo_bd;uid=root;pwd=")
+            conexaoo = conexao.NovaConexao()
             strSQL = "Select * FROM cadastrocompquimica where work_order = " + work
             Dim dt As New DataTable
             da = New MySqlDataAdapter(strSQL, conexaoo)
