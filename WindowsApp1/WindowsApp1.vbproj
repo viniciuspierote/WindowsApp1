@@ -94,6 +94,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackupBanco.vb" />
     <Compile Include="conexao.vb" />
     <Compile Include="CrystalReport1.vb">
       <AutoGen>True</AutoGen>

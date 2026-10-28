@@ -30,6 +30,8 @@ Partial Class frm_principal
         Me.btnespeci = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.btnConfiguracoes = New System.Windows.Forms.Button()
+        Me.btnHistoricoBackups = New System.Windows.Forms.Button()
+        Me.btnBackupAdicional = New System.Windows.Forms.Button()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -64,7 +66,7 @@ Partial Class frm_principal
         'StatusStrip1
         '
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 272)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 358)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(533, 22)
         Me.StatusStrip1.TabIndex = 8
@@ -103,11 +105,31 @@ Partial Class frm_principal
         Me.btnConfiguracoes.Text = "Configurações"
         Me.btnConfiguracoes.UseVisualStyleBackColor = True
         '
+        'btnHistoricoBackups
+        '
+        Me.btnHistoricoBackups.Location = New System.Drawing.Point(12, 183)
+        Me.btnHistoricoBackups.Name = "btnHistoricoBackups"
+        Me.btnHistoricoBackups.Size = New System.Drawing.Size(247, 44)
+        Me.btnHistoricoBackups.TabIndex = 16
+        Me.btnHistoricoBackups.Text = "Histórico dos backups"
+        Me.btnHistoricoBackups.UseVisualStyleBackColor = True
+        '
+        'btnBackupAdicional
+        '
+        Me.btnBackupAdicional.Location = New System.Drawing.Point(265, 183)
+        Me.btnBackupAdicional.Name = "btnBackupAdicional"
+        Me.btnBackupAdicional.Size = New System.Drawing.Size(231, 44)
+        Me.btnBackupAdicional.TabIndex = 17
+        Me.btnBackupAdicional.Text = "Backup adicional"
+        Me.btnBackupAdicional.UseVisualStyleBackColor = True
+        '
         'frm_principal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(533, 294)
+        Me.ClientSize = New System.Drawing.Size(533, 380)
+        Me.Controls.Add(Me.btnBackupAdicional)
+        Me.Controls.Add(Me.btnHistoricoBackups)
         Me.Controls.Add(Me.btnConfiguracoes)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.btnespeci)
@@ -135,4 +157,6 @@ Partial Class frm_principal
     Friend WithEvents btnespeci As Button
     Friend WithEvents Button4 As Button
     Friend WithEvents btnConfiguracoes As Button
+    Friend WithEvents btnHistoricoBackups As Button
+    Friend WithEvents btnBackupAdicional As Button
 End Class

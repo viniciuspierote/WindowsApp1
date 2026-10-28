@@ -260,7 +260,7 @@ Public Class frmcadastro
                     cmd.Parameters.AddWithValue("@reducaoarea", txtreducaoarea.Text)
 
                     cn.Open()
-                    cmd.ExecuteNonQuery()
+                    GravarSemRepetirLote(cmd, txtworkorder1.Text)
 
                     ' Número gerado pelo AUTO_INCREMENT do MySQL.
                     txtid.Text = cmd.LastInsertedId.ToString()
@@ -379,7 +379,8 @@ Public Class frmcadastro
 
                     cn.Open()
 
-                    Dim quantidade As Integer = cmd.ExecuteNonQuery()
+                    Dim quantidade As Integer =
+                        GravarSemRepetirLote(cmd, txtworkorder1.Text, idCadastro)
 
                     If quantidade = 1 Then
                         MessageBox.Show(
@@ -645,5 +646,88 @@ Public Class frmcadastro
         txtworkorder1.Focus()
 
     End Sub
+    Private Function GravarSemRepetirLote(
+    comandoGravacao As MySqlCommand,
+    loteInformado As String,
+    Optional idAtual As Integer = 0) As Integer
+
+        Dim cn As MySqlConnection = comandoGravacao.Connection
+        Dim lote As String = loteInformado.Trim()
+
+        If String.IsNullOrWhiteSpace(lote) Then
+            Throw New ArgumentException("Informe o lote / Work Order.")
+        End If
+
+        ' Usa uma trava compartilhada pelas gravações desta versão.
+        Using obterTrava As New MySqlCommand(
+            "SELECT GET_LOCK('sandinox_cadastro_lote', 5)", cn)
+
+            Dim resultado As Object = obterTrava.ExecuteScalar()
+
+            If resultado Is Nothing OrElse
+                resultado Is DBNull.Value OrElse
+                Convert.ToInt32(resultado) <> 1 Then
+
+                Throw New InvalidOperationException(
+                    "Outro cadastro está sendo gravado. Tente novamente.")
+            End If
+
+        End Using
+
+        Try
+            Dim manterLoteAtual As Boolean = False
+
+            If idAtual > 0 Then
+                ' Permite editar registros antigos mantendo o mesmo lote.
+                Using consultarAtual As New MySqlCommand(
+                    "SELECT 1 FROM cadastrocertificados " &
+                    "WHERE WORK_ORDER = @id " &
+                    "AND TRIM(WORK_ORDER_1) = @lote", cn)
+
+                    consultarAtual.Parameters.AddWithValue("@id", idAtual)
+                    consultarAtual.Parameters.AddWithValue("@lote", lote)
+
+                    manterLoteAtual =
+                        consultarAtual.ExecuteScalar() IsNot Nothing
+
+                End Using
+            End If
+
+            If Not manterLoteAtual Then
+
+                Using verificar As New MySqlCommand(
+                    "SELECT COUNT(*) FROM cadastrocertificados " &
+                    "WHERE TRIM(WORK_ORDER_1) = @lote " &
+                    "AND WORK_ORDER <> @id", cn)
+
+                    verificar.Parameters.AddWithValue("@lote", lote)
+                    verificar.Parameters.AddWithValue("@id", idAtual)
+
+                    Dim quantidade As Integer =
+                        Convert.ToInt32(verificar.ExecuteScalar())
+
+                    If quantidade > 0 Then
+                        Throw New InvalidOperationException(
+                            "O lote " & lote & " já está cadastrado. " &
+                            "Consulte o cadastro existente para editar.")
+                    End If
+
+                End Using
+            End If
+
+            comandoGravacao.Parameters("@lote").Value = lote
+
+            Return comandoGravacao.ExecuteNonQuery()
+
+        Finally
+            Using liberarTrava As New MySqlCommand(
+                "SELECT RELEASE_LOCK('sandinox_cadastro_lote')", cn)
+
+                liberarTrava.ExecuteScalar()
+
+            End Using
+        End Try
+
+    End Function
 End Class
 

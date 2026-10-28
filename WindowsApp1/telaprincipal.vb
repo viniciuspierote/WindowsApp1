@@ -1,6 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Threading.Tasks
 
 Public Class frm_principal
+    Private tarefaBackup As Task(Of String)
+
     Public Sub New()
 
         ' Esta chamada é requerida pelo designer.
@@ -59,4 +62,84 @@ Public Class frm_principal
             tela.ShowDialog(Me)
         End Using
     End Sub
+    Private Async Sub frm_principal_Shown(
+    sender As Object,
+    e As EventArgs) Handles MyBase.Shown
+
+        Await RodarBackupAsync(False)
+
+    End Sub
+
+    Private Async Function RodarBackupAsync(adicional As Boolean) As Task
+
+        If tarefaBackup IsNot Nothing AndAlso Not tarefaBackup.IsCompleted Then
+            If adicional Then
+                MessageBox.Show(
+                "Já existe um backup em andamento. Aguarde a conclusão.",
+                "Backups",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information)
+            End If
+            Return
+        End If
+
+        btnBackupAdicional.Enabled = False
+
+        Try
+            tarefaBackup = Task.Run(Function() BackupBanco.ExecutarBackup(adicional))
+            Dim mensagem As String = Await tarefaBackup
+
+            ' A execução automática bem-sucedida não abre mensagem.
+            If adicional Then
+                MessageBox.Show(
+                mensagem,
+                "Backups",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(
+            "O backup não foi confirmado." & vbCrLf & ex.Message,
+            "Backups",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Warning)
+        Finally
+            btnBackupAdicional.Enabled = True
+        End Try
+
+    End Function
+
+    Private Async Sub btnBackupAdicional_Click(
+    sender As Object,
+    e As EventArgs) Handles btnBackupAdicional.Click
+
+        Await RodarBackupAsync(True)
+
+    End Sub
+
+    Private Sub btnHistoricoBackups_Click(
+    sender As Object,
+    e As EventArgs) Handles btnHistoricoBackups.Click
+
+        BackupBanco.MostrarHistorico(Me)
+
+    End Sub
+
+    Private Sub frm_principal_FormClosing(
+    sender As Object,
+    e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+        If tarefaBackup IsNot Nothing AndAlso Not tarefaBackup.IsCompleted Then
+            e.Cancel = True
+
+            MessageBox.Show(
+            "O backup está em andamento. Aguarde a conclusão para fechar o sistema.",
+            "Backups",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information)
+        End If
+
+    End Sub
+
 End Class
