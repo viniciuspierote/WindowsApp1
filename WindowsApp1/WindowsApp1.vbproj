@@ -96,12 +96,14 @@
   <ItemGroup>
     <Compile Include="BackupBanco.vb" />
     <Compile Include="conexao.vb" />
+    <Compile Include="ConferenciaNormas.vb" />
     <Compile Include="CrystalReport1.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CrystalReport1.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EditorCadastroNormas.vb" />
     <Compile Include="Form1.Designer.vb">
       <DependentUpon>Form1.vb</DependentUpon>
     </Compile>
@@ -150,6 +152,9 @@
     <Compile Include="frmConfiguracoes.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmNormasConfig.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="login.Designer.vb">
       <DependentUpon>login.vb</DependentUpon>
     </Compile>
@@ -166,7 +171,6 @@
     </Compile>
     <Compile Include="telaprincipal.Designer.vb">
       <DependentUpon>telaprincipal.vb</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form2.Designer.vb">
       <DependentUpon>Form2.vb</DependentUpon>
@@ -262,4 +266,90 @@
     <Content Include="Resources\logo_sandinox.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <ItemGroup>
+    <Compile Include="frmAplicacaoPerfil.Designer.vb">
+      <DependentUpon>frmAplicacaoPerfil.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmAplicacaoPerfil.resx">
+      <DependentUpon>frmAplicacaoPerfil.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmAplicacaoPerfil.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConferenciaNormas.Designer.vb">
+      <DependentUpon>frmConferenciaNormas.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmConferenciaNormas.resx">
+      <DependentUpon>frmConferenciaNormas.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmConferenciaNormas.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDetalhesRequisito.Designer.vb">
+      <DependentUpon>frmDetalhesRequisito.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmDetalhesRequisito.resx">
+      <DependentUpon>frmDetalhesRequisito.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmDetalhesRequisito.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHistoricoBackups.Designer.vb">
+      <DependentUpon>frmHistoricoBackups.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmHistoricoBackups.resx">
+      <DependentUpon>frmHistoricoBackups.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmHistoricoBackups.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNormasConfig.Designer.vb">
+      <DependentUpon>frmNormasConfig.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmNormasConfig.resx">
+      <DependentUpon>frmNormasConfig.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmPropriedadeNorma.Designer.vb">
+      <DependentUpon>frmPropriedadeNorma.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmPropriedadeNorma.resx">
+      <DependentUpon>frmPropriedadeNorma.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmPropriedadeNorma.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Autenticacao.vb" />
+    <Compile Include="frmAlterarSenha.Designer.vb">
+      <DependentUpon>frmAlterarSenha.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmAlterarSenha.resx">
+      <DependentUpon>frmAlterarSenha.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmAlterarSenha.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPrimeiroAcesso.Designer.vb">
+      <DependentUpon>frmPrimeiroAcesso.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmPrimeiroAcesso.resx">
+      <DependentUpon>frmPrimeiroAcesso.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmPrimeiroAcesso.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUsuarios.Designer.vb">
+      <DependentUpon>frmUsuarios.vb</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmUsuarios.resx">
+      <DependentUpon>frmUsuarios.vb</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="frmUsuarios.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrincipalAcesso.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

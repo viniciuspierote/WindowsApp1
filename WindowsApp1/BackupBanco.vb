@@ -299,52 +299,8 @@ Public Module BackupBanco
     End Function
 
     Public Sub MostrarHistorico(dono As IWin32Window)
-        Using janela As New Form()
-            janela.Text = "Sandinox — Histórico dos backups"
-            janela.StartPosition = FormStartPosition.CenterParent
-            janela.Size = New System.Drawing.Size(1100, 520)
-            Dim grade As New DataGridView()
-            grade.Dock = DockStyle.Fill
-            grade.ReadOnly = True
-            grade.AllowUserToAddRows = False
-            grade.AllowUserToDeleteRows = False
-            grade.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells
-            grade.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-            Dim barra As New FlowLayoutPanel()
-            barra.Dock = DockStyle.Top
-            barra.Height = 42
-            Dim atualizar As New Button()
-            atualizar.Text = "Atualizar"
-            atualizar.Width = 110
-            Dim pasta As New Button()
-            pasta.Text = "Abrir pasta dos backups"
-            pasta.Width = 190
-            barra.Controls.Add(atualizar)
-            barra.Controls.Add(pasta)
-            Dim carregar As Action =
-                Sub()
-                    Try
-                        grade.DataSource = LerHistorico()
-                        grade.Columns("Início").DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss"
-                    Catch ex As Exception
-                        MessageBox.Show(janela, ex.Message, "Histórico", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Try
-                End Sub
-            AddHandler atualizar.Click, Sub(sender As Object, e As EventArgs) carregar()
-            AddHandler pasta.Click,
-                Sub(sender As Object, e As EventArgs)
-                    Try
-                        Directory.CreateDirectory(PastaBackups)
-                        Process.Start("explorer.exe", EntreAspas(PastaBackups))
-                    Catch ex As Exception
-                        MessageBox.Show(janela, ex.Message, "Backups", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Try
-                End Sub
-            janela.Controls.Add(grade)
-            janela.Controls.Add(barra)
-            carregar()
+        Using janela As New frmHistoricoBackups()
             janela.ShowDialog(dono)
         End Using
     End Sub
-
 End Module

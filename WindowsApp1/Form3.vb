@@ -7,6 +7,7 @@ Public Class frmcadastro
     Private da As MySqlDataAdapter
     Private dr As MySqlDataReader
     Private strSQL As String
+    Private _editorNormas As EditorCadastroNormas
     Public loteglobal As String
     Private _dataChegadaLegada As Object = DBNull.Value
     Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles txtcorrida.TextChanged, txtsalesorder.TextChanged
@@ -125,9 +126,19 @@ Public Class frmcadastro
             btncadastrarcomposicao.Enabled = True
 
             CarregarComposicaoQuimica()
+            If _editorNormas IsNot Nothing Then
+                Try
+                    _editorNormas.Carregar(Integer.Parse(txtid.Text))
+                Catch ex As Exception
+                    btnsalvar.Enabled = False
+                    btnatualizar.Enabled = False
+                    MessageBox.Show(ex.Message, "Cadastro")
+                End Try
+            End If
         Else
             btnsalvar.Enabled = False
             btnatualizar.Enabled = False
+            If _editorNormas IsNot Nothing Then _editorNormas.Novo()
 
             TabPage3.Enabled = False
             btncadastrarcomposicao.Enabled = False
@@ -162,6 +173,14 @@ Public Class frmcadastro
     End Sub
 
     Private Sub frmcadastro_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If DesignMode OrElse System.ComponentModel.LicenseManager.UsageMode = System.ComponentModel.LicenseUsageMode.Designtime Then Return
+        Try
+            SessaoAtual.ExigirAutenticado()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Acesso")
+            Close()
+            Return
+        End Try
 
         DateTimePicker1.ShowCheckBox = True
         dttime.ShowCheckBox = True
@@ -171,6 +190,13 @@ Public Class frmcadastro
         TextBox24.ReadOnly = True
         Label24.Text = "Atualizado em:"
         PrepararNovoCadastro()
+        Try
+            _editorNormas = New EditorCadastroNormas(Me)
+        Catch ex As Exception
+            btnsalvar.Enabled = False
+            btnatualizar.Enabled = False
+            MessageBox.Show("Nao foi possivel carregar a tela de normas. Detalhe do erro:" & vbCrLf & ex.Message)
+        End Try
 
     End Sub
 
@@ -228,6 +254,8 @@ Public Class frmcadastro
         End If
 
         Try
+            SessaoAtual.ExigirAutenticado()
+            If _editorNormas IsNot Nothing Then _editorNormas.PrepararGravacao()
             Using cn As MySqlConnection = conexao.NovaConexao()
 
                 Dim sql As String =
@@ -293,7 +321,7 @@ Public Class frmcadastro
                     cmd.Parameters.AddWithValue("@tratamento", txttratamentotermico.Text)
                     cmd.Parameters.AddWithValue("@acabamento", txtacabamento.Text)
                     cmd.Parameters.AddWithValue("@produto", ComboBox1.Text)
-                    cmd.Parameters.AddWithValue("@usuarioAtualizacao", Environment.UserName)
+                    cmd.Parameters.AddWithValue("@usuarioAtualizacao", SessaoAtual.Login)
                     cmd.Parameters.AddWithValue("@dataAtualizacao",
                         instanteGravacao.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
 
@@ -358,6 +386,8 @@ Public Class frmcadastro
         End If
 
         Try
+            SessaoAtual.ExigirAutenticado()
+            If _editorNormas IsNot Nothing Then _editorNormas.PrepararGravacao()
             Using cn As MySqlConnection = conexao.NovaConexao()
 
                 Dim sql As String =
@@ -424,7 +454,7 @@ Public Class frmcadastro
                     cmd.Parameters.AddWithValue("@tratamento", txttratamentotermico.Text)
                     cmd.Parameters.AddWithValue("@acabamento", txtacabamento.Text)
                     cmd.Parameters.AddWithValue("@produto", ComboBox1.Text)
-                    cmd.Parameters.AddWithValue("@usuarioAtualizacao", Environment.UserName)
+                    cmd.Parameters.AddWithValue("@usuarioAtualizacao", SessaoAtual.Login)
                     cmd.Parameters.AddWithValue("@dataAtualizacao",
                         instanteGravacao.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
 
@@ -699,6 +729,7 @@ Public Class frmcadastro
 
         TabControl1.SelectedTab = TabPage1
         txtworkorder1.Focus()
+        If _editorNormas IsNot Nothing Then _editorNormas.Novo()
 
     End Sub
 
@@ -731,7 +762,7 @@ Public Class frmcadastro
     End Function
 
     Private Sub MostrarAuditoriaCadastro(instante As DateTime)
-        TextBox24.Text = Environment.UserName
+        TextBox24.Text = SessaoAtual.Login
         dttime.Value = instante
         dttime.Checked = True
     End Sub
@@ -807,7 +838,29 @@ Public Class frmcadastro
 
             comandoGravacao.Parameters("@lote").Value = lote
 
-            Return comandoGravacao.ExecuteNonQuery()
+            Dim afetados As Integer
+            Using transacao As MySqlTransaction = cn.BeginTransaction()
+                comandoGravacao.Transaction = transacao
+                Try
+                    afetados = comandoGravacao.ExecuteNonQuery()
+                    Dim idGravado As Integer = If(idAtual > 0, idAtual, Convert.ToInt32(comandoGravacao.LastInsertedId))
+                    If _editorNormas IsNot Nothing Then
+                        _editorNormas.Gravar(cn, transacao, idGravado)
+                        If idAtual > 0 Then afetados = 1
+                    End If
+                    transacao.Commit()
+                Catch
+                    Try
+                        transacao.Rollback()
+                    Catch
+                        ' A conexao pode ter sido interrompida; o erro original sera exibido.
+                    End Try
+                    Throw
+                Finally
+                    comandoGravacao.Transaction = Nothing
+                End Try
+            End Using
+            Return afetados
 
         Finally
             Using liberarTrava As New MySqlCommand(
@@ -820,5 +873,6 @@ Public Class frmcadastro
 
     End Function
 End Class
+
 
 

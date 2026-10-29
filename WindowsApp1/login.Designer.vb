@@ -22,6 +22,9 @@ Partial Class frmlogin
     'Não o modifique usando o editor de códigos.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.btnBancoLogin = New System.Windows.Forms.Button()
+        Me.btnPrimeiroAdministrador = New System.Windows.Forms.Button()
+        Me.lblStatusLogin = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -112,7 +115,7 @@ Partial Class frmlogin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(505, 320)
+        Me.ClientSize = New System.Drawing.Size(520, 442)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.txtsenha)
         Me.Controls.Add(Me.txtusuario)
@@ -127,6 +130,21 @@ Partial Class frmlogin
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Certificado Sandinox - Login"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.btnBancoLogin.Name = "btnBancoLogin"
+        Me.btnBancoLogin.Text = "Configurações do banco"
+        Me.btnBancoLogin.Location = New System.Drawing.Point(20, 345)
+        Me.btnBancoLogin.Size = New System.Drawing.Size(230, 32)
+        Me.btnPrimeiroAdministrador.Name = "btnPrimeiroAdministrador"
+        Me.btnPrimeiroAdministrador.Text = "Primeiro acesso"
+        Me.btnPrimeiroAdministrador.Location = New System.Drawing.Point(265, 345)
+        Me.btnPrimeiroAdministrador.Size = New System.Drawing.Size(230, 32)
+        Me.lblStatusLogin.Name = "lblStatusLogin"
+        Me.lblStatusLogin.Text = "Informe usuário e senha."
+        Me.lblStatusLogin.Location = New System.Drawing.Point(20, 385)
+        Me.lblStatusLogin.Size = New System.Drawing.Size(475, 48)
+        Me.Controls.Add(Me.btnBancoLogin)
+        Me.Controls.Add(Me.btnPrimeiroAdministrador)
+        Me.Controls.Add(Me.lblStatusLogin)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -140,4 +158,8 @@ Partial Class frmlogin
     Friend WithEvents txtusuario As TextBox
     Friend WithEvents txtsenha As TextBox
     Friend WithEvents Label3 As Label
+    Friend WithEvents btnBancoLogin As System.Windows.Forms.Button
+    Friend WithEvents btnPrimeiroAdministrador As System.Windows.Forms.Button
+    Friend WithEvents lblStatusLogin As System.Windows.Forms.Label
 End Class
+

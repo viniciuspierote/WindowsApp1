@@ -22,6 +22,22 @@ Partial Class frmcadastro
     'Não o modifique usando o editor de códigos.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Me.painelNormasCadastro = New System.Windows.Forms.TableLayoutPanel()
+        Me.lblNorma0 = New System.Windows.Forms.Label()
+        Me.cboNormaCadastro = New System.Windows.Forms.ComboBox()
+        Me.lblNorma1 = New System.Windows.Forms.Label()
+        Me.cboLigaCadastro = New System.Windows.Forms.ComboBox()
+        Me.lblNorma2 = New System.Windows.Forms.Label()
+        Me.cboCondicaoCadastro = New System.Windows.Forms.ComboBox()
+        Me.lblAvisoNorma = New System.Windows.Forms.Label()
+        Me.btnEditarNormas = New System.Windows.Forms.Button()
+        Me.abaMecanicaNormas = New System.Windows.Forms.TabPage()
+        Me.gradeMecanicaNormas = New System.Windows.Forms.DataGridView()
+        Me.gradeQuimicaNormas = New System.Windows.Forms.DataGridView()
+        Me.gradeMetalurgiaNormas = New System.Windows.Forms.DataGridView()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
@@ -80,6 +96,8 @@ Partial Class frmcadastro
         Me.txtanocertificado = New System.Windows.Forms.TextBox()
         Me.txtid = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.LabelLigaCadastro = New System.Windows.Forms.Label()
+        Me.txtligaCadastro = New System.Windows.Forms.TextBox()
         Me.btncadastrarcomposicao = New System.Windows.Forms.Button()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.txtreducaoarea = New System.Windows.Forms.TextBox()
@@ -121,6 +139,11 @@ Partial Class frmcadastro
         Me.btncancelar = New System.Windows.Forms.Button()
         Me.btnsalvar = New System.Windows.Forms.Button()
         Me.btnatualizar = New System.Windows.Forms.Button()
+        Me.painelNormasCadastro.SuspendLayout()
+        Me.abaMecanicaNormas.SuspendLayout()
+        CType(Me.gradeMecanicaNormas, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.gradeQuimicaNormas, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.gradeMetalurgiaNormas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -131,15 +154,196 @@ Partial Class frmcadastro
         CType(Me.dgvdados, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
+        'painelNormasCadastro
+        '
+        Me.painelNormasCadastro.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.painelNormasCadastro.ColumnCount = 3
+        Me.painelNormasCadastro.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.painelNormasCadastro.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.painelNormasCadastro.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.painelNormasCadastro.Controls.Add(Me.lblNorma0, 0, 0)
+        Me.painelNormasCadastro.Controls.Add(Me.cboNormaCadastro, 0, 1)
+        Me.painelNormasCadastro.Controls.Add(Me.lblNorma1, 1, 0)
+        Me.painelNormasCadastro.Controls.Add(Me.cboLigaCadastro, 1, 1)
+        Me.painelNormasCadastro.Controls.Add(Me.lblNorma2, 2, 0)
+        Me.painelNormasCadastro.Controls.Add(Me.cboCondicaoCadastro, 2, 1)
+        Me.painelNormasCadastro.Controls.Add(Me.lblAvisoNorma, 0, 2)
+        Me.painelNormasCadastro.Location = New System.Drawing.Point(12, 54)
+        Me.painelNormasCadastro.Name = "painelNormasCadastro"
+        Me.painelNormasCadastro.RowCount = 3
+        Me.painelNormasCadastro.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18.0!))
+        Me.painelNormasCadastro.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
+        Me.painelNormasCadastro.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38.0!))
+        Me.painelNormasCadastro.Size = New System.Drawing.Size(1036, 84)
+        Me.painelNormasCadastro.TabIndex = 55
+        '
+        'lblNorma0
+        '
+        Me.lblNorma0.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblNorma0.Location = New System.Drawing.Point(3, 0)
+        Me.lblNorma0.Name = "lblNorma0"
+        Me.lblNorma0.Size = New System.Drawing.Size(339, 18)
+        Me.lblNorma0.TabIndex = 0
+        Me.lblNorma0.Text = "Norma / especificação"
+        '
+        'cboNormaCadastro
+        '
+        Me.cboNormaCadastro.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cboNormaCadastro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboNormaCadastro.Location = New System.Drawing.Point(3, 21)
+        Me.cboNormaCadastro.Name = "cboNormaCadastro"
+        Me.cboNormaCadastro.Size = New System.Drawing.Size(339, 21)
+        Me.cboNormaCadastro.TabIndex = 1
+        '
+        'lblNorma1
+        '
+        Me.lblNorma1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblNorma1.Location = New System.Drawing.Point(348, 0)
+        Me.lblNorma1.Name = "lblNorma1"
+        Me.lblNorma1.Size = New System.Drawing.Size(339, 18)
+        Me.lblNorma1.TabIndex = 2
+        Me.lblNorma1.Text = "Liga / grau / tipo"
+        '
+        'cboLigaCadastro
+        '
+        Me.cboLigaCadastro.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cboLigaCadastro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboLigaCadastro.Location = New System.Drawing.Point(348, 21)
+        Me.cboLigaCadastro.Name = "cboLigaCadastro"
+        Me.cboLigaCadastro.Size = New System.Drawing.Size(339, 21)
+        Me.cboLigaCadastro.TabIndex = 3
+        '
+        'lblNorma2
+        '
+        Me.lblNorma2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblNorma2.Location = New System.Drawing.Point(693, 0)
+        Me.lblNorma2.Name = "lblNorma2"
+        Me.lblNorma2.Size = New System.Drawing.Size(340, 18)
+        Me.lblNorma2.TabIndex = 4
+        Me.lblNorma2.Text = "Condição de fornecimento"
+        '
+        'cboCondicaoCadastro
+        '
+        Me.cboCondicaoCadastro.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cboCondicaoCadastro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboCondicaoCadastro.Location = New System.Drawing.Point(693, 21)
+        Me.cboCondicaoCadastro.Name = "cboCondicaoCadastro"
+        Me.cboCondicaoCadastro.Size = New System.Drawing.Size(340, 21)
+        Me.cboCondicaoCadastro.TabIndex = 5
+        '
+        'lblAvisoNorma
+        '
+        Me.painelNormasCadastro.SetColumnSpan(Me.lblAvisoNorma, 3)
+        Me.lblAvisoNorma.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblAvisoNorma.ForeColor = System.Drawing.Color.DarkOrange
+        Me.lblAvisoNorma.Location = New System.Drawing.Point(3, 46)
+        Me.lblAvisoNorma.Name = "lblAvisoNorma"
+        Me.lblAvisoNorma.Size = New System.Drawing.Size(1030, 38)
+        Me.lblAvisoNorma.TabIndex = 6
+        '
+        'btnEditarNormas
+        '
+        Me.btnEditarNormas.Location = New System.Drawing.Point(504, 25)
+        Me.btnEditarNormas.Name = "btnEditarNormas"
+        Me.btnEditarNormas.Size = New System.Drawing.Size(115, 23)
+        Me.btnEditarNormas.TabIndex = 56
+        Me.btnEditarNormas.Text = "Editar normas"
+        '
+        'abaMecanicaNormas
+        '
+        Me.abaMecanicaNormas.Controls.Add(Me.gradeMecanicaNormas)
+        Me.abaMecanicaNormas.Location = New System.Drawing.Point(4, 22)
+        Me.abaMecanicaNormas.Name = "abaMecanicaNormas"
+        Me.abaMecanicaNormas.Size = New System.Drawing.Size(1028, 428)
+        Me.abaMecanicaNormas.TabIndex = 3
+        Me.abaMecanicaNormas.Text = "Propriedades Mecânicas"
+        '
+        'gradeMecanicaNormas
+        '
+        Me.gradeMecanicaNormas.AllowUserToAddRows = False
+        Me.gradeMecanicaNormas.AllowUserToDeleteRows = False
+        Me.gradeMecanicaNormas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.gradeMecanicaNormas.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.gradeMecanicaNormas.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.gradeMecanicaNormas.DefaultCellStyle = DataGridViewCellStyle1
+        Me.gradeMecanicaNormas.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gradeMecanicaNormas.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.gradeMecanicaNormas.Location = New System.Drawing.Point(0, 0)
+        Me.gradeMecanicaNormas.Name = "gradeMecanicaNormas"
+        Me.gradeMecanicaNormas.RowHeadersVisible = False
+        Me.gradeMecanicaNormas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.gradeMecanicaNormas.Size = New System.Drawing.Size(1028, 428)
+        Me.gradeMecanicaNormas.TabIndex = 0
+        '
+        'gradeQuimicaNormas
+        '
+        Me.gradeQuimicaNormas.AllowUserToAddRows = False
+        Me.gradeQuimicaNormas.AllowUserToDeleteRows = False
+        Me.gradeQuimicaNormas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.gradeQuimicaNormas.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.gradeQuimicaNormas.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.gradeQuimicaNormas.DefaultCellStyle = DataGridViewCellStyle2
+        Me.gradeQuimicaNormas.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gradeQuimicaNormas.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.gradeQuimicaNormas.Location = New System.Drawing.Point(3, 3)
+        Me.gradeQuimicaNormas.Name = "gradeQuimicaNormas"
+        Me.gradeQuimicaNormas.RowHeadersVisible = False
+        Me.gradeQuimicaNormas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.gradeQuimicaNormas.Size = New System.Drawing.Size(1022, 422)
+        Me.gradeQuimicaNormas.TabIndex = 22
+        '
+        'gradeMetalurgiaNormas
+        '
+        Me.gradeMetalurgiaNormas.AllowUserToAddRows = False
+        Me.gradeMetalurgiaNormas.AllowUserToDeleteRows = False
+        Me.gradeMetalurgiaNormas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.gradeMetalurgiaNormas.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.gradeMetalurgiaNormas.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.gradeMetalurgiaNormas.DefaultCellStyle = DataGridViewCellStyle3
+        Me.gradeMetalurgiaNormas.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gradeMetalurgiaNormas.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.gradeMetalurgiaNormas.Location = New System.Drawing.Point(3, 3)
+        Me.gradeMetalurgiaNormas.Name = "gradeMetalurgiaNormas"
+        Me.gradeMetalurgiaNormas.RowHeadersVisible = False
+        Me.gradeMetalurgiaNormas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.gradeMetalurgiaNormas.Size = New System.Drawing.Size(1022, 422)
+        Me.gradeMetalurgiaNormas.TabIndex = 5
+        '
         'TabControl1
         '
+        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 54)
+        Me.TabControl1.Controls.Add(Me.abaMecanicaNormas)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 142)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(818, 454)
+        Me.TabControl1.Size = New System.Drawing.Size(1036, 454)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
@@ -187,7 +391,7 @@ Partial Class frmcadastro
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(810, 428)
+        Me.TabPage1.Size = New System.Drawing.Size(1028, 428)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Entrada da Certificação:"
         '
@@ -218,6 +422,7 @@ Partial Class frmcadastro
         '
         'txttratamentotermico
         '
+        Me.txttratamentotermico.Enabled = False
         Me.txttratamentotermico.FormattingEnabled = True
         Me.txttratamentotermico.Location = New System.Drawing.Point(583, 126)
         Me.txttratamentotermico.Name = "txttratamentotermico"
@@ -244,6 +449,7 @@ Partial Class frmcadastro
         '
         'txtespecificacao
         '
+        Me.txtespecificacao.Enabled = False
         Me.txtespecificacao.FormattingEnabled = True
         Me.txtespecificacao.Items.AddRange(New Object() {"ASTM F136 e ISO 5832-3", "ASTM F2063", "ASTM F1537 / NBR ISO 5832-12", "ASTM F899 303", "ASTM F67-Gr1 e ISO 5832-2", "ASTM F67-Gr2 e ISO 5832-2", "ASTM F67-Gr4 e ISO 5832-2", "ASTM F899 S42010", "ASTM F899 440C", "ASTM F899 455 XM-16"})
         Me.txtespecificacao.Location = New System.Drawing.Point(99, 132)
@@ -309,6 +515,7 @@ Partial Class frmcadastro
         Me.GroupBox2.TabIndex = 30
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Micro Inclusão"
+        Me.GroupBox2.Visible = False
         '
         'txtdgrossa
         '
@@ -459,9 +666,9 @@ Partial Class frmcadastro
         Me.Label14.AutoSize = True
         Me.Label14.Location = New System.Drawing.Point(31, 225)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(63, 13)
+        Me.Label14.Size = New System.Drawing.Size(68, 13)
         Me.Label14.TabIndex = 27
-        Me.Label14.Text = "Obervação:"
+        Me.Label14.Text = "Observação:"
         '
         'txtcomprimento
         '
@@ -472,6 +679,7 @@ Partial Class frmcadastro
         '
         'txtmicroestrutura
         '
+        Me.txtmicroestrutura.Enabled = False
         Me.txtmicroestrutura.Location = New System.Drawing.Point(100, 187)
         Me.txtmicroestrutura.Name = "txtmicroestrutura"
         Me.txtmicroestrutura.Size = New System.Drawing.Size(371, 20)
@@ -644,9 +852,9 @@ Partial Class frmcadastro
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(233, 16)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(65, 13)
+        Me.Label2.Size = New System.Drawing.Size(67, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Work Order:"
+        Me.Label2.Text = "Lote / W.O.:"
         '
         'txtanocertificado
         '
@@ -670,16 +878,33 @@ Partial Class frmcadastro
         Me.TabPage2.Controls.Add(Me.btncadastrarcomposicao)
         Me.TabPage2.Controls.Add(Me.GroupBox5)
         Me.TabPage2.Controls.Add(Me.GroupBox4)
+        Me.TabPage2.Controls.Add(Me.gradeMetalurgiaNormas)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(810, 428)
+        Me.TabPage2.Size = New System.Drawing.Size(1028, 428)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Detalhes do Produto:"
+        Me.TabPage2.Text = "Dados metalúrgicos"
+        '
+        'LabelLigaCadastro
+        '
+        Me.LabelLigaCadastro.AutoSize = True
+        Me.LabelLigaCadastro.Location = New System.Drawing.Point(307, 642)
+        Me.LabelLigaCadastro.Name = "LabelLigaCadastro"
+        Me.LabelLigaCadastro.Size = New System.Drawing.Size(77, 13)
+        Me.LabelLigaCadastro.TabIndex = 0
+        Me.LabelLigaCadastro.Text = "Liga / material:"
+        '
+        'txtligaCadastro
+        '
+        Me.txtligaCadastro.Location = New System.Drawing.Point(405, 639)
+        Me.txtligaCadastro.Name = "txtligaCadastro"
+        Me.txtligaCadastro.Size = New System.Drawing.Size(596, 20)
+        Me.txtligaCadastro.TabIndex = 4
         '
         'btncadastrarcomposicao
         '
-        Me.btncadastrarcomposicao.Location = New System.Drawing.Point(21, 185)
+        Me.btncadastrarcomposicao.Location = New System.Drawing.Point(21, 235)
         Me.btncadastrarcomposicao.Name = "btncadastrarcomposicao"
         Me.btncadastrarcomposicao.Size = New System.Drawing.Size(783, 48)
         Me.btncadastrarcomposicao.TabIndex = 4
@@ -704,6 +929,7 @@ Partial Class frmcadastro
         Me.GroupBox5.TabIndex = 3
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Propriedade Mecânica:"
+        Me.GroupBox5.Visible = False
         '
         'txtreducaoarea
         '
@@ -791,9 +1017,10 @@ Partial Class frmcadastro
         Me.GroupBox4.Controls.Add(Me.Label28)
         Me.GroupBox4.Controls.Add(Me.txttamanhograo)
         Me.GroupBox4.Controls.Add(Me.Label27)
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 6)
+        Me.GroupBox4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(705, 54)
+        Me.GroupBox4.Size = New System.Drawing.Size(1022, 85)
         Me.GroupBox4.TabIndex = 2
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Tamanho de Grão:"
@@ -818,6 +1045,7 @@ Partial Class frmcadastro
         '
         'txttamanhograo
         '
+        Me.txttamanhograo.Enabled = False
         Me.txttamanhograo.Location = New System.Drawing.Point(72, 23)
         Me.txttamanhograo.Name = "txttamanhograo"
         Me.txttamanhograo.Size = New System.Drawing.Size(100, 20)
@@ -848,12 +1076,13 @@ Partial Class frmcadastro
         Me.TabPage3.Controls.Add(Me.txttipo)
         Me.TabPage3.Controls.Add(Me.btnincluir)
         Me.TabPage3.Controls.Add(Me.dgvdados)
+        Me.TabPage3.Controls.Add(Me.gradeQuimicaNormas)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(810, 428)
+        Me.TabPage3.Size = New System.Drawing.Size(1028, 428)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Comp. Quimica"
+        Me.TabPage3.Text = "Composição Química"
         '
         'Label34
         '
@@ -863,6 +1092,7 @@ Partial Class frmcadastro
         Me.Label34.Size = New System.Drawing.Size(30, 13)
         Me.Label34.TabIndex = 6
         Me.Label34.Text = "Item:"
+        Me.Label34.Visible = False
         '
         'txtsequencia
         '
@@ -870,6 +1100,7 @@ Partial Class frmcadastro
         Me.txtsequencia.Name = "txtsequencia"
         Me.txtsequencia.Size = New System.Drawing.Size(35, 20)
         Me.txtsequencia.TabIndex = 1
+        Me.txtsequencia.Visible = False
         '
         'btnexibir
         '
@@ -879,6 +1110,7 @@ Partial Class frmcadastro
         Me.btnexibir.TabIndex = 7
         Me.btnexibir.Text = "Exibir"
         Me.btnexibir.UseVisualStyleBackColor = True
+        Me.btnexibir.Visible = False
         '
         'txtworkorder
         '
@@ -886,6 +1118,7 @@ Partial Class frmcadastro
         Me.txtworkorder.Name = "txtworkorder"
         Me.txtworkorder.Size = New System.Drawing.Size(100, 20)
         Me.txtworkorder.TabIndex = 0
+        Me.txtworkorder.Visible = False
         '
         'Label35
         '
@@ -894,7 +1127,8 @@ Partial Class frmcadastro
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(65, 13)
         Me.Label35.TabIndex = 0
-        Me.Label35.Text = "Work Order:"
+        Me.Label35.Text = "ID cadastro:"
+        Me.Label35.Visible = False
         '
         'Button1
         '
@@ -904,6 +1138,7 @@ Partial Class frmcadastro
         Me.Button1.TabIndex = 6
         Me.Button1.Text = "Excluir"
         Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
         '
         'btneditarcompquimica
         '
@@ -913,6 +1148,7 @@ Partial Class frmcadastro
         Me.btneditarcompquimica.TabIndex = 5
         Me.btneditarcompquimica.Text = "Editar"
         Me.btneditarcompquimica.UseVisualStyleBackColor = True
+        Me.btneditarcompquimica.Visible = False
         '
         'Label36
         '
@@ -922,6 +1158,7 @@ Partial Class frmcadastro
         Me.Label36.Size = New System.Drawing.Size(34, 13)
         Me.Label36.TabIndex = 21
         Me.Label36.Text = "Valor:"
+        Me.Label36.Visible = False
         '
         'txtvalor
         '
@@ -929,6 +1166,7 @@ Partial Class frmcadastro
         Me.txtvalor.Name = "txtvalor"
         Me.txtvalor.Size = New System.Drawing.Size(100, 20)
         Me.txtvalor.TabIndex = 3
+        Me.txtvalor.Visible = False
         '
         'Label37
         '
@@ -938,6 +1176,7 @@ Partial Class frmcadastro
         Me.Label37.Size = New System.Drawing.Size(54, 13)
         Me.Label37.TabIndex = 7
         Me.Label37.Text = "Elemento:"
+        Me.Label37.Visible = False
         '
         'txttipo
         '
@@ -945,6 +1184,7 @@ Partial Class frmcadastro
         Me.txttipo.Name = "txttipo"
         Me.txttipo.Size = New System.Drawing.Size(100, 20)
         Me.txttipo.TabIndex = 2
+        Me.txttipo.Visible = False
         '
         'btnincluir
         '
@@ -954,6 +1194,7 @@ Partial Class frmcadastro
         Me.btnincluir.TabIndex = 4
         Me.btnincluir.Text = "incluir"
         Me.btnincluir.UseVisualStyleBackColor = True
+        Me.btnincluir.Visible = False
         '
         'dgvdados
         '
@@ -962,11 +1203,12 @@ Partial Class frmcadastro
         Me.dgvdados.Name = "dgvdados"
         Me.dgvdados.Size = New System.Drawing.Size(776, 370)
         Me.dgvdados.TabIndex = 11
+        Me.dgvdados.Visible = False
         '
         'Label23
         '
         Me.Label23.AutoSize = True
-        Me.Label23.Location = New System.Drawing.Point(51, 517)
+        Me.Label23.Location = New System.Drawing.Point(51, 605)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(77, 13)
         Me.Label23.TabIndex = 31
@@ -974,7 +1216,7 @@ Partial Class frmcadastro
         '
         'TextBox24
         '
-        Me.TextBox24.Location = New System.Drawing.Point(130, 514)
+        Me.TextBox24.Location = New System.Drawing.Point(130, 602)
         Me.TextBox24.Name = "TextBox24"
         Me.TextBox24.Size = New System.Drawing.Size(220, 20)
         Me.TextBox24.TabIndex = 46
@@ -982,7 +1224,7 @@ Partial Class frmcadastro
         'Label24
         '
         Me.Label24.AutoSize = True
-        Me.Label24.Location = New System.Drawing.Point(526, 520)
+        Me.Label24.Location = New System.Drawing.Point(526, 608)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(77, 13)
         Me.Label24.TabIndex = 47
@@ -990,7 +1232,7 @@ Partial Class frmcadastro
         '
         'dttime
         '
-        Me.dttime.Location = New System.Drawing.Point(609, 514)
+        Me.dttime.Location = New System.Drawing.Point(609, 602)
         Me.dttime.Name = "dttime"
         Me.dttime.Size = New System.Drawing.Size(221, 20)
         Me.dttime.TabIndex = 48
@@ -1053,8 +1295,10 @@ Partial Class frmcadastro
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(863, 583)
+        Me.ClientSize = New System.Drawing.Size(1060, 671)
+        Me.Controls.Add(Me.LabelLigaCadastro)
         Me.Controls.Add(Me.btnatualizar)
+        Me.Controls.Add(Me.txtligaCadastro)
         Me.Controls.Add(Me.btnsalvar)
         Me.Controls.Add(Me.btncancelar)
         Me.Controls.Add(Me.btnexcluir)
@@ -1065,10 +1309,17 @@ Partial Class frmcadastro
         Me.Controls.Add(Me.Label24)
         Me.Controls.Add(Me.Label23)
         Me.Controls.Add(Me.TextBox24)
+        Me.Controls.Add(Me.painelNormasCadastro)
+        Me.Controls.Add(Me.btnEditarNormas)
         Me.MaximizeBox = False
         Me.Name = "frmcadastro"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = " "
+        Me.painelNormasCadastro.ResumeLayout(False)
+        Me.abaMecanicaNormas.ResumeLayout(False)
+        CType(Me.gradeMecanicaNormas, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.gradeQuimicaNormas, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.gradeMetalurgiaNormas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
@@ -1087,6 +1338,8 @@ Partial Class frmcadastro
 
     End Sub
 
+    Friend WithEvents LabelLigaCadastro As Label
+    Friend WithEvents txtligaCadastro As TextBox
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents Label3 As Label
@@ -1186,4 +1439,38 @@ Partial Class frmcadastro
     Friend WithEvents txttipo As TextBox
     Friend WithEvents btnincluir As Button
     Friend WithEvents dgvdados As DataGridView
+    Friend WithEvents painelNormasCadastro As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents lblNorma0 As System.Windows.Forms.Label
+    Friend WithEvents cboNormaCadastro As System.Windows.Forms.ComboBox
+    Friend WithEvents lblNorma1 As System.Windows.Forms.Label
+    Friend WithEvents cboLigaCadastro As System.Windows.Forms.ComboBox
+    Friend WithEvents lblNorma2 As System.Windows.Forms.Label
+    Friend WithEvents cboCondicaoCadastro As System.Windows.Forms.ComboBox
+    Friend WithEvents lblAvisoNorma As System.Windows.Forms.Label
+    Friend WithEvents btnEditarNormas As System.Windows.Forms.Button
+    Friend WithEvents abaMecanicaNormas As System.Windows.Forms.TabPage
+    Friend WithEvents gradeQuimicaNormas As System.Windows.Forms.DataGridView
+    Friend WithEvents gradeQuimicaNormas_nome As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeQuimicaNormas_valor As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeQuimicaNormas_unidade As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeQuimicaNormas_minimo As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeQuimicaNormas_maximo As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeQuimicaNormas_tolerancia As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeQuimicaNormas_situacao As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas As System.Windows.Forms.DataGridView
+    Friend WithEvents gradeMecanicaNormas_nome As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas_valor As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas_unidade As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas_minimo As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas_maximo As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas_tolerancia As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMecanicaNormas_situacao As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas As System.Windows.Forms.DataGridView
+    Friend WithEvents gradeMetalurgiaNormas_nome As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas_valor As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas_unidade As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas_minimo As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas_maximo As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas_tolerancia As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents gradeMetalurgiaNormas_situacao As System.Windows.Forms.DataGridViewTextBoxColumn
 End Class

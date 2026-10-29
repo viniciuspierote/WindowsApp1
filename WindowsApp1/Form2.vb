@@ -14,6 +14,14 @@ Public Class frm_emitircertificado
     Private _dataChegada As Object = DBNull.Value
 
     Private Sub frm_emitircertificado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If DesignMode OrElse System.ComponentModel.LicenseManager.UsageMode = System.ComponentModel.LicenseUsageMode.Designtime Then Return
+        Try
+            SessaoAtual.ExigirAutenticado()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Acesso")
+            Close()
+            Return
+        End Try
         _campos = New Dictionary(Of String, Control) From {
             {"WORK_ORDER", txtwo}, {"HEAT_NUMBER", txtcorrida},
             {"QTDE", txtquantidade}, {"ESPECIFICACAO", txtespecificacao},
@@ -226,6 +234,7 @@ Public Class frm_emitircertificado
 
     Private Sub GravarCertificado(atualizar As Boolean)
         Try
+            SessaoAtual.ExigirAutenticado()
             If String.IsNullOrWhiteSpace(txtlote.Text) Then
                 txtlote.Focus()
                 Throw New ArgumentException("Informe o lote do certificado.")
@@ -251,7 +260,7 @@ Public Class frm_emitircertificado
 
             ' A data de chegada acompanha a emissao mesmo sem um controle visual.
             valores.Add("SHIPMENT_DATE", _dataChegada)
-            valores.Add("USUARIO_ATUALIZACAO", Environment.UserName)
+            valores.Add("USUARIO_ATUALIZACAO", SessaoAtual.Login)
             valores.Add("DATA_ATUALIZACAO", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
             For Each coluna As String In New String() {"SHIPMENT_DATE", "USUARIO_ATUALIZACAO", "DATA_ATUALIZACAO"}
                 colunas.Add("`" & coluna & "`")
@@ -424,3 +433,4 @@ Public Class frm_emitircertificado
     End Sub
 
 End Class
+
