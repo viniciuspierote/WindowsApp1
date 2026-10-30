@@ -22,6 +22,7 @@ Partial Class frm_principal
     'Não o modifique usando o editor de códigos.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_principal))
         Me.btnUsuariosSistema = New System.Windows.Forms.Button()
         Me.btnMinhaSenha = New System.Windows.Forms.Button()
         Me.btnSairSessao = New System.Windows.Forms.Button()
@@ -38,13 +39,13 @@ Partial Class frm_principal
         Me.btnBackupAdicional = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ArquivoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CadastrosToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EmissãoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AjudaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SairToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CadastrosToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CadastrarCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NormaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EmissãoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EmitirCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AjudaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AjudaToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -186,12 +187,30 @@ Partial Class frm_principal
         Me.ArquivoToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
         Me.ArquivoToolStripMenuItem.Text = "Arquivo"
         '
+        'SairToolStripMenuItem
+        '
+        Me.SairToolStripMenuItem.Name = "SairToolStripMenuItem"
+        Me.SairToolStripMenuItem.Size = New System.Drawing.Size(93, 22)
+        Me.SairToolStripMenuItem.Text = "Sair"
+        '
         'CadastrosToolStripMenuItem
         '
         Me.CadastrosToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CadastrarCertificadoToolStripMenuItem, Me.NormaToolStripMenuItem})
         Me.CadastrosToolStripMenuItem.Name = "CadastrosToolStripMenuItem"
         Me.CadastrosToolStripMenuItem.Size = New System.Drawing.Size(71, 20)
         Me.CadastrosToolStripMenuItem.Text = "Cadastros"
+        '
+        'CadastrarCertificadoToolStripMenuItem
+        '
+        Me.CadastrarCertificadoToolStripMenuItem.Name = "CadastrarCertificadoToolStripMenuItem"
+        Me.CadastrarCertificadoToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
+        Me.CadastrarCertificadoToolStripMenuItem.Text = "Certificado"
+        '
+        'NormaToolStripMenuItem
+        '
+        Me.NormaToolStripMenuItem.Name = "NormaToolStripMenuItem"
+        Me.NormaToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
+        Me.NormaToolStripMenuItem.Text = "Norma"
         '
         'EmissãoToolStripMenuItem
         '
@@ -200,6 +219,12 @@ Partial Class frm_principal
         Me.EmissãoToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
         Me.EmissãoToolStripMenuItem.Text = "Emissão"
         '
+        'EmitirCertificadoToolStripMenuItem
+        '
+        Me.EmitirCertificadoToolStripMenuItem.Name = "EmitirCertificadoToolStripMenuItem"
+        Me.EmitirCertificadoToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
+        Me.EmitirCertificadoToolStripMenuItem.Text = "Emitir Certificado"
+        '
         'AjudaToolStripMenuItem
         '
         Me.AjudaToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AjudaToolStripMenuItem1})
@@ -207,34 +232,10 @@ Partial Class frm_principal
         Me.AjudaToolStripMenuItem.Size = New System.Drawing.Size(50, 20)
         Me.AjudaToolStripMenuItem.Text = "Ajuda"
         '
-        'SairToolStripMenuItem
-        '
-        Me.SairToolStripMenuItem.Name = "SairToolStripMenuItem"
-        Me.SairToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.SairToolStripMenuItem.Text = "Sair"
-        '
-        'CadastrarCertificadoToolStripMenuItem
-        '
-        Me.CadastrarCertificadoToolStripMenuItem.Name = "CadastrarCertificadoToolStripMenuItem"
-        Me.CadastrarCertificadoToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.CadastrarCertificadoToolStripMenuItem.Text = "Certificado"
-        '
-        'NormaToolStripMenuItem
-        '
-        Me.NormaToolStripMenuItem.Name = "NormaToolStripMenuItem"
-        Me.NormaToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.NormaToolStripMenuItem.Text = "Norma"
-        '
-        'EmitirCertificadoToolStripMenuItem
-        '
-        Me.EmitirCertificadoToolStripMenuItem.Name = "EmitirCertificadoToolStripMenuItem"
-        Me.EmitirCertificadoToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.EmitirCertificadoToolStripMenuItem.Text = "Emitir Certificado"
-        '
         'AjudaToolStripMenuItem1
         '
         Me.AjudaToolStripMenuItem1.Name = "AjudaToolStripMenuItem1"
-        Me.AjudaToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.AjudaToolStripMenuItem1.Size = New System.Drawing.Size(105, 22)
         Me.AjudaToolStripMenuItem1.Text = "Ajuda"
         '
         'frm_principal
@@ -256,6 +257,7 @@ Partial Class frm_principal
         Me.Controls.Add(Me.btnMinhaSenha)
         Me.Controls.Add(Me.btnSairSessao)
         Me.Controls.Add(Me.lblUsuarioSistema)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.IsMdiContainer = True
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "frm_principal"

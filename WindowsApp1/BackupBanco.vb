@@ -19,7 +19,7 @@ Imports MySql.Data.MySqlClient
 Public Module BackupBanco
 
     Public Const PastaBackups As String = "C:\Backups\Certificados"
-    Private Const ExecutavelDump As String = "C:\xampp\mysql\bin\mysqldump.exe"
+    Private Const ExecutavelDump As String = "C:\Ferramentas\MariaDB\bin\mariadb-dump.exe"
     Private Const NomeBanco As String = "novo_bd"
     Private Const LimiteMinutos As Integer = 30
 
@@ -104,9 +104,11 @@ Public Module BackupBanco
             credencial = Path.Combine(PastaHistorico, identificador & ".cnf")
             CriarCredencialPrivada(credencial, dados)
             Dim argumentos As String = "--defaults-file=" & EntreAspas(credencial) &
-                " --protocol=tcp --default-character-set=utf8mb4 --quick --lock-tables" &
+                " --protocol=tcp --default-character-set=utf8mb4" &
+                " --max-allowed-packet=64M --quick --lock-tables" &
                 " --routines --events --triggers --hex-blob --comments --dump-date" &
-                " --databases " & NomeBanco & " --result-file=" & EntreAspas(parcial)
+                " --databases " & NomeBanco &
+                " --result-file=" & EntreAspas(parcial)
 
             Dim info As New ProcessStartInfo(ExecutavelDump, argumentos)
             info.UseShellExecute = False

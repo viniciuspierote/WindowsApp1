@@ -22,6 +22,7 @@ Partial Class frmlogin
     'Não o modifique usando o editor de códigos.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmlogin))
         Me.btnBancoLogin = New System.Windows.Forms.Button()
         Me.btnPrimeiroAdministrador = New System.Windows.Forms.Button()
         Me.lblStatusLogin = New System.Windows.Forms.Label()
@@ -35,6 +36,30 @@ Partial Class frmlogin
         Me.Label3 = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'btnBancoLogin
+        '
+        Me.btnBancoLogin.Location = New System.Drawing.Point(20, 345)
+        Me.btnBancoLogin.Name = "btnBancoLogin"
+        Me.btnBancoLogin.Size = New System.Drawing.Size(230, 32)
+        Me.btnBancoLogin.TabIndex = 8
+        Me.btnBancoLogin.Text = "Configurações do banco"
+        '
+        'btnPrimeiroAdministrador
+        '
+        Me.btnPrimeiroAdministrador.Location = New System.Drawing.Point(265, 345)
+        Me.btnPrimeiroAdministrador.Name = "btnPrimeiroAdministrador"
+        Me.btnPrimeiroAdministrador.Size = New System.Drawing.Size(230, 32)
+        Me.btnPrimeiroAdministrador.TabIndex = 9
+        Me.btnPrimeiroAdministrador.Text = "Primeiro acesso"
+        '
+        'lblStatusLogin
+        '
+        Me.lblStatusLogin.Location = New System.Drawing.Point(20, 385)
+        Me.lblStatusLogin.Name = "lblStatusLogin"
+        Me.lblStatusLogin.Size = New System.Drawing.Size(475, 48)
+        Me.lblStatusLogin.TabIndex = 10
+        Me.lblStatusLogin.Text = "Informe usuário e senha."
         '
         'Label1
         '
@@ -124,27 +149,16 @@ Partial Class frmlogin
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
+        Me.Controls.Add(Me.btnBancoLogin)
+        Me.Controls.Add(Me.btnPrimeiroAdministrador)
+        Me.Controls.Add(Me.lblStatusLogin)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmlogin"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Certificado Sandinox - Login"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.btnBancoLogin.Name = "btnBancoLogin"
-        Me.btnBancoLogin.Text = "Configurações do banco"
-        Me.btnBancoLogin.Location = New System.Drawing.Point(20, 345)
-        Me.btnBancoLogin.Size = New System.Drawing.Size(230, 32)
-        Me.btnPrimeiroAdministrador.Name = "btnPrimeiroAdministrador"
-        Me.btnPrimeiroAdministrador.Text = "Primeiro acesso"
-        Me.btnPrimeiroAdministrador.Location = New System.Drawing.Point(265, 345)
-        Me.btnPrimeiroAdministrador.Size = New System.Drawing.Size(230, 32)
-        Me.lblStatusLogin.Name = "lblStatusLogin"
-        Me.lblStatusLogin.Text = "Informe usuário e senha."
-        Me.lblStatusLogin.Location = New System.Drawing.Point(20, 385)
-        Me.lblStatusLogin.Size = New System.Drawing.Size(475, 48)
-        Me.Controls.Add(Me.btnBancoLogin)
-        Me.Controls.Add(Me.btnPrimeiroAdministrador)
-        Me.Controls.Add(Me.lblStatusLogin)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

@@ -20,6 +20,8 @@ Public Class frmcadastro
 
     Private Sub btnprocurar_Click(sender As Object, e As EventArgs) Handles btnprocurar.Click
         Dim cq = txtworkorder1.Text
+        If Not ConfirmarDescarteAnexos() Then Return
+        LimparAnexosPdf(False)
         Dim encontrou As Boolean = False
 
         Try
@@ -65,7 +67,7 @@ Public Class frmcadastro
                 txttratamentotermico.Text = Convert.ToString(dr("TRAT_TERMICO"))
                 txtacabamento.Text = Convert.ToString(dr("ACABAMENTO"))
                 ComboBox1.Text = Convert.ToString(dr("PRODUTO"))
-                TextBox24.Text = Convert.ToString(dr("USUARIO_ATUALIZACAO"))
+                txtArquivoAnalise.Text = Convert.ToString(dr("USUARIO_ATUALIZACAO"))
                 _dataChegadaLegada = DBNull.Value
                 If Not PreencherDataCadastro(DateTimePicker1, dr("SHIPMENT_DATE")) Then
                     _dataChegadaLegada = dr("SHIPMENT_DATE")
@@ -104,7 +106,7 @@ Public Class frmcadastro
                 txttratamentotermico.Text = String.Empty
                 txtacabamento.Text = String.Empty
                 ComboBox1.Text = String.Empty
-                TextBox24.Clear()
+                txtArquivoAnalise.Clear()
                 DateTimePicker1.Checked = False
                 dttime.Checked = False
                 _dataChegadaLegada = DBNull.Value
@@ -119,34 +121,54 @@ Public Class frmcadastro
             comando = Nothing
         End Try
         If encontrou Then
+
+            Try
+                CarregarAnexosPdf(Integer.Parse(txtid.Text))
+
+            Catch ex As Exception
+                LimparAnexosPdf(False)
+                btnsalvar.Enabled = False
+                btnatualizar.Enabled = False
+
+                MessageBox.Show(
+            "Não foi possível carregar os anexos." &
+            vbCrLf & ex.Message,
+            "Anexos",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error)
+
+                Return
+            End Try
+
             btnsalvar.Enabled = False
             btnatualizar.Enabled = True
 
             TabPage3.Enabled = True
-            btncadastrarcomposicao.Enabled = True
 
             CarregarComposicaoQuimica()
+
             If _editorNormas IsNot Nothing Then
                 Try
                     _editorNormas.Carregar(Integer.Parse(txtid.Text))
+
                 Catch ex As Exception
                     btnsalvar.Enabled = False
                     btnatualizar.Enabled = False
                     MessageBox.Show(ex.Message, "Cadastro")
                 End Try
             End If
+
         Else
             btnsalvar.Enabled = False
             btnatualizar.Enabled = False
+
             If _editorNormas IsNot Nothing Then _editorNormas.Novo()
 
             TabPage3.Enabled = False
-            btncadastrarcomposicao.Enabled = False
-
             dgvdados.DataSource = Nothing
 
             MessageBox.Show(
-                "Lote não encontrado. Para cadastrar um novo, clique em Inserir.")
+        "Lote não encontrado. Para cadastrar um novo, clique em Inserir.")
         End If
     End Sub
 
@@ -187,7 +209,7 @@ Public Class frmcadastro
         dttime.Format = DateTimePickerFormat.Custom
         dttime.CustomFormat = "dd/MM/yyyy HH:mm"
         dttime.Enabled = False
-        TextBox24.ReadOnly = True
+        txtArquivoAnalise.ReadOnly = True
         Label24.Text = "Atualizado em:"
         PrepararNovoCadastro()
         Try
@@ -202,10 +224,6 @@ Public Class frmcadastro
 
     Private Sub btnatualizar_Click(sender As Object, e As EventArgs)
 
-    End Sub
-
-    Private Sub btncadastrarcomposicao_Click(sender As Object, e As EventArgs) Handles btncadastrarcomposicao.Click
-        Form4.Show()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
@@ -688,6 +706,8 @@ Public Class frmcadastro
 
     Private Sub PrepararNovoCadastro()
 
+        LimparAnexosPdf()
+
         Dim campos As Control() = {
             txtid, txtworkorder, txtworkorder1,
             txtcorrida, txtsalesorder, txtcustomer,
@@ -762,7 +782,7 @@ Public Class frmcadastro
     End Function
 
     Private Sub MostrarAuditoriaCadastro(instante As DateTime)
-        TextBox24.Text = SessaoAtual.Login
+        txtArquivoAnalise.Text = SessaoAtual.Login
         dttime.Value = instante
         dttime.Checked = True
     End Sub
@@ -848,7 +868,12 @@ Public Class frmcadastro
                         _editorNormas.Gravar(cn, transacao, idGravado)
                         If idAtual > 0 Then afetados = 1
                     End If
+
+                    GravarAnexosPdf(cn, transacao, idGravado)
+
                     transacao.Commit()
+
+                    ConfirmarAnexosSalvos(idGravado)
                 Catch
                     Try
                         transacao.Rollback()
@@ -872,6 +897,10 @@ Public Class frmcadastro
         End Try
 
     End Function
+
+    Private Sub btncadastrarcomposicao_Click(sender As Object, e As EventArgs) Handles btncadastrarcomposicao.Click
+
+    End Sub
 End Class
 
 

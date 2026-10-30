@@ -149,18 +149,44 @@ Public Class frm_emitircertificado
         End Try
     End Sub
 
-    Private Sub IncluirCertificado_Click(sender As Object, e As EventArgs) Handles btnincluir.Click
+    Private Sub IncluirCertificado_Click(
+    sender As Object,
+    e As EventArgs
+) Handles btnincluir.Click
+
         If _emEdicao Then Return
+
         _idAtual = 0
         _registroCarregado = Nothing
+
         LimparCampos()
         txtprocurar.Clear()
+
         txtano.Text = Date.Today.Year.ToString()
+
         ColocarTexto(txttipo, "Barra Redonda")
         ColocarTexto(txtacabamento, "Retificado")
+
         DefinirEdicao(True)
+
+        Try
+            txtnumerocertificado.Text = ConsultarNumeroProvavel()
+
+        Catch ex As Exception
+            txtnumerocertificado.Clear()
+
+            MessageBox.Show(
+            "Não foi possível consultar o número provável." &
+            vbCrLf & ex.Message & vbCrLf &
+            "Você pode continuar. O número será gerado ao salvar.",
+            "Numeração do certificado",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Warning)
+        End Try
+
         txtlote.Focus()
     End Sub
+
 
     Private Sub EditarCertificado_Click(sender As Object, e As EventArgs) Handles btneditar.Click
         If _emEdicao OrElse _idAtual <= 0 Then Return
@@ -432,5 +458,32 @@ Public Class frm_emitircertificado
         If _emEdicao Then frmprocurarlote.Show()
     End Sub
 
+    Private Function ConsultarNumeroProvavel() As String
+        Using cn As MySqlConnection = conexao.NovaConexao()
+            cn.Open()
+
+            Dim sql As String =
+                "SELECT AUTO_INCREMENT " &
+                "FROM information_schema.TABLES " &
+                "WHERE TABLE_SCHEMA = DATABASE() " &
+                "AND TABLE_NAME = @tabela"
+
+            Using cmd As New MySqlCommand(sql, cn)
+                cmd.Parameters.AddWithValue(
+                    "@tabela", "emissaodecertificado")
+
+                Dim resultado As Object = cmd.ExecuteScalar()
+
+                If resultado Is Nothing OrElse
+                    Convert.IsDBNull(resultado) Then
+
+                    Throw New InvalidOperationException(
+                        "Não foi possível consultar a próxima numeração.")
+                End If
+
+                Return Convert.ToInt64(resultado).ToString()
+            End Using
+        End Using
+    End Function
 End Class
 

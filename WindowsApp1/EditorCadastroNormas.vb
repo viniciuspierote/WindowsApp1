@@ -225,7 +225,6 @@ Public Class EditorCadastroNormas
         _mecanica.Rows.Clear()
         _metalurgia.Rows.Clear()
         _form.TabPage3.Enabled = True
-        _form.btncadastrarcomposicao.Enabled = False
         _ocupado = False
         MontarLinhas(New List(Of LinhaResultado)())
         _aviso.Text = "Selecione norma, liga e condição. Resultados podem ser salvos incompletos; isso não significa aprovação."

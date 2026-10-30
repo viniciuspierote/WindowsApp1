@@ -96,9 +96,9 @@ Partial Class frmcadastro
         Me.txtanocertificado = New System.Windows.Forms.TextBox()
         Me.txtid = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.LabelLigaCadastro = New System.Windows.Forms.Label()
-        Me.txtligaCadastro = New System.Windows.Forms.TextBox()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.btncadastrarcomposicao = New System.Windows.Forms.Button()
+        Me.txtespecificacaograo = New System.Windows.Forms.ComboBox()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.txtreducaoarea = New System.Windows.Forms.TextBox()
         Me.Label33 = New System.Windows.Forms.Label()
@@ -110,8 +110,6 @@ Partial Class frmcadastro
         Me.Label30 = New System.Windows.Forms.Label()
         Me.txtalongamento = New System.Windows.Forms.TextBox()
         Me.Label29 = New System.Windows.Forms.Label()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.txtespecificacaograo = New System.Windows.Forms.ComboBox()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.txttamanhograo = New System.Windows.Forms.TextBox()
         Me.Label27 = New System.Windows.Forms.Label()
@@ -129,8 +127,22 @@ Partial Class frmcadastro
         Me.txttipo = New System.Windows.Forms.TextBox()
         Me.btnincluir = New System.Windows.Forms.Button()
         Me.dgvdados = New System.Windows.Forms.DataGridView()
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.webPdfOrigem = New Microsoft.Web.WebView2.WinForms.WebView2()
+        Me.txtArquivoOrigem = New System.Windows.Forms.TextBox()
+        Me.btnRemoverOrigem = New System.Windows.Forms.Button()
+        Me.btnAbrirOrigem = New System.Windows.Forms.Button()
+        Me.btnAnexarOrigem = New System.Windows.Forms.Button()
+        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.webPdfAnalise = New Microsoft.Web.WebView2.WinForms.WebView2()
+        Me.btnRemoverAnalise = New System.Windows.Forms.Button()
+        Me.btnAbrirAnalise = New System.Windows.Forms.Button()
+        Me.btnAnexarAnalise = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.LabelLigaCadastro = New System.Windows.Forms.Label()
+        Me.txtligaCadastro = New System.Windows.Forms.TextBox()
         Me.Label23 = New System.Windows.Forms.Label()
-        Me.TextBox24 = New System.Windows.Forms.TextBox()
+        Me.txtArquivoAnalise = New System.Windows.Forms.TextBox()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.dttime = New System.Windows.Forms.DateTimePicker()
         Me.btninserir = New System.Windows.Forms.Button()
@@ -148,10 +160,14 @@ Partial Class frmcadastro
         Me.TabPage1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.TabPage2.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         CType(Me.dgvdados, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage4.SuspendLayout()
+        CType(Me.webPdfOrigem, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage5.SuspendLayout()
+        CType(Me.webPdfAnalise, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'painelNormasCadastro
@@ -340,6 +356,8 @@ Partial Class frmcadastro
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.abaMecanicaNormas)
+        Me.TabControl1.Controls.Add(Me.TabPage4)
+        Me.TabControl1.Controls.Add(Me.TabPage5)
         Me.TabControl1.Location = New System.Drawing.Point(12, 142)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -875,8 +893,6 @@ Partial Class frmcadastro
         'TabPage2
         '
         Me.TabPage2.BackColor = System.Drawing.Color.Gainsboro
-        Me.TabPage2.Controls.Add(Me.btncadastrarcomposicao)
-        Me.TabPage2.Controls.Add(Me.GroupBox5)
         Me.TabPage2.Controls.Add(Me.GroupBox4)
         Me.TabPage2.Controls.Add(Me.gradeMetalurgiaNormas)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
@@ -886,30 +902,40 @@ Partial Class frmcadastro
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Dados metalúrgicos"
         '
-        'LabelLigaCadastro
+        'GroupBox4
         '
-        Me.LabelLigaCadastro.AutoSize = True
-        Me.LabelLigaCadastro.Location = New System.Drawing.Point(307, 642)
-        Me.LabelLigaCadastro.Name = "LabelLigaCadastro"
-        Me.LabelLigaCadastro.Size = New System.Drawing.Size(77, 13)
-        Me.LabelLigaCadastro.TabIndex = 0
-        Me.LabelLigaCadastro.Text = "Liga / material:"
-        '
-        'txtligaCadastro
-        '
-        Me.txtligaCadastro.Location = New System.Drawing.Point(405, 639)
-        Me.txtligaCadastro.Name = "txtligaCadastro"
-        Me.txtligaCadastro.Size = New System.Drawing.Size(596, 20)
-        Me.txtligaCadastro.TabIndex = 4
+        Me.GroupBox4.Controls.Add(Me.btncadastrarcomposicao)
+        Me.GroupBox4.Controls.Add(Me.txtespecificacaograo)
+        Me.GroupBox4.Controls.Add(Me.GroupBox5)
+        Me.GroupBox4.Controls.Add(Me.Label28)
+        Me.GroupBox4.Controls.Add(Me.txttamanhograo)
+        Me.GroupBox4.Controls.Add(Me.Label27)
+        Me.GroupBox4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 3)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(1022, 85)
+        Me.GroupBox4.TabIndex = 2
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Tamanho de Grão:"
         '
         'btncadastrarcomposicao
         '
-        Me.btncadastrarcomposicao.Location = New System.Drawing.Point(21, 235)
+        Me.btncadastrarcomposicao.Location = New System.Drawing.Point(869, 7)
         Me.btncadastrarcomposicao.Name = "btncadastrarcomposicao"
-        Me.btncadastrarcomposicao.Size = New System.Drawing.Size(783, 48)
+        Me.btncadastrarcomposicao.Size = New System.Drawing.Size(147, 48)
         Me.btncadastrarcomposicao.TabIndex = 4
         Me.btncadastrarcomposicao.Text = "Cadastrar composição quimíca"
         Me.btncadastrarcomposicao.UseVisualStyleBackColor = True
+        Me.btncadastrarcomposicao.Visible = False
+        '
+        'txtespecificacaograo
+        '
+        Me.txtespecificacaograo.FormattingEnabled = True
+        Me.txtespecificacaograo.Items.AddRange(New Object() {"ASTM E112"})
+        Me.txtespecificacaograo.Location = New System.Drawing.Point(306, 22)
+        Me.txtespecificacaograo.Name = "txtespecificacaograo"
+        Me.txtespecificacaograo.Size = New System.Drawing.Size(263, 21)
+        Me.txtespecificacaograo.TabIndex = 12
         '
         'GroupBox5
         '
@@ -923,7 +949,7 @@ Partial Class frmcadastro
         Me.GroupBox5.Controls.Add(Me.Label30)
         Me.GroupBox5.Controls.Add(Me.txtalongamento)
         Me.GroupBox5.Controls.Add(Me.Label29)
-        Me.GroupBox5.Location = New System.Drawing.Point(6, 66)
+        Me.GroupBox5.Location = New System.Drawing.Point(366, 49)
         Me.GroupBox5.Name = "GroupBox5"
         Me.GroupBox5.Size = New System.Drawing.Size(705, 100)
         Me.GroupBox5.TabIndex = 3
@@ -1010,29 +1036,6 @@ Partial Class frmcadastro
         Me.Label29.Size = New System.Drawing.Size(89, 13)
         Me.Label29.TabIndex = 13
         Me.Label29.Text = "Alongamento (%):"
-        '
-        'GroupBox4
-        '
-        Me.GroupBox4.Controls.Add(Me.txtespecificacaograo)
-        Me.GroupBox4.Controls.Add(Me.Label28)
-        Me.GroupBox4.Controls.Add(Me.txttamanhograo)
-        Me.GroupBox4.Controls.Add(Me.Label27)
-        Me.GroupBox4.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GroupBox4.Location = New System.Drawing.Point(3, 3)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(1022, 85)
-        Me.GroupBox4.TabIndex = 2
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Tamanho de Grão:"
-        '
-        'txtespecificacaograo
-        '
-        Me.txtespecificacaograo.FormattingEnabled = True
-        Me.txtespecificacaograo.Items.AddRange(New Object() {"ASTM E112"})
-        Me.txtespecificacaograo.Location = New System.Drawing.Point(306, 22)
-        Me.txtespecificacaograo.Name = "txtespecificacaograo"
-        Me.txtespecificacaograo.Size = New System.Drawing.Size(263, 21)
-        Me.txtespecificacaograo.TabIndex = 12
         '
         'Label28
         '
@@ -1205,6 +1208,150 @@ Partial Class frmcadastro
         Me.dgvdados.TabIndex = 11
         Me.dgvdados.Visible = False
         '
+        'TabPage4
+        '
+        Me.TabPage4.Controls.Add(Me.webPdfOrigem)
+        Me.TabPage4.Controls.Add(Me.txtArquivoOrigem)
+        Me.TabPage4.Controls.Add(Me.btnRemoverOrigem)
+        Me.TabPage4.Controls.Add(Me.btnAbrirOrigem)
+        Me.TabPage4.Controls.Add(Me.btnAnexarOrigem)
+        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage4.Name = "TabPage4"
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage4.Size = New System.Drawing.Size(1028, 428)
+        Me.TabPage4.TabIndex = 4
+        Me.TabPage4.Text = "Certifcado de Origem"
+        Me.TabPage4.UseVisualStyleBackColor = True
+        '
+        'webPdfOrigem
+        '
+        Me.webPdfOrigem.AllowExternalDrop = True
+        Me.webPdfOrigem.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.webPdfOrigem.CreationProperties = Nothing
+        Me.webPdfOrigem.DefaultBackgroundColor = System.Drawing.Color.White
+        Me.webPdfOrigem.Location = New System.Drawing.Point(294, 6)
+        Me.webPdfOrigem.Name = "webPdfOrigem"
+        Me.webPdfOrigem.Size = New System.Drawing.Size(728, 390)
+        Me.webPdfOrigem.TabIndex = 4
+        Me.webPdfOrigem.ZoomFactor = 1.0R
+        '
+        'txtArquivoOrigem
+        '
+        Me.txtArquivoOrigem.Location = New System.Drawing.Point(6, 402)
+        Me.txtArquivoOrigem.Name = "txtArquivoOrigem"
+        Me.txtArquivoOrigem.ReadOnly = True
+        Me.txtArquivoOrigem.Size = New System.Drawing.Size(1016, 20)
+        Me.txtArquivoOrigem.TabIndex = 3
+        '
+        'btnRemoverOrigem
+        '
+        Me.btnRemoverOrigem.Location = New System.Drawing.Point(6, 156)
+        Me.btnRemoverOrigem.Name = "btnRemoverOrigem"
+        Me.btnRemoverOrigem.Size = New System.Drawing.Size(75, 69)
+        Me.btnRemoverOrigem.TabIndex = 2
+        Me.btnRemoverOrigem.Text = "Remover anexo"
+        Me.btnRemoverOrigem.UseVisualStyleBackColor = True
+        '
+        'btnAbrirOrigem
+        '
+        Me.btnAbrirOrigem.Location = New System.Drawing.Point(6, 81)
+        Me.btnAbrirOrigem.Name = "btnAbrirOrigem"
+        Me.btnAbrirOrigem.Size = New System.Drawing.Size(75, 69)
+        Me.btnAbrirOrigem.TabIndex = 1
+        Me.btnAbrirOrigem.Text = "Abrir PDF"
+        Me.btnAbrirOrigem.UseVisualStyleBackColor = True
+        '
+        'btnAnexarOrigem
+        '
+        Me.btnAnexarOrigem.Location = New System.Drawing.Point(6, 6)
+        Me.btnAnexarOrigem.Name = "btnAnexarOrigem"
+        Me.btnAnexarOrigem.Size = New System.Drawing.Size(75, 69)
+        Me.btnAnexarOrigem.TabIndex = 0
+        Me.btnAnexarOrigem.Text = "Anexar PDF"
+        Me.btnAnexarOrigem.UseVisualStyleBackColor = True
+        '
+        'TabPage5
+        '
+        Me.TabPage5.Controls.Add(Me.webPdfAnalise)
+        Me.TabPage5.Controls.Add(Me.btnRemoverAnalise)
+        Me.TabPage5.Controls.Add(Me.btnAbrirAnalise)
+        Me.TabPage5.Controls.Add(Me.btnAnexarAnalise)
+        Me.TabPage5.Controls.Add(Me.TextBox1)
+        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage5.Name = "TabPage5"
+        Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage5.Size = New System.Drawing.Size(1028, 428)
+        Me.TabPage5.TabIndex = 5
+        Me.TabPage5.Text = "Certificado de Análise"
+        Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'webPdfAnalise
+        '
+        Me.webPdfAnalise.AllowExternalDrop = True
+        Me.webPdfAnalise.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.webPdfAnalise.CreationProperties = Nothing
+        Me.webPdfAnalise.DefaultBackgroundColor = System.Drawing.Color.White
+        Me.webPdfAnalise.Location = New System.Drawing.Point(255, 6)
+        Me.webPdfAnalise.Name = "webPdfAnalise"
+        Me.webPdfAnalise.Size = New System.Drawing.Size(767, 390)
+        Me.webPdfAnalise.TabIndex = 4
+        Me.webPdfAnalise.ZoomFactor = 1.0R
+        '
+        'btnRemoverAnalise
+        '
+        Me.btnRemoverAnalise.Location = New System.Drawing.Point(6, 156)
+        Me.btnRemoverAnalise.Name = "btnRemoverAnalise"
+        Me.btnRemoverAnalise.Size = New System.Drawing.Size(75, 69)
+        Me.btnRemoverAnalise.TabIndex = 3
+        Me.btnRemoverAnalise.Text = "Remover anexo"
+        Me.btnRemoverAnalise.UseVisualStyleBackColor = True
+        '
+        'btnAbrirAnalise
+        '
+        Me.btnAbrirAnalise.Location = New System.Drawing.Point(6, 81)
+        Me.btnAbrirAnalise.Name = "btnAbrirAnalise"
+        Me.btnAbrirAnalise.Size = New System.Drawing.Size(75, 69)
+        Me.btnAbrirAnalise.TabIndex = 2
+        Me.btnAbrirAnalise.Text = "Abrir PDF"
+        Me.btnAbrirAnalise.UseVisualStyleBackColor = True
+        '
+        'btnAnexarAnalise
+        '
+        Me.btnAnexarAnalise.Location = New System.Drawing.Point(6, 6)
+        Me.btnAnexarAnalise.Name = "btnAnexarAnalise"
+        Me.btnAnexarAnalise.Size = New System.Drawing.Size(75, 69)
+        Me.btnAnexarAnalise.TabIndex = 1
+        Me.btnAnexarAnalise.Text = "Anexar PDF"
+        Me.btnAnexarAnalise.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(6, 402)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.ReadOnly = True
+        Me.TextBox1.Size = New System.Drawing.Size(1016, 20)
+        Me.TextBox1.TabIndex = 0
+        '
+        'LabelLigaCadastro
+        '
+        Me.LabelLigaCadastro.AutoSize = True
+        Me.LabelLigaCadastro.Location = New System.Drawing.Point(307, 642)
+        Me.LabelLigaCadastro.Name = "LabelLigaCadastro"
+        Me.LabelLigaCadastro.Size = New System.Drawing.Size(77, 13)
+        Me.LabelLigaCadastro.TabIndex = 0
+        Me.LabelLigaCadastro.Text = "Liga / material:"
+        '
+        'txtligaCadastro
+        '
+        Me.txtligaCadastro.Location = New System.Drawing.Point(405, 639)
+        Me.txtligaCadastro.Name = "txtligaCadastro"
+        Me.txtligaCadastro.Size = New System.Drawing.Size(596, 20)
+        Me.txtligaCadastro.TabIndex = 4
+        '
         'Label23
         '
         Me.Label23.AutoSize = True
@@ -1214,12 +1361,12 @@ Partial Class frmcadastro
         Me.Label23.TabIndex = 31
         Me.Label23.Text = "Atualizado por:"
         '
-        'TextBox24
+        'txtArquivoAnalise
         '
-        Me.TextBox24.Location = New System.Drawing.Point(130, 602)
-        Me.TextBox24.Name = "TextBox24"
-        Me.TextBox24.Size = New System.Drawing.Size(220, 20)
-        Me.TextBox24.TabIndex = 46
+        Me.txtArquivoAnalise.Location = New System.Drawing.Point(130, 602)
+        Me.txtArquivoAnalise.Name = "txtArquivoAnalise"
+        Me.txtArquivoAnalise.Size = New System.Drawing.Size(220, 20)
+        Me.txtArquivoAnalise.TabIndex = 46
         '
         'Label24
         '
@@ -1308,7 +1455,7 @@ Partial Class frmcadastro
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Label24)
         Me.Controls.Add(Me.Label23)
-        Me.Controls.Add(Me.TextBox24)
+        Me.Controls.Add(Me.txtArquivoAnalise)
         Me.Controls.Add(Me.painelNormasCadastro)
         Me.Controls.Add(Me.btnEditarNormas)
         Me.MaximizeBox = False
@@ -1326,13 +1473,19 @@ Partial Class frmcadastro
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
-        Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
         CType(Me.dgvdados, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabPage4.ResumeLayout(False)
+        Me.TabPage4.PerformLayout()
+        CType(Me.webPdfOrigem, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabPage5.ResumeLayout(False)
+        Me.TabPage5.PerformLayout()
+        CType(Me.webPdfAnalise, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1351,7 +1504,7 @@ Partial Class frmcadastro
     Friend WithEvents TabPage2 As TabPage
     Friend WithEvents dttime As DateTimePicker
     Friend WithEvents Label24 As Label
-    Friend WithEvents TextBox24 As TextBox
+    Friend WithEvents txtArquivoAnalise As TextBox
     Friend WithEvents Label23 As Label
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents txtdgrossa As TextBox
@@ -1403,18 +1556,6 @@ Partial Class frmcadastro
     Friend WithEvents btnexcluir As Button
     Friend WithEvents btncancelar As Button
     Friend WithEvents txtcustomer As TextBox
-    Friend WithEvents btncadastrarcomposicao As Button
-    Friend WithEvents GroupBox5 As GroupBox
-    Friend WithEvents txtreducaoarea As TextBox
-    Friend WithEvents Label33 As Label
-    Friend WithEvents txtdureza As TextBox
-    Friend WithEvents Label32 As Label
-    Friend WithEvents txttracao As TextBox
-    Friend WithEvents Label31 As Label
-    Friend WithEvents txtescoamento As TextBox
-    Friend WithEvents Label30 As Label
-    Friend WithEvents txtalongamento As TextBox
-    Friend WithEvents Label29 As Label
     Friend WithEvents btnprocurarofornecedor As Button
     Friend WithEvents btnsalvar As Button
     Friend WithEvents txtespecificacao As ComboBox
@@ -1473,4 +1614,28 @@ Partial Class frmcadastro
     Friend WithEvents gradeMetalurgiaNormas_maximo As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents gradeMetalurgiaNormas_tolerancia As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents gradeMetalurgiaNormas_situacao As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents GroupBox5 As GroupBox
+    Friend WithEvents txtreducaoarea As TextBox
+    Friend WithEvents Label33 As Label
+    Friend WithEvents txtdureza As TextBox
+    Friend WithEvents Label32 As Label
+    Friend WithEvents txttracao As TextBox
+    Friend WithEvents Label31 As Label
+    Friend WithEvents txtescoamento As TextBox
+    Friend WithEvents Label30 As Label
+    Friend WithEvents txtalongamento As TextBox
+    Friend WithEvents Label29 As Label
+    Friend WithEvents btncadastrarcomposicao As Button
+    Friend WithEvents TabPage4 As TabPage
+    Friend WithEvents txtArquivoOrigem As TextBox
+    Friend WithEvents btnRemoverOrigem As Button
+    Friend WithEvents btnAbrirOrigem As Button
+    Friend WithEvents btnAnexarOrigem As Button
+    Friend WithEvents TabPage5 As TabPage
+    Friend WithEvents btnRemoverAnalise As Button
+    Friend WithEvents btnAbrirAnalise As Button
+    Friend WithEvents btnAnexarAnalise As Button
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents webPdfOrigem As Microsoft.Web.WebView2.WinForms.WebView2
+    Friend WithEvents webPdfAnalise As Microsoft.Web.WebView2.WinForms.WebView2
 End Class

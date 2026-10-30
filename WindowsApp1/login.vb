@@ -65,6 +65,17 @@ Public Class frmlogin
                     End If
                 End Using
             End If
+            lblStatusLogin.Text = "Verificando atualizações..."
+
+            If Await AtualizacaoSistema.VerificarAsync(Me) Then
+                SessaoAtual.Encerrar()
+                nomeusuario = ""
+                Ocupado(False)
+                Close()
+                Return
+            End If
+
+            lblStatusLogin.Text = "Abrindo o sistema..."
             Ocupado(False)
             Hide()
             Try

@@ -135,7 +135,7 @@ Partial Class frmNormasConfig
         Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38.0!))
         Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54.0!))
         Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 110.0!))
-        Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 152.0!))
+        Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 167.0!))
         Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.layoutPrincipal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48.0!))
         Me.layoutPrincipal.Size = New System.Drawing.Size(1224, 821)
@@ -416,7 +416,7 @@ Partial Class frmNormasConfig
         Me.grpPerfil.Dock = System.Windows.Forms.DockStyle.Fill
         Me.grpPerfil.Location = New System.Drawing.Point(13, 215)
         Me.grpPerfil.Name = "grpPerfil"
-        Me.grpPerfil.Size = New System.Drawing.Size(1198, 146)
+        Me.grpPerfil.Size = New System.Drawing.Size(1198, 161)
         Me.grpPerfil.TabIndex = 3
         Me.grpPerfil.TabStop = False
         Me.grpPerfil.Text = "Aplicação dos requisitos — revisão independente da edição"
@@ -452,9 +452,9 @@ Partial Class frmNormasConfig
         Me.layoutPerfil.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
         Me.layoutPerfil.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17.0!))
         Me.layoutPerfil.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.layoutPerfil.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29.0!))
         Me.layoutPerfil.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17.0!))
-        Me.layoutPerfil.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.layoutPerfil.Size = New System.Drawing.Size(1192, 124)
+        Me.layoutPerfil.Size = New System.Drawing.Size(1192, 139)
         Me.layoutPerfil.TabIndex = 0
         '
         'lblPerfil0
@@ -566,7 +566,7 @@ Partial Class frmNormasConfig
         Me.lblPerfil6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblPerfil6.Location = New System.Drawing.Point(3, 88)
         Me.lblPerfil6.Name = "lblPerfil6"
-        Me.lblPerfil6.Size = New System.Drawing.Size(391, 17)
+        Me.lblPerfil6.Size = New System.Drawing.Size(391, 29)
         Me.lblPerfil6.TabIndex = 12
         Me.lblPerfil6.Text = "Sistema de unidades"
         '
@@ -575,7 +575,7 @@ Partial Class frmNormasConfig
         Me.cboPerfil_sistema_unidades.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cboPerfil_sistema_unidades.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboPerfil_sistema_unidades.Items.AddRange(New Object() {"SI", "IMPERIAL"})
-        Me.cboPerfil_sistema_unidades.Location = New System.Drawing.Point(3, 108)
+        Me.cboPerfil_sistema_unidades.Location = New System.Drawing.Point(3, 120)
         Me.cboPerfil_sistema_unidades.Name = "cboPerfil_sistema_unidades"
         Me.cboPerfil_sistema_unidades.Size = New System.Drawing.Size(391, 23)
         Me.cboPerfil_sistema_unidades.TabIndex = 13
@@ -585,7 +585,7 @@ Partial Class frmNormasConfig
         Me.lblPerfil7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblPerfil7.Location = New System.Drawing.Point(400, 88)
         Me.lblPerfil7.Name = "lblPerfil7"
-        Me.lblPerfil7.Size = New System.Drawing.Size(391, 17)
+        Me.lblPerfil7.Size = New System.Drawing.Size(391, 29)
         Me.lblPerfil7.TabIndex = 14
         Me.lblPerfil7.Text = "Situação da configuração"
         '
@@ -594,7 +594,7 @@ Partial Class frmNormasConfig
         Me.cboPerfil_status.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cboPerfil_status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboPerfil_status.Items.AddRange(New Object() {"RASCUNHO", "LIBERADO", "INATIVO"})
-        Me.cboPerfil_status.Location = New System.Drawing.Point(400, 108)
+        Me.cboPerfil_status.Location = New System.Drawing.Point(400, 120)
         Me.cboPerfil_status.Name = "cboPerfil_status"
         Me.cboPerfil_status.Size = New System.Drawing.Size(391, 23)
         Me.cboPerfil_status.TabIndex = 15
@@ -604,7 +604,7 @@ Partial Class frmNormasConfig
         Me.btnDimensoes.AutoSize = True
         Me.btnDimensoes.Location = New System.Drawing.Point(797, 91)
         Me.btnDimensoes.Name = "btnDimensoes"
-        Me.btnDimensoes.Size = New System.Drawing.Size(163, 11)
+        Me.btnDimensoes.Size = New System.Drawing.Size(392, 23)
         Me.btnDimensoes.TabIndex = 16
         Me.btnDimensoes.Text = "Dimensões e notas do perfil"
         '
@@ -615,10 +615,10 @@ Partial Class frmNormasConfig
         Me.abasRequisitos.Controls.Add(Me.abaMETALURGIA)
         Me.abasRequisitos.Controls.Add(Me.abaOUTROS)
         Me.abasRequisitos.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.abasRequisitos.Location = New System.Drawing.Point(13, 367)
+        Me.abasRequisitos.Location = New System.Drawing.Point(13, 382)
         Me.abasRequisitos.Name = "abasRequisitos"
         Me.abasRequisitos.SelectedIndex = 0
-        Me.abasRequisitos.Size = New System.Drawing.Size(1198, 393)
+        Me.abasRequisitos.Size = New System.Drawing.Size(1198, 378)
         Me.abasRequisitos.TabIndex = 4
         '
         'abaQUIMICA
@@ -627,7 +627,7 @@ Partial Class frmNormasConfig
         Me.abaQUIMICA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.abaQUIMICA.Location = New System.Drawing.Point(4, 24)
         Me.abaQUIMICA.Name = "abaQUIMICA"
-        Me.abaQUIMICA.Size = New System.Drawing.Size(1190, 365)
+        Me.abaQUIMICA.Size = New System.Drawing.Size(1190, 350)
         Me.abaQUIMICA.TabIndex = 0
         Me.abaQUIMICA.Text = "Composição Química"
         '
@@ -638,7 +638,7 @@ Partial Class frmNormasConfig
         Me.painelQUIMICA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.painelQUIMICA.Location = New System.Drawing.Point(0, 0)
         Me.painelQUIMICA.Name = "painelQUIMICA"
-        Me.painelQUIMICA.Size = New System.Drawing.Size(1190, 365)
+        Me.painelQUIMICA.Size = New System.Drawing.Size(1190, 350)
         Me.painelQUIMICA.TabIndex = 0
         '
         'gradeQUIMICA
@@ -650,10 +650,10 @@ Partial Class frmNormasConfig
         Me.gradeQUIMICA.BackgroundColor = System.Drawing.Color.White
         Me.gradeQUIMICA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gradeQUIMICA.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.gradeQUIMICA.Location = New System.Drawing.Point(0, 35)
+        Me.gradeQUIMICA.Location = New System.Drawing.Point(0, 41)
         Me.gradeQUIMICA.Name = "gradeQUIMICA"
         Me.gradeQUIMICA.RowHeadersVisible = False
-        Me.gradeQUIMICA.Size = New System.Drawing.Size(1190, 330)
+        Me.gradeQUIMICA.Size = New System.Drawing.Size(1190, 309)
         Me.gradeQUIMICA.TabIndex = 0
         '
         'botoesQUIMICA
@@ -664,7 +664,7 @@ Partial Class frmNormasConfig
         Me.botoesQUIMICA.Dock = System.Windows.Forms.DockStyle.Top
         Me.botoesQUIMICA.Location = New System.Drawing.Point(0, 0)
         Me.botoesQUIMICA.Name = "botoesQUIMICA"
-        Me.botoesQUIMICA.Size = New System.Drawing.Size(1190, 35)
+        Me.botoesQUIMICA.Size = New System.Drawing.Size(1190, 41)
         Me.botoesQUIMICA.TabIndex = 1
         '
         'btnQUIMICAAdicionar
@@ -700,7 +700,7 @@ Partial Class frmNormasConfig
         Me.abaMECANICA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.abaMECANICA.Location = New System.Drawing.Point(4, 24)
         Me.abaMECANICA.Name = "abaMECANICA"
-        Me.abaMECANICA.Size = New System.Drawing.Size(166, 0)
+        Me.abaMECANICA.Size = New System.Drawing.Size(1190, 350)
         Me.abaMECANICA.TabIndex = 1
         Me.abaMECANICA.Text = "Propriedades Mecânicas"
         '
@@ -711,7 +711,7 @@ Partial Class frmNormasConfig
         Me.painelMECANICA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.painelMECANICA.Location = New System.Drawing.Point(0, 0)
         Me.painelMECANICA.Name = "painelMECANICA"
-        Me.painelMECANICA.Size = New System.Drawing.Size(166, 0)
+        Me.painelMECANICA.Size = New System.Drawing.Size(1190, 350)
         Me.painelMECANICA.TabIndex = 0
         '
         'gradeMECANICA
@@ -726,7 +726,7 @@ Partial Class frmNormasConfig
         Me.gradeMECANICA.Location = New System.Drawing.Point(0, 35)
         Me.gradeMECANICA.Name = "gradeMECANICA"
         Me.gradeMECANICA.RowHeadersVisible = False
-        Me.gradeMECANICA.Size = New System.Drawing.Size(166, 0)
+        Me.gradeMECANICA.Size = New System.Drawing.Size(1190, 315)
         Me.gradeMECANICA.TabIndex = 0
         '
         'botoesMECANICA
@@ -737,7 +737,7 @@ Partial Class frmNormasConfig
         Me.botoesMECANICA.Dock = System.Windows.Forms.DockStyle.Top
         Me.botoesMECANICA.Location = New System.Drawing.Point(0, 0)
         Me.botoesMECANICA.Name = "botoesMECANICA"
-        Me.botoesMECANICA.Size = New System.Drawing.Size(166, 35)
+        Me.botoesMECANICA.Size = New System.Drawing.Size(1190, 35)
         Me.botoesMECANICA.TabIndex = 1
         '
         'btnMECANICAAdicionar
@@ -752,7 +752,7 @@ Partial Class frmNormasConfig
         'btnMECANICARemover
         '
         Me.btnMECANICARemover.AutoSize = True
-        Me.btnMECANICARemover.Location = New System.Drawing.Point(3, 37)
+        Me.btnMECANICARemover.Location = New System.Drawing.Point(126, 3)
         Me.btnMECANICARemover.Name = "btnMECANICARemover"
         Me.btnMECANICARemover.Size = New System.Drawing.Size(93, 28)
         Me.btnMECANICARemover.TabIndex = 1
@@ -761,7 +761,7 @@ Partial Class frmNormasConfig
         'btnMECANICADetalhes
         '
         Me.btnMECANICADetalhes.AutoSize = True
-        Me.btnMECANICADetalhes.Location = New System.Drawing.Point(3, 71)
+        Me.btnMECANICADetalhes.Location = New System.Drawing.Point(225, 3)
         Me.btnMECANICADetalhes.Name = "btnMECANICADetalhes"
         Me.btnMECANICADetalhes.Size = New System.Drawing.Size(167, 28)
         Me.btnMECANICADetalhes.TabIndex = 2
@@ -773,7 +773,7 @@ Partial Class frmNormasConfig
         Me.abaMETALURGIA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.abaMETALURGIA.Location = New System.Drawing.Point(4, 24)
         Me.abaMETALURGIA.Name = "abaMETALURGIA"
-        Me.abaMETALURGIA.Size = New System.Drawing.Size(166, 0)
+        Me.abaMETALURGIA.Size = New System.Drawing.Size(1190, 350)
         Me.abaMETALURGIA.TabIndex = 2
         Me.abaMETALURGIA.Text = "Dados Metalúrgicos"
         '
@@ -784,7 +784,7 @@ Partial Class frmNormasConfig
         Me.painelMETALURGIA.Dock = System.Windows.Forms.DockStyle.Fill
         Me.painelMETALURGIA.Location = New System.Drawing.Point(0, 0)
         Me.painelMETALURGIA.Name = "painelMETALURGIA"
-        Me.painelMETALURGIA.Size = New System.Drawing.Size(166, 0)
+        Me.painelMETALURGIA.Size = New System.Drawing.Size(1190, 350)
         Me.painelMETALURGIA.TabIndex = 0
         '
         'gradeMETALURGIA
@@ -799,7 +799,7 @@ Partial Class frmNormasConfig
         Me.gradeMETALURGIA.Location = New System.Drawing.Point(0, 35)
         Me.gradeMETALURGIA.Name = "gradeMETALURGIA"
         Me.gradeMETALURGIA.RowHeadersVisible = False
-        Me.gradeMETALURGIA.Size = New System.Drawing.Size(166, 0)
+        Me.gradeMETALURGIA.Size = New System.Drawing.Size(1190, 315)
         Me.gradeMETALURGIA.TabIndex = 0
         '
         'botoesMETALURGIA
@@ -810,7 +810,7 @@ Partial Class frmNormasConfig
         Me.botoesMETALURGIA.Dock = System.Windows.Forms.DockStyle.Top
         Me.botoesMETALURGIA.Location = New System.Drawing.Point(0, 0)
         Me.botoesMETALURGIA.Name = "botoesMETALURGIA"
-        Me.botoesMETALURGIA.Size = New System.Drawing.Size(166, 35)
+        Me.botoesMETALURGIA.Size = New System.Drawing.Size(1190, 35)
         Me.botoesMETALURGIA.TabIndex = 1
         '
         'btnMETALURGIAAdicionar
@@ -825,7 +825,7 @@ Partial Class frmNormasConfig
         'btnMETALURGIARemover
         '
         Me.btnMETALURGIARemover.AutoSize = True
-        Me.btnMETALURGIARemover.Location = New System.Drawing.Point(3, 37)
+        Me.btnMETALURGIARemover.Location = New System.Drawing.Point(126, 3)
         Me.btnMETALURGIARemover.Name = "btnMETALURGIARemover"
         Me.btnMETALURGIARemover.Size = New System.Drawing.Size(93, 28)
         Me.btnMETALURGIARemover.TabIndex = 1
@@ -834,7 +834,7 @@ Partial Class frmNormasConfig
         'btnMETALURGIADetalhes
         '
         Me.btnMETALURGIADetalhes.AutoSize = True
-        Me.btnMETALURGIADetalhes.Location = New System.Drawing.Point(3, 71)
+        Me.btnMETALURGIADetalhes.Location = New System.Drawing.Point(225, 3)
         Me.btnMETALURGIADetalhes.Name = "btnMETALURGIADetalhes"
         Me.btnMETALURGIADetalhes.Size = New System.Drawing.Size(167, 28)
         Me.btnMETALURGIADetalhes.TabIndex = 2
@@ -846,7 +846,7 @@ Partial Class frmNormasConfig
         Me.abaOUTROS.Dock = System.Windows.Forms.DockStyle.Fill
         Me.abaOUTROS.Location = New System.Drawing.Point(4, 24)
         Me.abaOUTROS.Name = "abaOUTROS"
-        Me.abaOUTROS.Size = New System.Drawing.Size(166, 0)
+        Me.abaOUTROS.Size = New System.Drawing.Size(1190, 350)
         Me.abaOUTROS.TabIndex = 3
         Me.abaOUTROS.Text = "Outros requisitos"
         '
@@ -857,7 +857,7 @@ Partial Class frmNormasConfig
         Me.painelOUTROS.Dock = System.Windows.Forms.DockStyle.Fill
         Me.painelOUTROS.Location = New System.Drawing.Point(0, 0)
         Me.painelOUTROS.Name = "painelOUTROS"
-        Me.painelOUTROS.Size = New System.Drawing.Size(166, 0)
+        Me.painelOUTROS.Size = New System.Drawing.Size(1190, 350)
         Me.painelOUTROS.TabIndex = 0
         '
         'gradeOUTROS
@@ -872,7 +872,7 @@ Partial Class frmNormasConfig
         Me.gradeOUTROS.Location = New System.Drawing.Point(0, 35)
         Me.gradeOUTROS.Name = "gradeOUTROS"
         Me.gradeOUTROS.RowHeadersVisible = False
-        Me.gradeOUTROS.Size = New System.Drawing.Size(166, 0)
+        Me.gradeOUTROS.Size = New System.Drawing.Size(1190, 315)
         Me.gradeOUTROS.TabIndex = 0
         '
         'botoesOUTROS
@@ -883,7 +883,7 @@ Partial Class frmNormasConfig
         Me.botoesOUTROS.Dock = System.Windows.Forms.DockStyle.Top
         Me.botoesOUTROS.Location = New System.Drawing.Point(0, 0)
         Me.botoesOUTROS.Name = "botoesOUTROS"
-        Me.botoesOUTROS.Size = New System.Drawing.Size(166, 35)
+        Me.botoesOUTROS.Size = New System.Drawing.Size(1190, 35)
         Me.botoesOUTROS.TabIndex = 1
         '
         'btnOUTROSAdicionar
@@ -898,7 +898,7 @@ Partial Class frmNormasConfig
         'btnOUTROSRemover
         '
         Me.btnOUTROSRemover.AutoSize = True
-        Me.btnOUTROSRemover.Location = New System.Drawing.Point(3, 37)
+        Me.btnOUTROSRemover.Location = New System.Drawing.Point(126, 3)
         Me.btnOUTROSRemover.Name = "btnOUTROSRemover"
         Me.btnOUTROSRemover.Size = New System.Drawing.Size(93, 28)
         Me.btnOUTROSRemover.TabIndex = 1
@@ -907,7 +907,7 @@ Partial Class frmNormasConfig
         'btnOUTROSDetalhes
         '
         Me.btnOUTROSDetalhes.AutoSize = True
-        Me.btnOUTROSDetalhes.Location = New System.Drawing.Point(3, 71)
+        Me.btnOUTROSDetalhes.Location = New System.Drawing.Point(225, 3)
         Me.btnOUTROSDetalhes.Name = "btnOUTROSDetalhes"
         Me.btnOUTROSDetalhes.Size = New System.Drawing.Size(167, 28)
         Me.btnOUTROSDetalhes.TabIndex = 2

@@ -151,7 +151,7 @@ Partial Class frmConferenciaNormas
         Me.abaMecanica.Controls.Add(Me._mecanicaGrid)
         Me.abaMecanica.Location = New System.Drawing.Point(4, 24)
         Me.abaMecanica.Name = "abaMecanica"
-        Me.abaMecanica.Size = New System.Drawing.Size(162, 0)
+        Me.abaMecanica.Size = New System.Drawing.Size(1142, 421)
         Me.abaMecanica.TabIndex = 1
         Me.abaMecanica.Text = "Propriedades mecânicas"
         '
@@ -176,7 +176,7 @@ Partial Class frmConferenciaNormas
         Me._mecanicaGrid.ReadOnly = True
         Me._mecanicaGrid.RowHeadersVisible = False
         Me._mecanicaGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me._mecanicaGrid.Size = New System.Drawing.Size(162, 0)
+        Me._mecanicaGrid.Size = New System.Drawing.Size(1142, 421)
         Me._mecanicaGrid.TabIndex = 0
         '
         'rodape
