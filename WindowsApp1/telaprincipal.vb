@@ -13,8 +13,8 @@ Public Class frm_principal
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        frm_emitircertificado.Show()
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles mnuEmitirCertificado.Click, mnuConsultarCertificados.Click
+        AbrirTela(frm_emitircertificado)
     End Sub
 
     Private Sub frm_principal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -30,8 +30,8 @@ Public Class frm_principal
 
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        frmcadastro.Show()
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles mnuLotes.Click
+        AbrirTela(frmcadastro)
 
 
     End Sub
@@ -49,15 +49,15 @@ Public Class frm_principal
 
     End Sub
 
-    Private Sub btnespeci_Click(sender As Object, e As EventArgs) Handles btnespeci.Click
-        frmespecificacaodocliente.Show()
+    Private Sub btnespeci_Click(sender As Object, e As EventArgs) Handles Handles mnuEspecificacoes.Click
+        AbrirTela(frmespecificacaodocliente)
     End Sub
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        frmcadastrarcliente.Show()
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Handles mnuClientes.Click
+        AbrirTela(frmcadastrarcliente)
     End Sub
 
-    Private Sub btnConfiguracoes_Click(sender As Object, e As EventArgs) Handles btnConfiguracoes.Click
+    Private Sub btnConfiguracoes_Click(sender As Object, e As EventArgs) Handles mnuBancoDados.Click
         Using tela As New frmConfiguracoes()
             tela.ShowDialog(Me)
         End Using
@@ -83,7 +83,7 @@ Public Class frm_principal
             Return
         End If
 
-        btnBackupAdicional.Enabled = False
+        mnuBackupAdicional.Enabled = False
 
         Try
             tarefaBackup = Task.Run(Function() BackupBanco.ExecutarBackup(adicional))
@@ -112,7 +112,7 @@ Public Class frm_principal
 
     Private Async Sub btnBackupAdicional_Click(
     sender As Object,
-    e As EventArgs) Handles btnBackupAdicional.Click
+    e As EventArgs) Handles mnuBackupAdicional.Click
 
         Await RodarBackupAsync(True)
 
@@ -120,7 +120,7 @@ Public Class frm_principal
 
     Private Sub btnHistoricoBackups_Click(
     sender As Object,
-    e As EventArgs) Handles btnHistoricoBackups.Click
+    e As EventArgs) Handles mnuHistoricoBackups.Click
 
         BackupBanco.MostrarHistorico(Me)
 
@@ -140,6 +140,22 @@ Public Class frm_principal
             MessageBoxIcon.Information)
         End If
 
+    End Sub
+
+    Private Sub AbrirTela(janela As Form)
+        SessaoAtual.ExigirAutenticado()
+
+        If janela.MdiParent Is Nothing Then
+            janela.MdiParent = Me
+        End If
+
+        If janela.WindowState = FormWindowState.Minimized Then
+            janela.WindowState = FormWindowState.Normal
+        End If
+
+        janela.Show()
+        janela.BringToFront()
+        janela.Activate()
     End Sub
 
 End Class

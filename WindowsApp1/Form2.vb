@@ -757,5 +757,8 @@ Public Class frm_emitircertificado
     Private Sub SalvarPdf_Click(sender As Object, e As EventArgs) Handles btnSalvarPdf.Click
         GerarCertificado(True)
     End Sub
+    Public Sub ExecutarSaidaCertificado(exportarPdf As Boolean)
+        GerarCertificado(exportarPdf)
+    End Sub
 End Class
 
