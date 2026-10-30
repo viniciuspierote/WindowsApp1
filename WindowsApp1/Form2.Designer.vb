@@ -151,6 +151,7 @@ Partial Class frm_emitircertificado
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.txtobervacoesdocliente = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnSalvarPdf = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -195,7 +196,7 @@ Partial Class frm_emitircertificado
         'btncancelar
         '
         Me.btncancelar.Enabled = False
-        Me.btncancelar.Location = New System.Drawing.Point(252, 25)
+        Me.btncancelar.Location = New System.Drawing.Point(526, 25)
         Me.btncancelar.Name = "btncancelar"
         Me.btncancelar.Size = New System.Drawing.Size(75, 27)
         Me.btncancelar.TabIndex = 1
@@ -205,7 +206,7 @@ Partial Class frm_emitircertificado
         'btnexcluir
         '
         Me.btnexcluir.Enabled = False
-        Me.btnexcluir.Location = New System.Drawing.Point(333, 25)
+        Me.btnexcluir.Location = New System.Drawing.Point(607, 25)
         Me.btnexcluir.Name = "btnexcluir"
         Me.btnexcluir.Size = New System.Drawing.Size(75, 27)
         Me.btnexcluir.TabIndex = 1
@@ -223,7 +224,7 @@ Partial Class frm_emitircertificado
         '
         'Button7
         '
-        Me.Button7.Location = New System.Drawing.Point(414, 25)
+        Me.Button7.Location = New System.Drawing.Point(688, 25)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 27)
         Me.Button7.TabIndex = 1
@@ -1105,6 +1106,7 @@ Partial Class frm_emitircertificado
         '
         'btnproximo
         '
+        Me.btnproximo.Controls.Add(Me.btnSalvarPdf)
         Me.btnproximo.Controls.Add(Me.btnatualizar)
         Me.btnproximo.Controls.Add(Me.Button6)
         Me.btnproximo.Controls.Add(Me.btnanterior)
@@ -1344,9 +1346,6 @@ Partial Class frm_emitircertificado
         Me.Label31.TabIndex = 32
         Me.Label31.Text = "Tamanho De Grão:"
         '
-        'BindingSource1
-        '
-        '
         'PictureBox1
         '
         Me.PictureBox1.Image = Global.CertificadoSandinox.My.Resources.Resources.logo_sandinox
@@ -1393,6 +1392,15 @@ Partial Class frm_emitircertificado
         Me.Button1.TabIndex = 17
         Me.Button1.Text = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
+        '
+        'btnSalvarPdf
+        '
+        Me.btnSalvarPdf.Location = New System.Drawing.Point(252, 27)
+        Me.btnSalvarPdf.Name = "btnSalvarPdf"
+        Me.btnSalvarPdf.Size = New System.Drawing.Size(75, 25)
+        Me.btnSalvarPdf.TabIndex = 5
+        Me.btnSalvarPdf.Text = "Salvar PDF"
+        Me.btnSalvarPdf.UseVisualStyleBackColor = True
         '
         'frm_emitircertificado
         '
@@ -1573,4 +1581,5 @@ Partial Class frm_emitircertificado
     Friend WithEvents txttratamentotermicocliente As TextBox
     Friend WithEvents Label51 As Label
     Friend WithEvents Button1 As Button
+    Friend WithEvents btnSalvarPdf As Button
 End Class

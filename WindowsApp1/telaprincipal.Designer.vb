@@ -47,6 +47,10 @@ Partial Class frm_principal
         Me.EmitirCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AjudaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AjudaToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImpressãoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImprimirCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImprimirEmLoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SalvarEmPDFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -173,7 +177,7 @@ Partial Class frm_principal
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ArquivoToolStripMenuItem, Me.CadastrosToolStripMenuItem, Me.EmissãoToolStripMenuItem, Me.AjudaToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ArquivoToolStripMenuItem, Me.CadastrosToolStripMenuItem, Me.EmissãoToolStripMenuItem, Me.ImpressãoToolStripMenuItem, Me.AjudaToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(533, 24)
@@ -238,6 +242,31 @@ Partial Class frm_principal
         Me.AjudaToolStripMenuItem1.Size = New System.Drawing.Size(105, 22)
         Me.AjudaToolStripMenuItem1.Text = "Ajuda"
         '
+        'ImpressãoToolStripMenuItem
+        '
+        Me.ImpressãoToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImprimirCertificadoToolStripMenuItem, Me.ImprimirEmLoteToolStripMenuItem, Me.SalvarEmPDFToolStripMenuItem})
+        Me.ImpressãoToolStripMenuItem.Name = "ImpressãoToolStripMenuItem"
+        Me.ImpressãoToolStripMenuItem.Size = New System.Drawing.Size(73, 20)
+        Me.ImpressãoToolStripMenuItem.Text = "Impressão"
+        '
+        'ImprimirCertificadoToolStripMenuItem
+        '
+        Me.ImprimirCertificadoToolStripMenuItem.Name = "ImprimirCertificadoToolStripMenuItem"
+        Me.ImprimirCertificadoToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ImprimirCertificadoToolStripMenuItem.Text = "Imprimir certificado"
+        '
+        'ImprimirEmLoteToolStripMenuItem
+        '
+        Me.ImprimirEmLoteToolStripMenuItem.Name = "ImprimirEmLoteToolStripMenuItem"
+        Me.ImprimirEmLoteToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ImprimirEmLoteToolStripMenuItem.Text = "Imprimir em lote"
+        '
+        'SalvarEmPDFToolStripMenuItem
+        '
+        Me.SalvarEmPDFToolStripMenuItem.Name = "SalvarEmPDFToolStripMenuItem"
+        Me.SalvarEmPDFToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SalvarEmPDFToolStripMenuItem.Text = "Salvar em PDF"
+        '
         'frm_principal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -297,5 +326,9 @@ Partial Class frm_principal
     Friend WithEvents EmitirCertificadoToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AjudaToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AjudaToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ImpressãoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ImprimirCertificadoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ImprimirEmLoteToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SalvarEmPDFToolStripMenuItem As ToolStripMenuItem
 End Class
 

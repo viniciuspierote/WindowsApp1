@@ -66,6 +66,8 @@ Public Class frm_emitircertificado
         btneditar.Enabled = Not editar AndAlso _idAtual > 0
         btnsalvar.Enabled = editar AndAlso _idAtual = 0
         btnatualizar.Enabled = editar AndAlso _idAtual > 0
+        Button8.Enabled = Not editar AndAlso _idAtual > 0
+        btnSalvarPdf.Enabled = Not editar AndAlso _idAtual > 0
         btncancelar.Enabled = editar
         btnprocurar.Enabled = editar
         btnprocurarcliente.Enabled = editar
@@ -485,5 +487,275 @@ Public Class frm_emitircertificado
             End Using
         End Using
     End Function
+    Private Function ConsultarDadosImpressao(
+    cn As MySqlConnection,
+    sql As String,
+    parametro As String,
+    valor As Object
+) As DataTable
+
+        Dim dados As New DataTable()
+
+        Using comando As New MySqlCommand(sql, cn)
+            comando.Parameters.AddWithValue(parametro, valor)
+
+            Using adaptador As New MySqlDataAdapter(comando)
+                adaptador.Fill(dados)
+            End Using
+        End Using
+
+        Return dados
+    End Function
+
+    Private Sub VincularTabelasImpressao(
+        documento As CrystalDecisions.CrystalReports.Engine.ReportDocument,
+        emissao As DataTable,
+        cadastro As DataTable,
+        cliente As DataTable,
+        composicao As DataTable
+    )
+
+        For Each tabela As CrystalDecisions.CrystalReports.Engine.Table _
+            In documento.Database.Tables
+
+            Dim nome As String = tabela.Name.ToLowerInvariant()
+
+            If nome.StartsWith("itu_cad_certif_prod_said") Then
+                tabela.SetDataSource(emissao)
+
+            ElseIf nome.StartsWith("itu_cad_certif_prod_f") Then
+                tabela.SetDataSource(composicao)
+
+            ElseIf nome.StartsWith("itu_cad_certif_prod") Then
+                tabela.SetDataSource(cadastro)
+
+            ElseIf nome.StartsWith("clientes") Then
+                tabela.SetDataSource(cliente)
+
+            Else
+                Throw New InvalidOperationException(
+                    "Não existe um vínculo configurado para a tabela " &
+                    tabela.Name & " do relatório.")
+            End If
+        Next
+    End Sub
+
+    Private Function FiltroCertificadoImpressao(
+        documento As CrystalDecisions.CrystalReports.Engine.ReportDocument,
+        certificadoId As Integer
+    ) As String
+
+        For Each tabela As CrystalDecisions.CrystalReports.Engine.Table _
+            In documento.Database.Tables
+
+            If tabela.Name.ToLowerInvariant().
+                StartsWith("itu_cad_certif_prod_said") Then
+
+                Return "{" & tabela.Name & ".ID} = " &
+                    certificadoId.ToString(CultureInfo.InvariantCulture)
+            End If
+        Next
+
+        Throw New InvalidOperationException(
+            "A tabela da emissão não foi encontrada no relatório.")
+    End Function
+
+    Private Sub GerarCertificado(exportarPdf As Boolean)
+
+        If _emEdicao Then
+            MessageBox.Show(
+                "Salve ou cancele as alterações antes de imprimir.",
+                "Imprimir certificado")
+            Return
+        End If
+
+        If _idAtual <= 0 Then
+            MessageBox.Show(
+                "Consulte ou salve um certificado antes de imprimir.",
+                "Imprimir certificado")
+            Return
+        End If
+
+        Try
+            SessaoAtual.ExigirAutenticado()
+
+            Dim caminho As String =
+                System.IO.Path.Combine(
+                    Application.StartupPath,
+                    "Certificado_BD_NOVO.rpt")
+
+            If Not System.IO.File.Exists(caminho) Then
+                Throw New System.IO.FileNotFoundException(
+                    "O relatório não foi encontrado na pasta do programa.",
+                    caminho)
+            End If
+
+            UseWaitCursor = True
+            Button8.Enabled = False
+
+            Dim emissao As DataTable
+            Dim cadastro As DataTable
+            Dim cliente As DataTable
+            Dim composicao As DataTable
+
+            Using cn As MySqlConnection = conexao.NovaConexao()
+                cn.Open()
+
+                emissao = ConsultarDadosImpressao(
+                    cn,
+                    "SELECT * FROM emissaodecertificado WHERE ID = @id",
+                    "@id",
+                    _idAtual)
+
+                If emissao.Rows.Count <> 1 Then
+                    Throw New InvalidOperationException(
+                        "O certificado não foi encontrado. Consulte novamente.")
+                End If
+
+                Dim registro As DataRow = emissao.Rows(0)
+
+                If registro.IsNull("WORK_ORDER") Then
+                    Throw New InvalidOperationException(
+                        "Este certificado não possui um cadastro de lote vinculado.")
+                End If
+
+                Dim cadastroId As Integer =
+                    Convert.ToInt32(registro("WORK_ORDER"))
+
+                cadastro = ConsultarDadosImpressao(
+                    cn,
+                    "SELECT * FROM cadastrocertificados " &
+                    "WHERE WORK_ORDER = @id",
+                    "@id",
+                    cadastroId)
+
+                If cadastro.Rows.Count <> 1 Then
+                    Throw New InvalidOperationException(
+                        "O cadastro do lote vinculado não foi encontrado.")
+                End If
+
+                cliente = ConsultarDadosImpressao(
+                    cn,
+                    "SELECT * FROM clientes WHERE codigo = @codigo",
+                    "@codigo",
+                    registro("COD_CLI"))
+
+                If cliente.Rows.Count <> 1 Then
+                    Throw New InvalidOperationException(
+                        "O cliente do certificado não foi encontrado ou " &
+                        "o código está duplicado. Confira o cadastro do cliente.")
+                End If
+
+                composicao = ConsultarDadosImpressao(
+                    cn,
+                    "SELECT * FROM cadastrocompquimica " &
+                    "WHERE WORK_ORDER = @id ORDER BY SEQUENCIA",
+                    "@id",
+                    cadastroId)
+            End Using
+
+            Using relatorio As New _
+                CrystalDecisions.CrystalReports.Engine.ReportDocument()
+
+                relatorio.Load(caminho)
+
+                VincularTabelasImpressao(
+                    relatorio, emissao, cadastro, cliente, composicao)
+
+                relatorio.RecordSelectionFormula =
+                    FiltroCertificadoImpressao(relatorio, _idAtual)
+
+                For Each subRelatorio As _
+                    CrystalDecisions.CrystalReports.Engine.ReportDocument _
+                    In relatorio.Subreports
+
+                    VincularTabelasImpressao(
+                        subRelatorio, emissao, cadastro, cliente, composicao)
+
+                    subRelatorio.RecordSelectionFormula =
+                        FiltroCertificadoImpressao(subRelatorio, _idAtual)
+                Next
+                If exportarPdf Then
+                    UseWaitCursor = False
+
+                    Using salvar As New SaveFileDialog()
+                        salvar.Title = "Salvar certificado em PDF"
+                        salvar.Filter = "Arquivo PDF (*.pdf)|*.pdf"
+                        salvar.DefaultExt = "pdf"
+                        salvar.AddExtension = True
+                        salvar.OverwritePrompt = True
+                        salvar.RestoreDirectory = True
+                        salvar.FileName = "Certificado_Sandinox_" &
+                          _idAtual.ToString(CultureInfo.InvariantCulture) &
+                          ".pdf"
+
+                        If salvar.ShowDialog(Me) <> DialogResult.OK Then Return
+
+                        UseWaitCursor = True
+
+                        relatorio.ExportToDisk(
+            CrystalDecisions.Shared.ExportFormatType.PortableDocFormat,
+            salvar.FileName)
+
+                        UseWaitCursor = False
+
+                        MessageBox.Show(
+            "Certificado salvo em PDF." & vbCrLf & salvar.FileName,
+            "Salvar PDF",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information)
+                    End Using
+
+                    Return
+                End If
+
+                Using janela As New Form()
+                    janela.Text =
+                        "Certificado de qualidade — " &
+                        _idAtual.ToString()
+
+                    janela.WindowState = FormWindowState.Maximized
+                    janela.StartPosition = FormStartPosition.CenterParent
+
+                    Using visualizador As New _
+                        CrystalDecisions.Windows.Forms.CrystalReportViewer()
+
+                        visualizador.Dock = DockStyle.Fill
+                        visualizador.ShowPrintButton = True
+                        visualizador.ShowExportButton = True
+
+                        janela.Controls.Add(visualizador)
+
+                        Try
+                            visualizador.ReportSource = relatorio
+                            UseWaitCursor = False
+                            janela.ShowDialog(Me)
+                        Finally
+                            visualizador.ReportSource = Nothing
+                        End Try
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show(
+                "Não foi possível abrir o certificado para impressão." &
+                vbCrLf & ex.GetBaseException().Message,
+                "Imprimir certificado",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+
+        Finally
+            UseWaitCursor = False
+            Button8.Enabled = True
+        End Try
+    End Sub
+    Private Sub ImprimirCertificado_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        GerarCertificado(False)
+    End Sub
+
+    Private Sub SalvarPdf_Click(sender As Object, e As EventArgs) Handles btnSalvarPdf.Click
+        GerarCertificado(True)
+    End Sub
 End Class
 
