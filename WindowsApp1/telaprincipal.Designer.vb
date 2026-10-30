@@ -38,19 +38,28 @@ Partial Class frm_principal
         Me.btnHistoricoBackups = New System.Windows.Forms.Button()
         Me.btnBackupAdicional = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.ArquivoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SairToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CadastrosToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CadastrarCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NormaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EmissãoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EmitirCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AjudaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AjudaToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImpressãoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImprimirCertificadoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImprimirEmLoteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SalvarEmPDFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuSessao = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuMinhaSenha = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuCadastros = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuLotes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuClientes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuCertificados = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuEmitirCertificado = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuConfiguracoes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuBancoDados = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuImpressao = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuImprimirCertificado = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuImprimirLote = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuSalvarPdf = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuAjuda = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuEspecificacoes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuNormas = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuConsultarCertificados = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuUsuarios = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuBackupAdicional = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuHistoricoBackups = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuSairSessao = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuSobre = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -118,9 +127,9 @@ Partial Class frm_principal
         'StatusStrip1
         '
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 358)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 508)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(533, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(716, 22)
         Me.StatusStrip1.TabIndex = 8
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -177,101 +186,156 @@ Partial Class frm_principal
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ArquivoToolStripMenuItem, Me.CadastrosToolStripMenuItem, Me.EmissãoToolStripMenuItem, Me.ImpressãoToolStripMenuItem, Me.AjudaToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSessao, Me.mnuCadastros, Me.mnuCertificados, Me.mnuImpressao, Me.mnuConfiguracoes, Me.mnuAjuda})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(533, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(716, 24)
         Me.MenuStrip1.TabIndex = 23
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'ArquivoToolStripMenuItem
+        'mnuSessao
         '
-        Me.ArquivoToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SairToolStripMenuItem})
-        Me.ArquivoToolStripMenuItem.Name = "ArquivoToolStripMenuItem"
-        Me.ArquivoToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
-        Me.ArquivoToolStripMenuItem.Text = "Arquivo"
+        Me.mnuSessao.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuMinhaSenha, Me.mnuSairSessao})
+        Me.mnuSessao.Name = "mnuSessao"
+        Me.mnuSessao.Size = New System.Drawing.Size(54, 20)
+        Me.mnuSessao.Text = "Sessão"
         '
-        'SairToolStripMenuItem
+        'mnuMinhaSenha
         '
-        Me.SairToolStripMenuItem.Name = "SairToolStripMenuItem"
-        Me.SairToolStripMenuItem.Size = New System.Drawing.Size(93, 22)
-        Me.SairToolStripMenuItem.Text = "Sair"
+        Me.mnuMinhaSenha.Name = "mnuMinhaSenha"
+        Me.mnuMinhaSenha.Size = New System.Drawing.Size(180, 22)
+        Me.mnuMinhaSenha.Text = "Alterar minha senha"
         '
-        'CadastrosToolStripMenuItem
+        'mnuCadastros
         '
-        Me.CadastrosToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CadastrarCertificadoToolStripMenuItem, Me.NormaToolStripMenuItem})
-        Me.CadastrosToolStripMenuItem.Name = "CadastrosToolStripMenuItem"
-        Me.CadastrosToolStripMenuItem.Size = New System.Drawing.Size(71, 20)
-        Me.CadastrosToolStripMenuItem.Text = "Cadastros"
+        Me.mnuCadastros.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLotes, Me.mnuClientes, Me.mnuEspecificacoes, Me.mnuNormas})
+        Me.mnuCadastros.Name = "mnuCadastros"
+        Me.mnuCadastros.Size = New System.Drawing.Size(71, 20)
+        Me.mnuCadastros.Text = "Cadastros"
         '
-        'CadastrarCertificadoToolStripMenuItem
+        'mnuLotes
         '
-        Me.CadastrarCertificadoToolStripMenuItem.Name = "CadastrarCertificadoToolStripMenuItem"
-        Me.CadastrarCertificadoToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
-        Me.CadastrarCertificadoToolStripMenuItem.Text = "Certificado"
+        Me.mnuLotes.Name = "mnuLotes"
+        Me.mnuLotes.Size = New System.Drawing.Size(205, 22)
+        Me.mnuLotes.Text = "Lotes"
         '
-        'NormaToolStripMenuItem
+        'mnuClientes
         '
-        Me.NormaToolStripMenuItem.Name = "NormaToolStripMenuItem"
-        Me.NormaToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
-        Me.NormaToolStripMenuItem.Text = "Norma"
+        Me.mnuClientes.Name = "mnuClientes"
+        Me.mnuClientes.Size = New System.Drawing.Size(205, 22)
+        Me.mnuClientes.Text = "Clientes"
         '
-        'EmissãoToolStripMenuItem
+        'mnuCertificados
         '
-        Me.EmissãoToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EmitirCertificadoToolStripMenuItem})
-        Me.EmissãoToolStripMenuItem.Name = "EmissãoToolStripMenuItem"
-        Me.EmissãoToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
-        Me.EmissãoToolStripMenuItem.Text = "Emissão"
+        Me.mnuCertificados.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuEmitirCertificado, Me.mnuConsultarCertificados})
+        Me.mnuCertificados.Name = "mnuCertificados"
+        Me.mnuCertificados.Size = New System.Drawing.Size(82, 20)
+        Me.mnuCertificados.Text = "Certificados"
         '
-        'EmitirCertificadoToolStripMenuItem
+        'mnuEmitirCertificado
         '
-        Me.EmitirCertificadoToolStripMenuItem.Name = "EmitirCertificadoToolStripMenuItem"
-        Me.EmitirCertificadoToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
-        Me.EmitirCertificadoToolStripMenuItem.Text = "Emitir Certificado"
+        Me.mnuEmitirCertificado.Name = "mnuEmitirCertificado"
+        Me.mnuEmitirCertificado.Size = New System.Drawing.Size(238, 22)
+        Me.mnuEmitirCertificado.Text = "Emitir certificado"
         '
-        'AjudaToolStripMenuItem
+        'mnuConfiguracoes
         '
-        Me.AjudaToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AjudaToolStripMenuItem1})
-        Me.AjudaToolStripMenuItem.Name = "AjudaToolStripMenuItem"
-        Me.AjudaToolStripMenuItem.Size = New System.Drawing.Size(50, 20)
-        Me.AjudaToolStripMenuItem.Text = "Ajuda"
+        Me.mnuConfiguracoes.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuBancoDados, Me.mnuUsuarios, Me.mnuBackupAdicional, Me.mnuHistoricoBackups})
+        Me.mnuConfiguracoes.Name = "mnuConfiguracoes"
+        Me.mnuConfiguracoes.Size = New System.Drawing.Size(96, 20)
+        Me.mnuConfiguracoes.Text = "Configurações"
         '
-        'AjudaToolStripMenuItem1
+        'mnuBancoDados
         '
-        Me.AjudaToolStripMenuItem1.Name = "AjudaToolStripMenuItem1"
-        Me.AjudaToolStripMenuItem1.Size = New System.Drawing.Size(105, 22)
-        Me.AjudaToolStripMenuItem1.Text = "Ajuda"
+        Me.mnuBancoDados.Name = "mnuBancoDados"
+        Me.mnuBancoDados.Size = New System.Drawing.Size(191, 22)
+        Me.mnuBancoDados.Text = "Banco de dados"
         '
-        'ImpressãoToolStripMenuItem
+        'mnuImpressao
         '
-        Me.ImpressãoToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImprimirCertificadoToolStripMenuItem, Me.ImprimirEmLoteToolStripMenuItem, Me.SalvarEmPDFToolStripMenuItem})
-        Me.ImpressãoToolStripMenuItem.Name = "ImpressãoToolStripMenuItem"
-        Me.ImpressãoToolStripMenuItem.Size = New System.Drawing.Size(73, 20)
-        Me.ImpressãoToolStripMenuItem.Text = "Impressão"
+        Me.mnuImpressao.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuImprimirCertificado, Me.mnuImprimirLote, Me.mnuSalvarPdf})
+        Me.mnuImpressao.Name = "mnuImpressao"
+        Me.mnuImpressao.Size = New System.Drawing.Size(73, 20)
+        Me.mnuImpressao.Text = "Impressão"
         '
-        'ImprimirCertificadoToolStripMenuItem
+        'mnuImprimirCertificado
         '
-        Me.ImprimirCertificadoToolStripMenuItem.Name = "ImprimirCertificadoToolStripMenuItem"
-        Me.ImprimirCertificadoToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.ImprimirCertificadoToolStripMenuItem.Text = "Imprimir certificado"
+        Me.mnuImprimirCertificado.Name = "mnuImprimirCertificado"
+        Me.mnuImprimirCertificado.Size = New System.Drawing.Size(180, 22)
+        Me.mnuImprimirCertificado.Text = "Imprimir certificado"
         '
-        'ImprimirEmLoteToolStripMenuItem
+        'mnuImprimirLote
         '
-        Me.ImprimirEmLoteToolStripMenuItem.Name = "ImprimirEmLoteToolStripMenuItem"
-        Me.ImprimirEmLoteToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.ImprimirEmLoteToolStripMenuItem.Text = "Imprimir em lote"
+        Me.mnuImprimirLote.Name = "mnuImprimirLote"
+        Me.mnuImprimirLote.Size = New System.Drawing.Size(180, 22)
+        Me.mnuImprimirLote.Text = "Imprimir em lote"
         '
-        'SalvarEmPDFToolStripMenuItem
+        'mnuSalvarPdf
         '
-        Me.SalvarEmPDFToolStripMenuItem.Name = "SalvarEmPDFToolStripMenuItem"
-        Me.SalvarEmPDFToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.SalvarEmPDFToolStripMenuItem.Text = "Salvar em PDF"
+        Me.mnuSalvarPdf.Name = "mnuSalvarPdf"
+        Me.mnuSalvarPdf.Size = New System.Drawing.Size(180, 22)
+        Me.mnuSalvarPdf.Text = "Salvar em PDF"
+        '
+        'mnuAjuda
+        '
+        Me.mnuAjuda.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSobre})
+        Me.mnuAjuda.Name = "mnuAjuda"
+        Me.mnuAjuda.Size = New System.Drawing.Size(50, 20)
+        Me.mnuAjuda.Text = "Ajuda"
+        '
+        'mnuEspecificacoes
+        '
+        Me.mnuEspecificacoes.Name = "mnuEspecificacoes"
+        Me.mnuEspecificacoes.Size = New System.Drawing.Size(205, 22)
+        Me.mnuEspecificacoes.Text = "Especificações do cliente"
+        '
+        'mnuNormas
+        '
+        Me.mnuNormas.Name = "mnuNormas"
+        Me.mnuNormas.Size = New System.Drawing.Size(205, 22)
+        Me.mnuNormas.Text = "Normas"
+        '
+        'mnuConsultarCertificados
+        '
+        Me.mnuConsultarCertificados.Name = "mnuConsultarCertificados"
+        Me.mnuConsultarCertificados.Size = New System.Drawing.Size(238, 22)
+        Me.mnuConsultarCertificados.Text = "Consultar certificados emitidos"
+        '
+        'mnuUsuarios
+        '
+        Me.mnuUsuarios.Name = "mnuUsuarios"
+        Me.mnuUsuarios.Size = New System.Drawing.Size(191, 22)
+        Me.mnuUsuarios.Text = "Usuários"
+        '
+        'mnuBackupAdicional
+        '
+        Me.mnuBackupAdicional.Name = "mnuBackupAdicional"
+        Me.mnuBackupAdicional.Size = New System.Drawing.Size(191, 22)
+        Me.mnuBackupAdicional.Text = "Backup adicional"
+        '
+        'mnuHistoricoBackups
+        '
+        Me.mnuHistoricoBackups.Name = "mnuHistoricoBackups"
+        Me.mnuHistoricoBackups.Size = New System.Drawing.Size(191, 22)
+        Me.mnuHistoricoBackups.Text = "Histórico dos backups"
+        '
+        'mnuSairSessao
+        '
+        Me.mnuSairSessao.Name = "mnuSairSessao"
+        Me.mnuSairSessao.Size = New System.Drawing.Size(180, 22)
+        Me.mnuSairSessao.Text = "Sair da sessão"
+        '
+        'mnuSobre
+        '
+        Me.mnuSobre.Name = "mnuSobre"
+        Me.mnuSobre.Size = New System.Drawing.Size(180, 22)
+        Me.mnuSobre.Text = "Sobre o sistema"
         '
         'frm_principal
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(533, 380)
+        Me.ClientSize = New System.Drawing.Size(716, 530)
         Me.Controls.Add(Me.btnBackupAdicional)
         Me.Controls.Add(Me.btnHistoricoBackups)
         Me.Controls.Add(Me.btnConfiguracoes)
@@ -317,18 +381,27 @@ Partial Class frm_principal
     Friend WithEvents btnSairSessao As System.Windows.Forms.Button
     Friend WithEvents lblUsuarioSistema As System.Windows.Forms.Label
     Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents ArquivoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SairToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents CadastrosToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents CadastrarCertificadoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents NormaToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents EmissãoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents EmitirCertificadoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AjudaToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AjudaToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents ImpressãoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ImprimirCertificadoToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ImprimirEmLoteToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SalvarEmPDFToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents mnuSessao As ToolStripMenuItem
+    Friend WithEvents mnuMinhaSenha As ToolStripMenuItem
+    Friend WithEvents mnuCadastros As ToolStripMenuItem
+    Friend WithEvents mnuLotes As ToolStripMenuItem
+    Friend WithEvents mnuClientes As ToolStripMenuItem
+    Friend WithEvents mnuCertificados As ToolStripMenuItem
+    Friend WithEvents mnuEmitirCertificado As ToolStripMenuItem
+    Friend WithEvents mnuConfiguracoes As ToolStripMenuItem
+    Friend WithEvents mnuBancoDados As ToolStripMenuItem
+    Friend WithEvents mnuImpressao As ToolStripMenuItem
+    Friend WithEvents mnuImprimirCertificado As ToolStripMenuItem
+    Friend WithEvents mnuImprimirLote As ToolStripMenuItem
+    Friend WithEvents mnuSalvarPdf As ToolStripMenuItem
+    Friend WithEvents mnuAjuda As ToolStripMenuItem
+    Friend WithEvents mnuSairSessao As ToolStripMenuItem
+    Friend WithEvents mnuEspecificacoes As ToolStripMenuItem
+    Friend WithEvents mnuNormas As ToolStripMenuItem
+    Friend WithEvents mnuConsultarCertificados As ToolStripMenuItem
+    Friend WithEvents mnuUsuarios As ToolStripMenuItem
+    Friend WithEvents mnuBackupAdicional As ToolStripMenuItem
+    Friend WithEvents mnuHistoricoBackups As ToolStripMenuItem
+    Friend WithEvents mnuSobre As ToolStripMenuItem
 End Class
 

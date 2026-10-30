@@ -685,9 +685,9 @@ Public Class frm_emitircertificado
                         salvar.AddExtension = True
                         salvar.OverwritePrompt = True
                         salvar.RestoreDirectory = True
-                        salvar.FileName = "Certificado_Sandinox_" &
-                          _idAtual.ToString(CultureInfo.InvariantCulture) &
-                          ".pdf"
+                        salvar.InitialDirectory = "Z:\CQ"
+                        salvar.FileName = _idAtual.ToString(CultureInfo.InvariantCulture) &
+                                         "-" & txtano.Text.Trim() & ".pdf"
 
                         If salvar.ShowDialog(Me) <> DialogResult.OK Then Return
 
